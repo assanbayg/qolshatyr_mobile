@@ -13,7 +13,7 @@ class QolshatyrApp extends StatelessWidget {
       title: 'Qolshatyr',
       theme: lightTheme,
       darkTheme: darkTheme,
-      initialRoute: '/auth',
+      initialRoute: '/',
       routes: {
         '/': (context) => const NavigationScreen(),
         '/auth': (context) => const AuthScreen(),

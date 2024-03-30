@@ -13,9 +13,21 @@ class AuthScreen extends StatelessWidget {
         Image.asset('assets/qolshatyr.png'),
         Text(
           'Welcome to Qolshatyr!',
-          style: Theme.of(context).textTheme.displayMedium,
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
-        Text('Already have an account?')
+        Row(
+          children: [
+            const Text('Already have an account?'),
+            TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'Sign in',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                  ),
+                ))
+          ],
+        )
       ],
     ));
   }
