@@ -141,3 +141,6 @@ app.*.symbols
 !.vscode/settings.json
 
 web/
+
+# API keys and credentials
+local.properties

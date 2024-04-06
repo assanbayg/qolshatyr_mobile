@@ -4,7 +4,7 @@
 Qolshatyr addresses a critical personal safety concern by offering users more than just an application; it provides a reliable digital companion for journeys. The application allows users to input detailed information about their location, destination, and expected arrival time before departure. Once activated, the application continuously tracks the user's location in real-time. Users can specify their mode of transportation, including transportation details, and select departure and destination points on the map, enabling the application to save the route and streets traversed in history. Upon setting departure and expected arrival times, the application initiates a timer. If the user fails to confirm their arrival within 5 minutes of the planned time, the application notifies emergency contacts via message and call. In case of delays, such as traffic or additional stops, users can update the time information to avoid false alarms. Qolshatyr also reminds users to confirm their location 10 and 5 minutes before the expected arrival time, minimizing the risk of missing check-ins.
 
 ## Features to Implement
-1. [ ] **Real-time Location Tracking:**
+1. [x] **Real-time Location Tracking:**
    - Utilize Flutter packages for real-time location tracking.
    
 2. [ ] **Journey Information Input:**
@@ -35,8 +35,8 @@ For the database solution, consider using:
 
 ## Flutter Packages
 Use the following Flutter packages to facilitate development:
-- **flutter_map**: For integrating interactive maps and displaying routes.
-- **geolocator**: For accessing device location and implementing real-time location tracking.
+- [x] **google_maps_flutter**: For integrating interactive maps and displaying routes.
+- [x] **location**: For accessing device location and implementing real-time location tracking.
 - **flutter_local_notifications**: For sending reminder notifications to users.
 - **firebase_core** and **cloud_firestore**: For integrating Firebase services such as authentication and real-time database storage.
 - **riverpod**: For dependency injection and state management.
