@@ -77,10 +77,12 @@ class _MapScreenState extends State<MapScreen> {
     locationController.onLocationChanged.listen((currentLocation) {
       if (currentLocation.latitude != null &&
           currentLocation.longitude != null) {
-        setState(() {
-          currentPosition =
-              LatLng(currentLocation.latitude!, currentLocation.longitude!);
-        });
+        if (mounted) {
+          setState(() {
+            currentPosition =
+                LatLng(currentLocation.latitude!, currentLocation.longitude!);
+          });
+        }
       }
     });
   }
