@@ -33,8 +33,9 @@
 	<key>To display and track location</key>
 	<string>NSLocationAlwaysAndWhenInUseUsageDescription</string>
 	<key>To display and track location</key>
-	<key>NSContactsUsageDescription</key>
-  <string>Save emergency contact list</string>
+	<!-- apparently those are not required anymore -->
+	<!-- <key>NSContactsUsageDescription</key>
+  <string>Save emergency contact list</string> -->
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>

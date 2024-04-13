@@ -1,43 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ContactsScreen extends StatefulWidget {
+import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
+import 'package:qolshatyr_mobile/src/presentation/widgets/contact_card.dart';
+
+// these are emergency contacts
+class ContactsScreen extends ConsumerWidget {
   const ContactsScreen({super.key});
 
   @override
-  State<ContactsScreen> createState() => _ContactsScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final contacts = ref.watch(contactListProvider);
 
-class _ContactsScreenState extends State<ContactsScreen> {
-  final FlutterContactPicker _contactPicker = FlutterContactPicker();
-  List<Contact>? _contacts;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ElevatedButton(
-            child: Text("Single"),
-            onPressed: () async {
-              Contact? contact = await _contactPicker.selectContact();
-              setState(() {
-                _contacts = [...?_contacts, contact!];
-              });
-            },
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const Icon(Icons.account_circle_rounded, size: 80),
+                Expanded(
+                  child: Text(
+                    'Emergency Contacts',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                ),
+              ],
+            ),
           ),
-          if (_contacts != null)
-            ..._contacts!.map(
-              (e) => Text(e.toString()),
-            )
-        ],
-      ),
+        ),
+        if (contacts.isNotEmpty)
+          ...contacts.map(
+            (contact) => ContactCard(contact: contact),
+          ),
+      ],
     );
   }
 }

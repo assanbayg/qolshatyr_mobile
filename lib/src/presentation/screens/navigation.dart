@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qolshatyr_mobile/src/presentation/screens/contacts.dart';
 import 'package:qolshatyr_mobile/src/presentation/screens/map.dart';
+import 'package:qolshatyr_mobile/src/presentation/widgets/contact_floating_action_button.dart';
 
 class NavigationScreen extends StatefulWidget {
   static const routeName = '/';
@@ -14,8 +15,8 @@ class NavigationScreen extends StatefulWidget {
 class _NavigationScreenState extends State<NavigationScreen> {
   final List<Widget> _screens = const [
     MapScreen(),
+    Placeholder(),
     ContactsScreen(),
-    Placeholder(), // ToDo: clarify about SOS Screen
   ];
 
   final List<BottomNavigationBarItem> _items = const [
@@ -24,12 +25,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
       label: 'Location',
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.call_rounded),
-      label: 'Emergy Contacts',
-    ),
-    BottomNavigationBarItem(
       icon: Icon(Icons.sos_rounded),
       label: 'SOS',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.call_rounded),
+      label: 'Emergy Contacts',
     ),
   ];
 
@@ -48,6 +49,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
           _selectedIndex = value;
         }),
       ),
+      floatingActionButton:
+          _selectedIndex == 2 ? const ContactFloatingActionButton() : null,
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const QolshatyrApp());
+  runApp(const ProviderScope(child: QolshatyrApp()));
 }
