@@ -14,7 +14,7 @@ final ThemeData darkTheme = ThemeData(
   textTheme: GoogleFonts.poppinsTextTheme(
       ThemeData(brightness: Brightness.dark).textTheme),
   colorScheme: ColorScheme.fromSeed(
-    seedColor: Colors.lightGreen.shade800,
+    seedColor: const Color(0xFF81D1C6),
     brightness: Brightness.dark,
   ),
 );

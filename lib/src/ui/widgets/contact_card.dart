@@ -6,7 +6,7 @@ import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
 class ContactCard extends ConsumerWidget {
   final Contact contact;
 
-  const ContactCard({Key? key, required this.contact}) : super(key: key);
+  const ContactCard({super.key, required this.contact});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,15 +19,15 @@ class ContactCard extends ConsumerWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // ToDo: add visibility support for riverpod
-            IconButton(onPressed: () {}, icon: Icon(Icons.visibility)),
+            // TODO: add visibility support for riverpod
+            IconButton(onPressed: () {}, icon: const Icon(Icons.visibility)),
             IconButton(
               onPressed: () {
                 ref
                     .read(contactListProvider.notifier)
                     .removeContact(contact.id);
               },
-              icon: Icon(Icons.remove),
+              icon: const Icon(Icons.remove),
             ),
           ],
         ),

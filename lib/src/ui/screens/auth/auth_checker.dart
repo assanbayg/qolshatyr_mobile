@@ -2,10 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
 import 'package:qolshatyr_mobile/src/providers/auth_provider.dart';
-import 'package:qolshatyr_mobile/src/presentation/screens/auth/login.dart';
-import 'package:qolshatyr_mobile/src/presentation/screens/auth/error.dart';
-import 'package:qolshatyr_mobile/src/presentation/screens/auth/loading.dart';
-import 'package:qolshatyr_mobile/src/presentation/screens/base.dart';
+import 'package:qolshatyr_mobile/src/ui/screens/auth/login.dart';
+import 'package:qolshatyr_mobile/src/ui/screens/auth/error.dart';
+import 'package:qolshatyr_mobile/src/ui/screens/auth/loading.dart';
+import 'package:qolshatyr_mobile/src/ui/screens/base.dart';
 
 class AuthChecker extends ConsumerWidget {
   const AuthChecker({super.key});

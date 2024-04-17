@@ -4,7 +4,7 @@ import 'package:flutter/gestures.dart';
 
 import 'package:qolshatyr_mobile/src/providers/auth_provider.dart';
 import 'package:qolshatyr_mobile/src/utils/form_validation.dart';
-import 'package:qolshatyr_mobile/src/presentation/widgets/auth_widgets.dart';
+import 'package:qolshatyr_mobile/src/ui/widgets/auth_widgets.dart';
 
 enum Status { login, signUp }
 

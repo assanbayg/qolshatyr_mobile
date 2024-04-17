@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:qolshatyr_mobile/src/presentation/screens/contacts.dart';
-import 'package:qolshatyr_mobile/src/presentation/screens/map.dart';
-import 'package:qolshatyr_mobile/src/presentation/widgets/contact_floating_action_button.dart';
+import 'package:qolshatyr_mobile/src/ui/screens/contacts.dart';
+import 'package:qolshatyr_mobile/src/ui/screens/map.dart';
+import 'package:qolshatyr_mobile/src/ui/widgets/contact_floating_action_button.dart';
 
 class BaseScreen extends StatefulWidget {
   static const routeName = '/base';

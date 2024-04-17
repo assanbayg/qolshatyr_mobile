@@ -1,4 +1,4 @@
-// IMPORTANT ToDo:
+// IMPORTANT TODO:
 // once you start publishing this app, change the way you secure your Google Maps API
 // for now local.properties is okay but be careful, Gauhar from the future
 
@@ -20,7 +20,7 @@ class _MapScreenState extends State<MapScreen> {
   Location locationController = Location();
 
   // Almaty Location
-  // ToDo: detect city location automatically or use another location
+  // TODO: detect city location automatically or use another location
   static const googlePlex = LatLng(43.238949, 76.889709);
 
   LatLng? currentPosition;
