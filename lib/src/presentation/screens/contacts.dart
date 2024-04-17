@@ -24,7 +24,7 @@ class ContactsScreen extends ConsumerWidget {
                 const Icon(Icons.account_circle_rounded, size: 80),
                 Expanded(
                   child: Text(
-                    'Emergency Contacts',
+                    'Emergency Contacts Call',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),

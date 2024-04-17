@@ -144,3 +144,8 @@ web/
 
 # API keys and credentials
 local.properties
+
+/lib/firebase_options.dart
+GoogleService-Info.plist
+google-services.json
+firebase.json

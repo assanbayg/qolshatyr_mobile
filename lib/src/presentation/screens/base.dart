@@ -3,16 +3,16 @@ import 'package:qolshatyr_mobile/src/presentation/screens/contacts.dart';
 import 'package:qolshatyr_mobile/src/presentation/screens/map.dart';
 import 'package:qolshatyr_mobile/src/presentation/widgets/contact_floating_action_button.dart';
 
-class NavigationScreen extends StatefulWidget {
-  static const routeName = '/';
+class BaseScreen extends StatefulWidget {
+  static const routeName = '/base';
 
-  const NavigationScreen({super.key});
+  const BaseScreen({super.key});
 
   @override
-  State<NavigationScreen> createState() => _NavigationScreenState();
+  State<BaseScreen> createState() => _BaseScreenState();
 }
 
-class _NavigationScreenState extends State<NavigationScreen> {
+class _BaseScreenState extends State<BaseScreen> {
   final List<Widget> _screens = const [
     MapScreen(),
     Placeholder(),

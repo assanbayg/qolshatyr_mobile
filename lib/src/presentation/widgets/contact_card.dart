@@ -1,43 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/models/contact.dart';
+import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
 
-class ContactCard extends StatefulWidget {
+class ContactCard extends ConsumerWidget {
   final Contact contact;
 
-  const ContactCard({super.key, required this.contact});
+  const ContactCard({Key? key, required this.contact}) : super(key: key);
 
   @override
-  State<ContactCard> createState() => _ContactCardState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final contactList = ref.watch(contactListProvider);
 
-class _ContactCardState extends State<ContactCard> {
-  bool _expanded = false;
-
-  @override
-  Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(8),
       child: ExpansionTile(
-        leading: const CircleAvatar(
-          child: Icon(Icons.person),
+        title: Text(contact.name),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // ToDo: add visibility support for riverpod
+            IconButton(onPressed: () {}, icon: Icon(Icons.visibility)),
+            IconButton(
+              onPressed: () {
+                ref
+                    .read(contactListProvider.notifier)
+                    .removeContact(contact.id);
+              },
+              icon: Icon(Icons.remove),
+            ),
+          ],
         ),
-        title: Text(widget.contact.name),
-        subtitle: Text(widget.contact.phoneNumber),
-        onExpansionChanged: (expanded) {
-          setState(() {
-            _expanded = expanded;
-          });
-        },
-        initiallyExpanded: _expanded,
-        children: const [
+        children: [
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text("Email"),
-                SizedBox(height: 8.0),
-                Text("Address"),
+              children: [
+                Text(contact.phoneNumber),
+                Text(contact.id),
               ],
             ),
           ),
