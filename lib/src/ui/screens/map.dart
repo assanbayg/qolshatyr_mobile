@@ -7,9 +7,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:qolshatyr_mobile/src/services/location_service.dart';
 
 class MapScreen extends StatefulWidget {
-  static const routeName = '/map';
+  static const routeName = '/base/map';
   const MapScreen({super.key});
 
   @override
@@ -17,31 +18,44 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  Location locationController = Location();
-
-  // Almaty Location
-  // TODO: detect city location automatically or use another location
-  static const googlePlex = LatLng(43.238949, 76.889709);
-
+  final LocationService _locationService = LocationService();
   LatLng? currentPosition;
+  StreamSubscription<LocationData>? _locationSubscription;
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await fetchLocationUpdates();
-    });
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _getLastLocation();
+      _locationSubscription = _locationService.getLocationUpdates().listen(
+        (LocationData currentLocation) {
+          _updateLocation(currentLocation);
+        },
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _locationSubscription?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return currentPosition == null
         ? const Center(
-            child: CircularProgressIndicator(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                Text('Please turn on the location'),
+              ],
+            ),
           )
         : GoogleMap(
-            initialCameraPosition: const CameraPosition(
-              target: googlePlex,
+            initialCameraPosition: CameraPosition(
+              target: currentPosition!,
               zoom: 13,
             ),
             markers: {
@@ -55,35 +69,21 @@ class _MapScreenState extends State<MapScreen> {
           );
   }
 
-  Future<void> fetchLocationUpdates() async {
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
-
-    serviceEnabled = await locationController.serviceEnabled();
-    if (serviceEnabled) {
-      serviceEnabled = await locationController.requestService();
-    } else {
-      return;
+  Future<void> _getLastLocation() async {
+    final lastLocation = await _locationService.getLastLocation();
+    if (lastLocation != null) {
+      setState(() {
+        currentPosition =
+            LatLng(lastLocation.latitude!, lastLocation.longitude!);
+      });
     }
+  }
 
-    permissionGranted = await locationController.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await locationController.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
-
-    locationController.onLocationChanged.listen((currentLocation) {
-      if (currentLocation.latitude != null &&
-          currentLocation.longitude != null) {
-        if (mounted) {
-          setState(() {
-            currentPosition =
-                LatLng(currentLocation.latitude!, currentLocation.longitude!);
-          });
-        }
-      }
+  Future<void> _updateLocation(LocationData currentLocation) async {
+    setState(() {
+      currentPosition =
+          LatLng(currentLocation.latitude!, currentLocation.longitude!);
     });
+    _locationService.saveLastLocation(currentLocation);
   }
 }

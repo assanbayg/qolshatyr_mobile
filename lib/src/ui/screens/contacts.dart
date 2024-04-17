@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
 import 'package:qolshatyr_mobile/src/ui/widgets/contact_card.dart';
 
-// these are emergency contacts
 class ContactsScreen extends ConsumerWidget {
+  static const routeName = '/base/contacts';
   const ContactsScreen({super.key});
 
   @override

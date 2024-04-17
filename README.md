@@ -30,7 +30,7 @@ Qolshatyr addresses a critical personal safety concern by offering users more th
 
 ## Database Solution
 For the database solution, consider using:
-- **Hive**: For local storage of user data and journey history.
+- **Shared preferences**: For local storage.
 - **Firebase Firestore**: For real-time synchronization and storage of user information, emergency contacts, and journey data.
 
 ## Flutter Packages
