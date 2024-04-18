@@ -8,12 +8,19 @@ class LocationService {
     try {
       final serviceEnabled = await _location.serviceEnabled();
       if (!serviceEnabled) {
-        await _location.requestService();
+        final serviceStatusResult = await _location.requestService();
+        if (!serviceStatusResult) {
+          return null;
+        }
       }
 
-      final permissionGranted = await _location.hasPermission();
-      if (permissionGranted == PermissionStatus.denied) {
-        await _location.requestPermission();
+      var permissionGranted = await _location.hasPermission();
+      if (permissionGranted == PermissionStatus.denied ||
+          permissionGranted == PermissionStatus.deniedForever) {
+        permissionGranted = await _location.requestPermission();
+        if (permissionGranted != PermissionStatus.granted) {
+          return null;
+        }
       }
 
       return await _location.getLocation();

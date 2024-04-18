@@ -1,13 +1,9 @@
-// IMPORTANT TODO:
-// once you start publishing this app, change the way you secure your Google Maps API
-// for now local.properties is okay but be careful, Gauhar from the future
-
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:qolshatyr_mobile/src/services/location_service.dart';
+import 'package:qolshatyr_mobile/src/models/trip.dart';
 
 class MapScreen extends StatefulWidget {
   static const routeName = '/base/map';
@@ -61,21 +57,87 @@ class _MapScreenState extends State<MapScreen> {
             markers: {
               Marker(
                 markerId: const MarkerId('Me'),
-                icon: BitmapDescriptor.defaultMarkerWithHue(
-                    BitmapDescriptor.hueAzure),
                 position: currentPosition!,
               ),
             },
           );
   }
 
+  Future<void> _showInitialDialog() async {
+    await showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Initial Dialog'),
+          content: const Text('This is the initial dialog.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // _showBottomSheet();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showBottomSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text('Create a New Trip'),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  // Create a new Trip instance here
+                  Trip newTrip = Trip(
+                    startLocation: LocationData.fromMap({
+                      'latitude': currentPosition!.latitude,
+                      'longitude': currentPosition!.longitude
+                    }),
+                    endLocation:
+                        LocationData.fromMap({'latitude': 0, 'longitude': 0}),
+                    estimateDuration: const Duration(hours: 1),
+                    startTime: DateTime.now(),
+                  );
+                  // Do something with the new Trip
+                  print('New Trip created: $newTrip');
+                  Navigator.pop(context); // Close the bottom sheet
+                },
+                child: const Text('Create Trip'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Future<void> _getLastLocation() async {
     final lastLocation = await _locationService.getLastLocation();
+    print('GAUHAR $lastLocation');
     if (lastLocation != null) {
       setState(() {
         currentPosition =
             LatLng(lastLocation.latitude!, lastLocation.longitude!);
       });
+    } else {
+      LocationData? currentLocation =
+          await _locationService.getCurrentLocation();
+      setState(() {
+        currentPosition =
+            LatLng(currentLocation!.latitude!, currentLocation.longitude!);
+      });
+      print('HELLO $currentPosition');
     }
   }
 
