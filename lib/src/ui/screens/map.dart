@@ -17,23 +17,17 @@ class _MapScreenState extends State<MapScreen> {
   final LocationService _locationService = LocationService();
   LatLng? currentPosition;
   StreamSubscription<LocationData>? _locationSubscription;
-  bool dialogShown = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (!dialogShown) {
-        // await _showInitialDialog();
-        dialogShown = true;
-      } else {
-        await _getLastLocation();
-        _locationSubscription = _locationService.getLocationUpdates().listen(
-          (LocationData currentLocation) {
-            _updateLocation(currentLocation);
-          },
-        );
-      }
+      await _getLastLocation();
+      _locationSubscription = _locationService.getLocationUpdates().listen(
+        (LocationData currentLocation) {
+          _updateLocation(currentLocation);
+        },
+      );
     });
   }
 
