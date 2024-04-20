@@ -50,7 +50,7 @@ class _BaseScreenState extends State<BaseScreen> {
           _selectedIndex = value;
         }),
       ),
-      drawer: MyDrawer(),
+      drawer: const MyDrawer(),
       floatingActionButton:
           _selectedIndex == 2 ? const ContactFloatingActionButton() : null,
     );
