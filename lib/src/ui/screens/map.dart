@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
 import 'package:qolshatyr_mobile/src/services/location_service.dart';
 import 'package:qolshatyr_mobile/src/models/trip.dart';
 
@@ -16,8 +18,8 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   final LocationService _locationService = LocationService();
   LatLng? currentPosition;
+  LatLng? endPosition;
   StreamSubscription<LocationData>? _locationSubscription;
-  TimeOfDay? _estimatedArrivalTime;
 
   @override
   void initState() {
@@ -29,7 +31,7 @@ class _MapScreenState extends State<MapScreen> {
           _updateLocation(currentLocation);
         },
       );
-      _showInitialDialog();
+      _showInitialDialog(context, currentPosition!, currentPosition!);
     });
   }
 
@@ -61,12 +63,26 @@ class _MapScreenState extends State<MapScreen> {
                 markerId: const MarkerId('Me'),
                 position: currentPosition!,
               ),
+              Marker(
+                markerId: const MarkerId('B'),
+                position: endPosition ?? currentPosition!,
+              ),
+            },
+            onTap: (LatLng location) {
+              setState(() {
+                endPosition = location;
+              });
             },
           );
   }
 
-  Future<void> _showInitialDialog() async {
+  Future<void> _showInitialDialog(
+    BuildContext context,
+    LatLng currentPosition,
+    LatLng endPosition,
+  ) async {
     print('DIALOG 1');
+    endPosition = currentPosition;
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -78,7 +94,7 @@ class _MapScreenState extends State<MapScreen> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                _showBottomSheet();
+                _showBottomSheet(context);
               },
               child: const Text('Next'),
             ),
@@ -88,63 +104,78 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  void _showBottomSheet() {
+  void _showBottomSheet(BuildContext context) {
+    TimeOfDay? estimatedArrivalTime;
+
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return Container(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Text(
-                    'Enter your destination address and estimated arrival time',
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16.0),
-                  TextButton(
-                      onPressed: () async {
-                        final TimeOfDay? picked = await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.now(),
-                        );
-                        if (picked != null) {
-                          setState(() {
-                            _estimatedArrivalTime = picked;
-                          });
-                        }
-                      },
-                      child: Text(
-                        _estimatedArrivalTime == null ? '00:00' : _estimatedArrivalTime!.format(context),
+        return Consumer(
+          builder: (context, ref, _) {
+            final tripNotifier = ref.read(tripProvider.notifier);
+            return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text(
+                        'Enter your destination address and estimated arrival time',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 28,
+                      ),
+                      const SizedBox(height: 16.0),
+                      TextButton(
+                        onPressed: () async {
+                          final TimeOfDay? picked = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                          );
+                          if (picked != null) {
+                            setState(() {
+                              estimatedArrivalTime = picked;
+                            });
+                          }
+                        },
+                        child: Text(
+                          estimatedArrivalTime == null
+                              ? '00:00'
+                              : estimatedArrivalTime!.format(context),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 28,
+                          ),
                         ),
-                      )),
-                  ElevatedButton(
-                    onPressed: () {
-                      Trip newTrip = Trip(
-                        startLocation: LocationData.fromMap({
-                          'latitude': currentPosition!.latitude,
-                          'longitude': currentPosition!.longitude,
-                        }),
-                        endLocation: LocationData.fromMap({
-                          'latitude': 0.0,
-                          'longitude': 0.0,
-                        }),
-                        estimateDuration: const Duration(hours: 1),
-                        startTime: DateTime.now(),
-                      );
-                      print('New Trip created: $newTrip');
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Start a trip'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          print("TEST !!!");
+                          Trip newTrip = Trip(
+                            startLocation: LocationData.fromMap({
+                              'latitude': currentPosition!.latitude,
+                              'longitude': currentPosition!.longitude,
+                            }),
+                            endLocation: LocationData.fromMap({
+                              'latitude': endPosition!.latitude,
+                              'longitude': endPosition!.longitude,
+                            }),
+                            estimateDuration: const Duration(hours: 1),
+                            startTime: DateTime.now(),
+                          );
+
+                          // Update trip state using TripProvider
+                          tripNotifier.addTrip(newTrip);
+
+                          print('New Trip created: $newTrip');
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Start a trip'),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             );
           },
         );

@@ -51,8 +51,16 @@ class _BaseScreenState extends State<BaseScreen> {
         }),
       ),
       drawer: const MyDrawer(),
-      floatingActionButton:
-          _selectedIndex == 2 ? const ContactFloatingActionButton() : null,
+      floatingActionButton: _selectedIndex == 0
+          ? FloatingActionButton(
+              onPressed: () {
+                print('TEST!');
+              },
+              child: Text('Hello'),
+            )
+          : _selectedIndex == 2
+              ? const ContactFloatingActionButton()
+              : null,
     );
   }
 }
