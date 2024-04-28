@@ -24,7 +24,7 @@ class Trip {
         'latitude': 0.0,
         'longitude': 0.0,
       }),
-      estimateDuration: Duration(minutes: 0),
+      estimateDuration: const Duration(minutes: 0),
       startTime: DateTime.now(),
     );
   }

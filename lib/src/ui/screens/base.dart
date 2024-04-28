@@ -50,7 +50,6 @@ class _BaseScreenState extends State<BaseScreen> {
           _selectedIndex = value;
         }),
       ),
-      // TODO: do something with drawe
       drawer: const MyDrawer(),
       floatingActionButton: _selectedIndex == 0
           ? const CreateTripFloatingActionButton()

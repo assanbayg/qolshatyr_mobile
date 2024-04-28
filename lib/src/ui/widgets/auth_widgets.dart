@@ -6,8 +6,8 @@ class AuthInputField extends StatelessWidget {
   final IconData icon;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
+  final bool? isPassword;
 
-  //TODO: add obscure text for password
   const AuthInputField({
     super.key,
     required this.controller,
@@ -15,6 +15,7 @@ class AuthInputField extends StatelessWidget {
     required this.icon,
     this.keyboardType,
     this.validator,
+    this.isPassword,
   });
 
   @override
@@ -30,6 +31,8 @@ class AuthInputField extends StatelessWidget {
         controller: controller,
         keyboardType: keyboardType,
         validator: validator,
+        obscureText: isPassword ?? false,
+        style: const TextStyle(color: Colors.black54),
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: const TextStyle(color: Colors.black54),
@@ -45,13 +48,11 @@ class AuthInputField extends StatelessWidget {
 class AuthButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String label;
-  final icon;
   final bool isLoading = false;
   const AuthButton({
     super.key,
     required this.onPressed,
     required this.label,
-    this.icon,
   });
 
   @override
@@ -75,7 +76,6 @@ class AuthButton extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (icon != null) icon,
                   Text(
                     ' $label',
                     style: const TextStyle(fontWeight: FontWeight.w600),

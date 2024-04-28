@@ -78,8 +78,6 @@ class _MapScreenState extends State<MapScreen> {
                             'latitude': endPosition!.latitude,
                             'longitude': endPosition!.longitude,
                           }));
-                      print(
-                          'Latitude: ${point.latitude}, Longitude: ${point.longitude}');
                     },
                   ),
                   children: [
@@ -117,12 +115,15 @@ class _MapScreenState extends State<MapScreen> {
             LatLng(lastLocation.latitude!, lastLocation.longitude!);
       });
     } else {
+      if (mounted) {
+        
       LocationData? currentLocation =
-          await _locationService.getCurrentLocation();
+          await _locationService.getCurrentLocation(context);
       setState(() {
         currentPosition =
             LatLng(currentLocation!.latitude!, currentLocation.longitude!);
       });
+      }
     }
   }
 

@@ -24,7 +24,6 @@ class _LoginPageState extends State<LoginScreen> {
   final TextEditingController _password = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();
 
-  // TODO: create Loading animation
   bool _isLoading = false;
 
   void _toggleLoading(bool value) {
@@ -63,118 +62,124 @@ class _LoginPageState extends State<LoginScreen> {
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Consumer(builder: (context, ref, _) {
-          final auth = ref.watch(authenticationProvider);
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SafeArea(
+              child: Consumer(builder: (context, ref, _) {
+                final auth = ref.watch(authenticationProvider);
 
-          return Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: size.height * 3 / 4,
-                  child: Expanded(
-                    flex: 3,
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 48),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.asset('assets/qolshatyr.png'),
-                          const Spacer(flex: 1),
-                          AuthInputField(
-                            controller: _email,
-                            hintText: 'Email address',
-                            icon: Icons.email_outlined,
-                            keyboardType: TextInputType.emailAddress,
-                            validator: LoginFormValidation.validateEmail,
-                          ),
-                          AuthInputField(
-                            controller: _password,
-                            hintText: 'Password',
-                            icon: Icons.lock_rounded,
-                            validator: LoginFormValidation.validatePassword,
-                          ),
-                          if (type == Status.signUp)
-                            AuthInputField(
-                              controller: _confirmPassword,
-                              hintText: 'Confirm password',
-                              icon: Icons.lock_rounded,
-                              validator: (value) =>
-                                  LoginFormValidation.validateConfirmPassword(
-                                value,
-                                _password.text,
-                              ),
-                            ),
-                          const Spacer()
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    width: double.infinity,
-                    decoration: const BoxDecoration(color: Colors.white),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        AuthButton(
-                          onPressed: () => _performAuthentication(
-                            context,
-                            ref,
-                            () => type == Status.login
-                                ? auth.signInWithEmailAndPassword(
-                                    _email.text,
-                                    _password.text,
-                                    context,
-                                  )
-                                : auth.signUpWithEmailAndPassword(
-                                    _email.text,
-                                    _password.text,
-                                    context,
-                                  ),
-                          ),
-                          label: type == Status.login ? 'Log in' : 'Sign up',
-                        ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 24.0),
-                          child: RichText(
-                            text: TextSpan(
-                              text: type == Status.login
-                                  ? 'Don\'t have an account? '
-                                  : 'Already have an account? ',
-                              style: const TextStyle(color: Colors.black),
+                return Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: size.height * 3 / 4,
+                        child: Expanded(
+                          flex: 3,
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 48),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                TextSpan(
-                                  text: type == Status.login
-                                      ? 'Sign up now'
-                                      : 'Log in',
-                                  style: TextStyle(
-                                    color: Colors.blue.shade700,
-                                    fontWeight: FontWeight.w600,
+                                Image.asset('assets/qolshatyr.png'),
+                                const Spacer(flex: 1),
+                                AuthInputField(
+                                  controller: _email,
+                                  hintText: 'Email address',
+                                  icon: Icons.email_outlined,
+                                  keyboardType: TextInputType.emailAddress,
+                                  validator: LoginFormValidation.validateEmail,
+                                ),
+                                AuthInputField(
+                                  controller: _password,
+                                  hintText: 'Password',
+                                  icon: Icons.lock_rounded,
+                                  validator:
+                                      LoginFormValidation.validatePassword,
+                                  isPassword: true,
+                                ),
+                                if (type == Status.signUp)
+                                  AuthInputField(
+                                    controller: _confirmPassword,
+                                    hintText: 'Confirm password',
+                                    icon: Icons.lock_rounded,
+                                    validator: (value) => LoginFormValidation
+                                        .validateConfirmPassword(
+                                      value,
+                                      _password.text,
+                                    ),
                                   ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = _toggleType,
-                                )
+                                const Spacer()
                               ],
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          width: double.infinity,
+                          decoration: const BoxDecoration(color: Colors.white),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              AuthButton(
+                                onPressed: () => _performAuthentication(
+                                  context,
+                                  ref,
+                                  () => type == Status.login
+                                      ? auth.signInWithEmailAndPassword(
+                                          _email.text,
+                                          _password.text,
+                                          context,
+                                        )
+                                      : auth.signUpWithEmailAndPassword(
+                                          _email.text,
+                                          _password.text,
+                                          context,
+                                        ),
+                                ),
+                                label:
+                                    type == Status.login ? 'Log in' : 'Sign up',
+                              ),
+                              const Spacer(),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 24.0),
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: type == Status.login
+                                        ? 'Don\'t have an account? '
+                                        : 'Already have an account? ',
+                                    style: const TextStyle(color: Colors.black),
+                                    children: [
+                                      TextSpan(
+                                        text: type == Status.login
+                                            ? 'Sign up now'
+                                            : 'Log in',
+                                        style: TextStyle(
+                                          color: Colors.blue.shade700,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = _toggleType,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                );
+              }),
             ),
-          );
-        }),
-      ),
     );
   }
 }

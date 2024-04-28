@@ -1,23 +1,18 @@
+import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-/*
-  it has 3 methods: 
-    1. getCurrentLocation - pretty obvious huh
-    2. saveLastLocation - saves them in local storage (uses shared_preferences)
-    3. getLocationUpdates - also veyr clear from the name
-*/
 
 class LocationService {
   final Location _location = Location();
 
-  Future<LocationData?> getCurrentLocation() async {
+  Future<LocationData?> getCurrentLocation(BuildContext context) async {
     try {
       final serviceEnabled = await _location.serviceEnabled();
       if (!serviceEnabled) {
         final serviceStatusResult = await _location.requestService();
         if (!serviceStatusResult) {
-          return null;
+          throw LocationServiceException(
+              'Location services are disabled. Please enable location services to proceed.');
         }
       }
 
@@ -26,19 +21,31 @@ class LocationService {
           permissionGranted == PermissionStatus.deniedForever) {
         permissionGranted = await _location.requestPermission();
         if (permissionGranted != PermissionStatus.granted) {
-          return null;
+          throw LocationPermissionException(
+              'Location permission denied. Please grant permission to access your location.');
         }
       }
 
       return await _location.getLocation();
+    } on LocationServiceException catch (e) {
+      if (context.mounted) {
+        _showSnackBar(context, e.message);
+      }
+      return null;
+    } on LocationPermissionException catch (e) {
+      if (context.mounted) {
+        _showSnackBar(context, e.message);
+      }
+      return null;
     } catch (e) {
-      print('Failed to get location: $e');
+      if (context.mounted) {
+        _showSnackBar(context, 'Failed to get location. Please try again.');
+      }
       return null;
     }
   }
 
   Future<void> saveLastLocation(LocationData location) async {
-    print('Save Last Location: $location');
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble('latitude', location.latitude ?? 0);
     await prefs.setDouble('longitude', location.longitude ?? 0);
@@ -60,4 +67,22 @@ class LocationService {
   Stream<LocationData> getLocationUpdates() {
     return _location.onLocationChanged;
   }
+
+  void _showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+}
+
+// Custom exceptions for location service and permission errors
+class LocationServiceException implements Exception {
+  final String message;
+
+  LocationServiceException(this.message);
+}
+
+class LocationPermissionException implements Exception {
+  final String message;
+
+  LocationPermissionException(this.message);
 }

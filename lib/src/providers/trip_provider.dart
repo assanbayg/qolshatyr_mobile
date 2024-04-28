@@ -3,7 +3,8 @@ import 'package:location/location.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:qolshatyr_mobile/src/models/trip.dart';
 
-final currentPositionProvider = StateProvider<LatLng?>((ref) => LatLng(0, 0));
+final currentPositionProvider =
+    StateProvider<LatLng?>((ref) => const LatLng(0, 0));
 final tripProvider = StateNotifierProvider((ref) => TripNotifier());
 
 class TripNotifier extends StateNotifier<Trip> {

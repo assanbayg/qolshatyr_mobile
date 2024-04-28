@@ -82,8 +82,10 @@ class DialogService {
                             'latitude': currentPosition.latitude,
                             'longitude': currentPosition.longitude,
                           });
-                          // TODO: Use Duration from Timer
-                          final Duration estimateDuration = Duration(hours: 1);
+                          final Duration estimateDuration = Duration(
+                            hours: estimatedArrivalTime!.hour,
+                            minutes: estimatedArrivalTime!.minute,
+                          );
                           tripNotifier.addTrip(startLocation, estimateDuration);
                           Navigator.pop(context);
                         },
