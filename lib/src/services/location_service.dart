@@ -1,6 +1,13 @@
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/*
+  it has 3 methods: 
+    1. getCurrentLocation - pretty obvious huh
+    2. saveLastLocation - saves them in local storage (uses shared_preferences)
+    3. getLocationUpdates - also veyr clear from the name
+*/
+
 class LocationService {
   final Location _location = Location();
 
