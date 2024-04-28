@@ -35,7 +35,7 @@ For the database solution, consider using:
 
 ## Flutter Packages
 Use the following Flutter packages to facilitate development:
-- [x] **google_maps_flutter**: For integrating interactive maps and displaying routes.
+- [x] **flutter_map**: For integrating interactive maps and displaying routes.
 - [x] **location**: For accessing device location and implementing real-time location tracking.
 - [x] **riverpod**: For dependency injection and state management.
 - **flutter_local_notifications**: For sending reminder notifications to users.
