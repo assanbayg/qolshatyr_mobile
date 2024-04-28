@@ -14,6 +14,21 @@ class Trip {
     required this.startTime,
   });
 
+  factory Trip.empty() {
+    return Trip(
+      startLocation: LocationData.fromMap({
+        'latitude': 0.0,
+        'longitude': 0.0,
+      }),
+      endLocation: LocationData.fromMap({
+        'latitude': 0.0,
+        'longitude': 0.0,
+      }),
+      estimateDuration: Duration(minutes: 0),
+      startTime: DateTime.now(),
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'start_location': {

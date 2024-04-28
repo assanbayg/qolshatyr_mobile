@@ -3,7 +3,7 @@ import 'package:qolshatyr_mobile/src/models/contact.dart';
 
 final contactListProvider =
     StateNotifierProvider<ContactNotifier, List<Contact>>(
-  (ref) => ContactNotifier(),
+(ref) => ContactNotifier(),
 );
 
 class ContactNotifier extends StateNotifier<List<Contact>> {

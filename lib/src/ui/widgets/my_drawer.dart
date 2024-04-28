@@ -9,7 +9,7 @@ class MyDrawer extends StatelessWidget {
       child: Container(
         height: double.maxFinite,
         width: MediaQuery.of(context).size.width * 2 / 3,
-        decoration: BoxDecoration(),
+        decoration: const BoxDecoration(),
       ),
     );
   }
