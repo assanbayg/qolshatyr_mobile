@@ -3,11 +3,24 @@ import 'package:location/location.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
 
-// this class providers methods for opening dialog and bottom modal sheet
-// which are used in map and base.dart
-// it took really long time to create it btw
-
 class DialogService {
+  Future<void> showAuthExceptionsDialog(
+      BuildContext context, String title, String message) async {
+    await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(_).pop(),
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> showInitialDialog(
       BuildContext context, LocationData currentPosition) async {
     await showDialog(
@@ -21,7 +34,7 @@ class DialogService {
               onPressed: () {
                 Navigator.of(context).pop();
                 DialogService dialogService = DialogService();
-                dialogService.showBottomSheet(context, currentPosition);
+                dialogService.showCreateTrip(context, currentPosition);
               },
               child: const Text('Next'),
             ),
@@ -31,7 +44,7 @@ class DialogService {
     );
   }
 
-  void showBottomSheet(BuildContext context, LocationData currentPosition) {
+  void showCreateTrip(BuildContext context, LocationData currentPosition) {
     TimeOfDay? estimatedArrivalTime;
 
     showModalBottomSheet(

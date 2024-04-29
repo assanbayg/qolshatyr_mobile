@@ -10,7 +10,7 @@ class ContactCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final contactList = ref.watch(contactListProvider);
+    // final contactList = ref.watch(contactListProvider);
 
     return Card(
       margin: const EdgeInsets.all(8),

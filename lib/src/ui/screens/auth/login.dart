@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginScreen> {
     }
     _toggleLoading(true);
     await authenticationFunction().whenComplete(() {
-      ref.watch(authenticationProvider).authStateChange.listen((event) {
+      ref.watch(authService).authStateChange.listen((event) {
         if (event == null) {
           _toggleLoading(false);
           return;
@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginScreen> {
           ? const Center(child: CircularProgressIndicator())
           : SafeArea(
               child: Consumer(builder: (context, ref, _) {
-                final auth = ref.watch(authenticationProvider);
+                final auth = ref.watch(authService);
 
                 return Form(
                   key: _formKey,

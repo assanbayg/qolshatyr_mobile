@@ -49,7 +49,7 @@ class CreateTripFloatingActionButton extends StatelessWidget {
         final LocationData? currentPosition =
             await locationService.getCurrentLocation(context);
         if (context.mounted) {
-          dialogService.showBottomSheet(context, currentPosition!);
+          dialogService.showCreateTrip(context, currentPosition!);
         }
       },
       child: const Icon(Icons.local_taxi_rounded),
