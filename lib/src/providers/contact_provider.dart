@@ -14,7 +14,11 @@ class ContactNotifier extends StateNotifier<List<Contact>> {
 
   ContactNotifier() : super([]);
 
-  void addContact(String name, String phoneNumber) async {
+  Future<void> addContact(String name, String phoneNumber) async {
+    if (state.any((contact) => contact.phoneNumber == phoneNumber)) {
+      return;
+    }
+
     await _firestoreService.addEmergencyContact(
       _firebaseAuth.currentUser!.uid,
       name,

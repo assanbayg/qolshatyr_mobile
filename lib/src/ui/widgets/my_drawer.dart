@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/providers/auth_provider.dart';
+import 'package:qolshatyr_mobile/src/ui/screens/trips_history.dart';
 
 class MyDrawer extends ConsumerWidget {
   const MyDrawer({super.key});
@@ -22,11 +23,22 @@ class MyDrawer extends ConsumerWidget {
             ),
             ListTile(
               title: const Text('Sign Out'),
+              leading: const Icon(Icons.logout_rounded),
               onTap: () async {
                 await authService.signOut();
                 if (context.mounted) {
                   Navigator.of(context).pop();
                 }
+              },
+            ),
+            ListTile(
+              title: const Text('User Trips'),
+              leading: const Icon(Icons.local_taxi_rounded),
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return TripsHistoryScreen();
+                }));
               },
             ),
           ],

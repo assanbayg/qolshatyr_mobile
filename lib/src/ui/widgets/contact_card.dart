@@ -28,7 +28,6 @@ class ContactCard extends ConsumerWidget {
                 ref
                     .read(contactListProvider.notifier)
                     .removeContact(contact.phoneNumber);
-                final newValue = ref.refresh(contactListProvider);
               },
               icon: const Icon(Icons.remove),
             ),

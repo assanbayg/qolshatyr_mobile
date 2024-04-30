@@ -81,7 +81,12 @@ class _LoginPageState extends State<LoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Image.asset('assets/qolshatyr.png'),
+                              Center(
+                                child: SizedBox(
+                                  height: 250,
+                                  child: Image.asset('assets/qolshatyr.png'),
+                                ),
+                              ),
                               const Spacer(flex: 1),
                               AuthInputField(
                                 controller: _email,

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:qolshatyr_mobile/src/models/contact.dart';
+import 'package:qolshatyr_mobile/src/models/trip.dart';
 
 class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -10,6 +11,29 @@ class FirestoreService {
       'email': user.email,
       'name': user.displayName,
     });
+  }
+
+  Future<void> addTrip(Map<String, dynamic> tripJson) async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    tripJson['userId'] = userId;
+
+    await _firestore.collection('trips').add(tripJson);
+  }
+
+  Future<List<Trip>> getUserTrips() async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+        .collection('trips')
+        .where('userId', isEqualTo: userId)
+        .get();
+
+    List<Trip> trips = querySnapshot.docs
+        .map((QueryDocumentSnapshot<Map<String, dynamic>> document) {
+      return Trip.fromJson(document.data());
+    }).toList();
+    print(trips);
+
+    return trips;
   }
 
   Future<void> addEmergencyContact(
