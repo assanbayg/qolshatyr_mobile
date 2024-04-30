@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qolshatyr_mobile/src/providers/auth_provider.dart';
 
 import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
 import 'package:qolshatyr_mobile/src/ui/widgets/contact_card.dart';
@@ -15,6 +16,14 @@ class ContactsScreen extends ConsumerWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        ElevatedButton(
+            onPressed: () {
+              final authService = ref.read(fireBaseAuthProvider);
+              final firestoreService = ref.read(firestoreServiceProvider);
+              firestoreService
+                  .getEmergencyContacts(authService.currentUser!.uid);
+            },
+            child: Text("BUTTON")),
         Card(
           child: Padding(
             padding: const EdgeInsets.all(15),

@@ -11,9 +11,10 @@ class ContactNotifier extends StateNotifier<List<Contact>> {
 
   void addContact(Contact newContact) {
     state = [...state, newContact];
+    
   }
 
-  void removeContact(String id) {
-    state.removeWhere((contact) => contact.id == id);
+  void removeContact(String phoneNumber) {
+    state.removeWhere((contact) => contact.phoneNumber == phoneNumber);
   }
 }

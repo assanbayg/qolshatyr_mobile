@@ -25,7 +25,7 @@ class ContactCard extends ConsumerWidget {
               onPressed: () {
                 ref
                     .read(contactListProvider.notifier)
-                    .removeContact(contact.id);
+                    .removeContact(contact.phoneNumber);
               },
               icon: const Icon(Icons.remove),
             ),
@@ -38,7 +38,6 @@ class ContactCard extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(contact.phoneNumber),
-                Text(contact.id),
               ],
             ),
           ),

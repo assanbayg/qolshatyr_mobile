@@ -5,7 +5,7 @@ import 'package:qolshatyr_mobile/src/services/firestore_service.dart';
 
 class AuthServive {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirecloudService _firecloudService = FirecloudService();
+  final FirestoreService _firecloudService = FirestoreService();
 
   Stream<User?> get authStateChange => _auth.authStateChanges();
 

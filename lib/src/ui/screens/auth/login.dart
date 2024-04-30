@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginScreen> {
     }
     _toggleLoading(true);
     await authenticationFunction().whenComplete(() {
-      ref.watch(authService).authStateChange.listen((event) {
+      ref.watch(authServiceProvider).authStateChange.listen((event) {
         if (event == null) {
           _toggleLoading(false);
           return;
@@ -59,8 +59,6 @@ class _LoginPageState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
@@ -68,53 +66,50 @@ class _LoginPageState extends State<LoginScreen> {
           ? const Center(child: CircularProgressIndicator())
           : SafeArea(
               child: Consumer(builder: (context, ref, _) {
-                final auth = ref.watch(authService);
+                final auth = ref.watch(authServiceProvider);
 
                 return Form(
                   key: _formKey,
                   child: Column(
                     children: [
-                      SizedBox(
-                        height: size.height * 3 / 4,
-                        child: Expanded(
-                          flex: 3,
-                          child: Container(
-                            margin: const EdgeInsets.only(top: 48),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset('assets/qolshatyr.png'),
-                                const Spacer(flex: 1),
+                      Expanded(
+                        flex: type == Status.login ? 4 : 8,
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 48),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.asset('assets/qolshatyr.png'),
+                              const Spacer(flex: 1),
+                              AuthInputField(
+                                controller: _email,
+                                hintText: 'Email address',
+                                icon: Icons.email_outlined,
+                                keyboardType: TextInputType.emailAddress,
+                                validator: LoginFormValidation.validateEmail,
+                              ),
+                              AuthInputField(
+                                controller: _password,
+                                hintText: 'Password',
+                                icon: Icons.lock_rounded,
+                                validator: LoginFormValidation.validatePassword,
+                                isPassword: true,
+                              ),
+                              if (type == Status.signUp)
                                 AuthInputField(
-                                  controller: _email,
-                                  hintText: 'Email address',
-                                  icon: Icons.email_outlined,
-                                  keyboardType: TextInputType.emailAddress,
-                                  validator: LoginFormValidation.validateEmail,
-                                ),
-                                AuthInputField(
-                                  controller: _password,
-                                  hintText: 'Password',
+                                  controller: _confirmPassword,
+                                  hintText: 'Confirm password',
                                   icon: Icons.lock_rounded,
-                                  validator:
-                                      LoginFormValidation.validatePassword,
+                                  validator: (value) => LoginFormValidation
+                                      .validateConfirmPassword(
+                                    value,
+                                    _password.text,
+                                  ),
                                   isPassword: true,
                                 ),
-                                if (type == Status.signUp)
-                                  AuthInputField(
-                                    controller: _confirmPassword,
-                                    hintText: 'Confirm password',
-                                    icon: Icons.lock_rounded,
-                                    validator: (value) => LoginFormValidation
-                                        .validateConfirmPassword(
-                                      value,
-                                      _password.text,
-                                    ),
-                                  ),
-                                const Spacer()
-                              ],
-                            ),
+                              const Spacer()
+                            ],
                           ),
                         ),
                       ),
