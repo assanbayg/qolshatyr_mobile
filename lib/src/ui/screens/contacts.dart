@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qolshatyr_mobile/src/models/contact.dart';
 import 'package:qolshatyr_mobile/src/providers/auth_provider.dart';
 
 import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
@@ -13,17 +14,17 @@ class ContactsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final contacts = ref.watch(contactListProvider);
 
+    void fetchContacts() async {
+      final authService = ref.read(fireBaseAuthProvider);
+      final firestoreService = ref.read(firestoreServiceProvider);
+      List<Contact> fetchedContacts = await firestoreService
+          .getEmergencyContacts(authService.currentUser!.uid);
+      ref.read(contactListProvider.notifier).updateContacts(fetchedContacts);
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ElevatedButton(
-            onPressed: () {
-              final authService = ref.read(fireBaseAuthProvider);
-              final firestoreService = ref.read(firestoreServiceProvider);
-              firestoreService
-                  .getEmergencyContacts(authService.currentUser!.uid);
-            },
-            child: Text("BUTTON")),
         Card(
           child: Padding(
             padding: const EdgeInsets.all(15),
@@ -41,6 +42,10 @@ class ContactsScreen extends ConsumerWidget {
               ],
             ),
           ),
+        ),
+        ElevatedButton(
+          onPressed: fetchContacts,
+          child: const Text("Sync Contacts"),
         ),
         if (contacts.isNotEmpty)
           ...contacts.map(

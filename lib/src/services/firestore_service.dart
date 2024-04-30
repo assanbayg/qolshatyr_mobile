@@ -28,14 +28,30 @@ class FirestoreService {
         .collection('contacts')
         .get()
         .then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
-      querySnapshot.docs.forEach((element) {
+      for (var element in querySnapshot.docs) {
         Contact.fromJson(element.data());
-      });
+      }
+      if (querySnapshot.docs.isEmpty) {
+        return [];
+      }
       return querySnapshot.docs
           .map((QueryDocumentSnapshot<Map<String, dynamic>> document) {
-        print(Contact.fromJson(document.data()));
         return Contact.fromJson(document.data());
       }).toList();
+    });
+  }
+
+  Future<void> deleteEmergencyContact(String userId, String number) async {
+    await _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('contacts')
+        .where('number', isEqualTo: number)
+        .get()
+        .then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+      for (var document in querySnapshot.docs) {
+        document.reference.delete();
+      }
     });
   }
 }

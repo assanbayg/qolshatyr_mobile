@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:location/location.dart';
-import 'package:qolshatyr_mobile/src/models/contact.dart' as contact_model;
-import 'package:qolshatyr_mobile/src/providers/auth_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
 import 'package:qolshatyr_mobile/src/services/dialog_service.dart';
-import 'package:qolshatyr_mobile/src/services/firestore_service.dart';
 import 'package:qolshatyr_mobile/src/services/location_service.dart';
 
 class ContactFloatingActionButton extends ConsumerWidget {
@@ -20,19 +17,9 @@ class ContactFloatingActionButton extends ConsumerWidget {
       final Contact? contact = await contactPicker.selectContact();
       if (contact != null) {
         ref.read(contactListProvider.notifier).addContact(
-              contact_model.Contact(
-                contact.fullName!,
-                contact.phoneNumbers![0],
-              ),
+              contact.fullName!,
+              contact.phoneNumbers![0],
             );
-        final FirestoreService firestoreService =
-            ref.read(firestoreServiceProvider);
-        final firebaseAuth = ref.read(fireBaseAuthProvider);
-        firestoreService.addEmergencyContact(
-          firebaseAuth.currentUser!.uid,
-          contact.fullName!,
-          contact.phoneNumbers![0],
-        );
       }
     }
 

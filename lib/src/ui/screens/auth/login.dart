@@ -46,6 +46,7 @@ class _LoginPageState extends State<LoginScreen> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
+    // TODO: loading animation
     _toggleLoading(true);
     await authenticationFunction().whenComplete(() {
       ref.watch(authServiceProvider).authStateChange.listen((event) {

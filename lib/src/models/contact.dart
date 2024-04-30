@@ -6,7 +6,7 @@ class Contact {
 
   @override
   String toString() {
-    return 'Contact(name: $name, phoneNumber: $phoneNumber);';
+    return 'Contact(name: $name, phoneNumber: $phoneNumber)';
   }
 
   Map<String, dynamic> toJson() {

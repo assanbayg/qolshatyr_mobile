@@ -10,8 +10,6 @@ class ContactCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final contactList = ref.watch(contactListProvider);
-
     return Card(
       margin: const EdgeInsets.all(8),
       child: ExpansionTile(
@@ -19,13 +17,18 @@ class ContactCard extends ConsumerWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // TODO: add visibility support for riverpod
-            IconButton(onPressed: () {}, icon: const Icon(Icons.visibility)),
+            IconButton(
+              onPressed: () {
+                // TODO: add visibility support for riverpod
+              },
+              icon: const Icon(Icons.visibility),
+            ),
             IconButton(
               onPressed: () {
                 ref
                     .read(contactListProvider.notifier)
                     .removeContact(contact.phoneNumber);
+                final newValue = ref.refresh(contactListProvider);
               },
               icon: const Icon(Icons.remove),
             ),
@@ -35,7 +38,6 @@ class ContactCard extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(contact.phoneNumber),
               ],
