@@ -31,7 +31,6 @@ class FirestoreService {
         .map((QueryDocumentSnapshot<Map<String, dynamic>> document) {
       return Trip.fromJson(document.data());
     }).toList();
-    print(trips);
 
     return trips;
   }
