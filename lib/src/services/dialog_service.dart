@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qolshatyr_mobile/src/providers/timer_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
 
 class DialogService {
@@ -100,6 +103,9 @@ class DialogService {
                             minutes: estimatedArrivalTime!.minute,
                           );
                           tripNotifier.addTrip(startLocation, estimateDuration);
+                          ref
+                              .read(timerProvider.notifier)
+                              .startTimer(estimateDuration);
                           Navigator.pop(context);
                         },
                         child: const Text('Start a trip'),
