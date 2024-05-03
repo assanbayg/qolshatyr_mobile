@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qolshatyr_mobile/src/providers/voice_recognition_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:qolshatyr_mobile/src/providers/voice_recognition_provider.dart';
 import 'package:qolshatyr_mobile/src/services/voice_recognition_service.dart';
 import 'package:qolshatyr_mobile/src/ui/widgets/voice_recognition_widgets.dart';
 
