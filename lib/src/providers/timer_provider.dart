@@ -7,15 +7,19 @@ final timerProvider = StateNotifierProvider<TimerNotifier, int>((ref) {
 });
 
 class TimerNotifier extends StateNotifier<int> {
-  TimerNotifier() : super(0);
+  TimerNotifier() : super(0) {
+    _timerController.stream.listen((event) {
+      state = event;
+    });
+  }
 
+  final _timerController = StreamController<int>();
   Timer? _timer;
 
   void startTimer(Duration duration) {
-    print('STARTED');
     _timer?.cancel();
     _timer = Timer.periodic(duration, (timer) {
-      state++;
+      _timerController.add(state + 1);
     });
   }
 
@@ -27,6 +31,7 @@ class TimerNotifier extends StateNotifier<int> {
   @override
   void dispose() {
     _timer?.cancel();
+    _timerController.close();
     super.dispose();
   }
 }

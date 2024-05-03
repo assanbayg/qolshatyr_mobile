@@ -5,6 +5,8 @@ import 'package:location/location.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/providers/timer_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
+import 'package:qolshatyr_mobile/src/providers/voice_recognition_provider.dart';
+import 'package:qolshatyr_mobile/src/services/voice_recognition_service.dart';
 
 class DialogService {
   Future<void> showAuthExceptionsDialog(
@@ -56,6 +58,10 @@ class DialogService {
         return Consumer(
           builder: (context, ref, _) {
             final tripNotifier = ref.read(tripProvider.notifier);
+            final timerNotifier = ref.read(timerProvider.notifier);
+            final VoiceRecognitionService voiceService =
+                ref.watch(voiceServiceProvider);
+
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
                 return Container(
@@ -86,9 +92,7 @@ class DialogService {
                               ? '00:00'
                               : estimatedArrivalTime!.format(context),
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 28,
-                          ),
+                          style: const TextStyle(fontSize: 28),
                         ),
                       ),
                       ElevatedButton(
@@ -103,9 +107,8 @@ class DialogService {
                             minutes: estimatedArrivalTime!.minute,
                           );
                           tripNotifier.addTrip(startLocation, estimateDuration);
-                          ref
-                              .read(timerProvider.notifier)
-                              .startTimer(estimateDuration);
+                          timerNotifier.startTimer(estimateDuration);
+                          voiceService.toggleListening();
                           Navigator.pop(context);
                         },
                         child: const Text('Start a trip'),
