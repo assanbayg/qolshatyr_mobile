@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qolshatyr_mobile/src/providers/timer_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
@@ -19,16 +21,17 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen> {
   String _recognizedText = '';
   int _timerDuration = 1;
 
-  @override
-  void initState() {
-    super.initState();
-    _speech.initialize(
-        onError: (error) => print('Initialization error: $error'));
-    _startTimer();
+  Timer? _timer;
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      _timerStreamController.add(DateTime.now());
+    });
   }
 
   @override
   void dispose() {
+    _timer?.cancel();
     _timerStreamController.close();
     super.dispose();
   }
@@ -40,23 +43,30 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen> {
       );
       print(available);
       if (available) {
-        _speech.listen(
-          onResult: (result) {
-            setState(() {
-              _recognizedText = result.recognizedWords.toLowerCase();
-              if (_recognizedText.contains('help')) {
-                print('SOS');
-                _makeEmergencyCall();
-              }
-            });
-          },
-        );
+        _startListening();
         setState(() => _isListening = true);
       }
     } else {
       _speech.stop();
       setState(() => _isListening = false);
     }
+  }
+
+  void _startListening() {
+    _speech.listen(
+      onResult: (result) {
+        setState(() {
+          _recognizedText = result.recognizedWords.toLowerCase();
+          if (_recognizedText.contains('help')) {
+            print('SOS');
+            _makeEmergencyCall();
+          }
+        });
+        if (result.finalResult) {
+          _startListening();
+        }
+      },
+    );
   }
 
   Future<void> _makeEmergencyCall() async {
@@ -72,11 +82,11 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen> {
     }
   }
 
-  void _startTimer() {
-    Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      _timerStreamController.add(DateTime.now());
-    });
-  }
+  // void _startTimer() {
+  //   Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+  //     _timerStreamController.add(DateTime.now());
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
