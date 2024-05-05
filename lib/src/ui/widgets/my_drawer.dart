@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/providers/auth_provider.dart';
-import 'package:qolshatyr_mobile/src/ui/screens/trips_history.dart';
+import 'package:qolshatyr_mobile/src/ui/screens/trips_history_screen.dart';
 
 class MyDrawer extends ConsumerWidget {
   const MyDrawer({super.key});

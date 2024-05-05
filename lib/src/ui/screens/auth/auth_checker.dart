@@ -5,7 +5,7 @@ import 'package:qolshatyr_mobile/src/providers/auth_provider.dart';
 import 'package:qolshatyr_mobile/src/ui/screens/auth/login.dart';
 import 'package:qolshatyr_mobile/src/ui/screens/auth/error.dart';
 import 'package:qolshatyr_mobile/src/ui/screens/auth/loading.dart';
-import 'package:qolshatyr_mobile/src/ui/screens/base.dart';
+import 'package:qolshatyr_mobile/src/ui/screens/base_screen.dart';
 
 class AuthChecker extends ConsumerWidget {
   const AuthChecker({super.key});

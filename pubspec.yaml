@@ -52,6 +52,7 @@ dependencies:
   url_launcher: ^6.2.6
   flutter_tts: ^4.0.2
   flutter_local_notifications: ^17.1.1
+  direct_sms: ^0.0.1
 
 dev_dependencies:
   flutter_test:

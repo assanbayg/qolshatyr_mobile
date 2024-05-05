@@ -15,11 +15,18 @@ class TimerNotifier extends StateNotifier<int> {
 
   final _timerController = StreamController<int>();
   Timer? _timer;
+  Duration _duration = Duration.zero;
 
   void startTimer(Duration duration) {
     _timer?.cancel();
-    _timer = Timer.periodic(duration, (timer) {
-      _timerController.add(state + 1);
+    _duration = duration;
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_duration.inSeconds > 0) {
+        _duration = _duration - Duration(seconds: 1);
+        _timerController.add(_duration.inSeconds);
+      } else {
+        _timer?.cancel();
+      }
     });
   }
 

@@ -10,15 +10,21 @@ class VoiceRecognitionService {
   bool get isListening => _isListening;
   String get recognizedText => _recognizedText;
 
+  //TODO: fix to listen continuously once trip has started
   Future<void> toggleListening() async {
     if (!_isListening) {
-      bool available = await _speech.initialize(
-        onError: (error) => print('Initialization error: $error'),
-      );
-      if (available) {
-        _startListening();
-        _isListening = true;
+      bool available = false;
+      while (!available) {
+        available = await _speech.initialize(
+          onError: (val) async {
+            print('Initialization error: $val');
+            _speech.stop();
+            await Future.delayed(const Duration(seconds: 2));
+          },
+        );
       }
+      _startListening();
+      _isListening = true;
     } else {
       _speech.stop();
       _isListening = false;
@@ -31,7 +37,6 @@ class VoiceRecognitionService {
         _recognizedText = result.recognizedWords.toLowerCase();
         if (result.finalResult) {
           print(_recognizedText);
-          // okay now i'm sure that it stil listens to words, huh?
           _startListening();
         }
       },
