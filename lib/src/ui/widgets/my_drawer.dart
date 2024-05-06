@@ -41,6 +41,7 @@ class MyDrawer extends ConsumerWidget {
                 }));
               },
             ),
+            // TODO: add tech support screen
           ],
         ),
       ),

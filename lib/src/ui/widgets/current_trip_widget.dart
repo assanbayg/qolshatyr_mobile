@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/providers/timer_provider.dart';
-import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
 
 class CurrentTripWidget extends ConsumerWidget {
   const CurrentTripWidget({super.key});
@@ -10,7 +9,6 @@ class CurrentTripWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final Size size = MediaQuery.of(context).size;
     final int timer = ref.watch(timerProvider);
-    final tripNotifier = ref.read(tripProvider.notifier);
 
     String formatTime(int time) {
       return time.toString().padLeft(2, '0');

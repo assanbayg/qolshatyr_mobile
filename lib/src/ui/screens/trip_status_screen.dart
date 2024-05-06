@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qolshatyr_mobile/src/services/notifi_service.dart';
 import 'package:qolshatyr_mobile/src/services/sms_sender.dart';
 import 'package:qolshatyr_mobile/src/ui/widgets/current_trip_widget.dart';
 import 'package:qolshatyr_mobile/src/providers/voice_recognition_provider.dart';
@@ -47,6 +48,14 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
             ElevatedButton(
                 onPressed: _makeEmergencyCall,
                 child: const Text('Send SOS message')),
+            ElevatedButton(
+                onPressed: () {
+                  NotificationService().showNotification(
+                    title: 'Sample text',
+                    body: 'It works!',
+                  );
+                },
+                child: const Text('Receive notification')),
           ],
         ),
       );

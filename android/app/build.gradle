@@ -27,7 +27,6 @@ if (flutterVersionName == null) {
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
-def googleMapsApiKey = properties.getProperty('googleMapsApiKey') // Notice we get the property we the exact same name we wrote in the local.properties file
 
 android {
     namespace "com.example.qolshatyr_mobile"
@@ -56,7 +55,6 @@ android {
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        manifestPlaceholders = [googleMapsApiKey: googleMapsApiKey]
     }
 
     buildTypes {
