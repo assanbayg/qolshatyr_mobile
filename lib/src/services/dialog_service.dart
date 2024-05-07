@@ -108,6 +108,9 @@ class DialogService {
                           );
                           tripNotifier.addTrip(startLocation, estimateDuration);
                           timerNotifier.startTimer(estimateDuration);
+                          ref
+                              .read(checkInProvider.notifier)
+                              .startTimer(Duration(seconds: 10));
                           voiceService.toggleListening();
                           Navigator.pop(context);
                         },

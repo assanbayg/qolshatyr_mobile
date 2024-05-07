@@ -6,12 +6,14 @@ class Trip {
   final Duration estimateDuration;
   final DateTime startTime;
   final DateTime endTime = DateTime(2024);
+  bool isOngoing;
 
   Trip({
     required this.startLocation,
     required this.endLocation,
     required this.estimateDuration,
     required this.startTime,
+    required this.isOngoing,
   });
 
   factory Trip.empty() {
@@ -26,6 +28,7 @@ class Trip {
       }),
       estimateDuration: const Duration(minutes: 0),
       startTime: DateTime.now(),
+      isOngoing: true,
     );
   }
 
@@ -42,6 +45,7 @@ class Trip {
       'estimate_duration': estimateDuration.inMinutes,
       'start_time': startTime.millisecondsSinceEpoch,
       'end_time': endTime.millisecondsSinceEpoch,
+      'is_ongoing': isOngoing,
     };
   }
 
@@ -57,6 +61,7 @@ class Trip {
       }),
       estimateDuration: Duration(minutes: json['estimate_duration']),
       startTime: DateTime.fromMillisecondsSinceEpoch(json['start_time']),
+      isOngoing: json['is_ongoing'],
     );
   }
 

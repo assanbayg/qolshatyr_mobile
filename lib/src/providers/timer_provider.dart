@@ -6,6 +6,10 @@ final timerProvider = StateNotifierProvider<TimerNotifier, int>((ref) {
   return TimerNotifier();
 });
 
+final checkInProvider = StateNotifierProvider<TimerNotifier, int>((ref) {
+  return TimerNotifier();
+});
+
 class TimerNotifier extends StateNotifier<int> {
   TimerNotifier() : super(0) {
     _timerController.stream.listen((event) {

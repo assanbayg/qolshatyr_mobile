@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/providers/timer_provider.dart';
+import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
+import 'package:qolshatyr_mobile/src/services/notifi_service.dart';
 
 class CurrentTripWidget extends ConsumerWidget {
   const CurrentTripWidget({super.key});
@@ -9,6 +11,26 @@ class CurrentTripWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final Size size = MediaQuery.of(context).size;
     final int timer = ref.watch(timerProvider);
+    final int checkinTimer = ref.watch(checkInProvider);
+    final trip = ref.read(tripProvider.notifier);
+
+    if (timer == 0 && trip.getState()) {
+      NotificationService.showSimpleNotification(
+          title: 'Trip has ended',
+          body: 'Confirm you are safe',
+          payload: 'payload');
+      trip.updateStatus(false);
+    }
+
+    if (checkinTimer == 0 && trip.getState()) {
+      NotificationService.showSimpleNotification(
+          title: 'Check In', body: 'Update your status', payload: 'test');
+      // TODO: use custom duration
+      // or at least update it for the release
+      ref
+          .read(checkInProvider.notifier)
+          .startTimer(const Duration(seconds: 15));
+    }
 
     String formatTime(int time) {
       return time.toString().padLeft(2, '0');

@@ -19,8 +19,10 @@ class TripStatusScreen extends StatefulWidget {
 
 class _TripStatusScreenState extends State<TripStatusScreen> {
   // TODO: create service for emergency calls and messaging
-  String phoneNumber = 'will to it later';
+  String phoneNumber = '77771730178';
   Future<void> _makeEmergencyCall() async {
+    NotificationService.showSimpleNotification(
+        title: 'title', body: 'body', payload: 'test');
     SmsSender.sendSms(phoneNumber,
         'IF you received this message, then code is working and pls tell this to Gauhar');
   }
@@ -46,16 +48,9 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
                 onPressed: voiceService.toggleListening),
             // TODO: stop trip when button is pressed
             ElevatedButton(
-                onPressed: _makeEmergencyCall,
-                child: const Text('Send SOS message')),
-            ElevatedButton(
-                onPressed: () {
-                  NotificationService().showNotification(
-                    title: 'Sample text',
-                    body: 'It works!',
-                  );
-                },
-                child: const Text('Receive notification')),
+              onPressed: _makeEmergencyCall,
+              child: const Text('Send SOS message'),
+            ),
           ],
         ),
       );

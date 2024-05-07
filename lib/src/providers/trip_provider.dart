@@ -19,6 +19,7 @@ class TripNotifier extends StateNotifier<Trip> {
       endLocation: state.endLocation,
       estimateDuration: estimateDuration,
       startTime: DateTime.now(),
+      isOngoing: true,
     );
     await _firestoreService.addTrip(newTrip.toJson());
     state = newTrip;
@@ -30,7 +31,14 @@ class TripNotifier extends StateNotifier<Trip> {
       endLocation: newEndLocation,
       estimateDuration: state.estimateDuration,
       startTime: state.startTime,
+      isOngoing: state.isOngoing,
     );
     state = updatedTrip;
   }
+
+  void updateStatus(bool newStatus) {
+    state.isOngoing = newStatus;
+  }
+
+  bool getState() => state.isOngoing;
 }

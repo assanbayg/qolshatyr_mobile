@@ -19,13 +19,18 @@ class QolshatyrApp extends ConsumerWidget {
       title: 'Qolshatyr',
       theme: lightTheme,
       darkTheme: darkTheme,
-      // initialRoute: '/auth',
+
+      // When app is initialized it checks whether user signed in AuthChecker
+      // AuthChecker is responsible for that so don't do anything with it
       home: initialize.when(
-          data: (data) {
-            return const AuthChecker();
-          },
-          loading: () => const LoadingScreen(),
-          error: (e, stackTrace) => ErrorScreen(e, stackTrace)),
+        data: (data) {
+          return const AuthChecker();
+        },
+        loading: () => const LoadingScreen(),
+        error: (e, stackTrace) => ErrorScreen(e, stackTrace),
+      ),
+
+      // Routes in the app. Maybe add other ones but now I navigate using BottomNavigationBar
       routes: {
         '/base': (context) => const BaseScreen(),
         '/auth': (context) => const LoginScreen(),
