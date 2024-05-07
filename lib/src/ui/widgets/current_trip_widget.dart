@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/providers/timer_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
-import 'package:qolshatyr_mobile/src/services/notifi_service.dart';
+import 'package:qolshatyr_mobile/src/services/notification_service.dart';
 
 class CurrentTripWidget extends ConsumerWidget {
   const CurrentTripWidget({super.key});
@@ -14,7 +14,7 @@ class CurrentTripWidget extends ConsumerWidget {
     final int checkinTimer = ref.watch(checkInProvider);
     final trip = ref.read(tripProvider.notifier);
 
-    if (timer == 0 && trip.getState()) {
+    if (timer == 0 && trip.isOngoing) {
       NotificationService.showSimpleNotification(
           title: 'Trip has ended',
           body: 'Confirm you are safe',
@@ -22,7 +22,7 @@ class CurrentTripWidget extends ConsumerWidget {
       trip.updateStatus(false);
     }
 
-    if (checkinTimer == 0 && trip.getState()) {
+    if (checkinTimer == 0 && trip.isOngoing) {
       NotificationService.showSimpleNotification(
           title: 'Check In', body: 'Update your status', payload: 'test');
       // TODO: use custom duration

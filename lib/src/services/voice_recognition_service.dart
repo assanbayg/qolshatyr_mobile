@@ -11,6 +11,8 @@ class VoiceRecognitionService {
   String get recognizedText => _recognizedText;
 
   //TODO: fix to listen continuously once trip has started
+  // Toggles listening status when user has active Trip instances
+  // Starts voice recognition or stops it
   Future<void> toggleListening() async {
     if (!_isListening) {
       bool available = false;

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qolshatyr_mobile/src/services/notifi_service.dart';
+import 'package:qolshatyr_mobile/src/services/notification_service.dart';
 import 'package:qolshatyr_mobile/src/services/sms_sender.dart';
 import 'package:qolshatyr_mobile/src/ui/widgets/current_trip_widget.dart';
 import 'package:qolshatyr_mobile/src/providers/voice_recognition_provider.dart';

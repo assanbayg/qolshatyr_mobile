@@ -6,11 +6,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/providers/timer_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/voice_recognition_provider.dart';
-import 'package:qolshatyr_mobile/src/services/voice_recognition_service.dart';
 
 class DialogService {
+  // Shows the dialog with error message when it occurs
   Future<void> showAuthExceptionsDialog(
-      BuildContext context, String title, String message) async {
+    BuildContext context,
+    String title,
+    String message,
+  ) async {
     await showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -26,8 +29,12 @@ class DialogService {
     );
   }
 
+  // Shows the dialog when MapScreen is initialized
+  // Opens Modular Sheet to create a new Trip instance
   Future<void> showInitialDialog(
-      BuildContext context, LocationData currentPosition) async {
+    BuildContext context,
+    LocationData userCurrentPosition,
+  ) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -38,8 +45,7 @@ class DialogService {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                DialogService dialogService = DialogService();
-                dialogService.showCreateTrip(context, currentPosition);
+                showCreateTrip(context, userCurrentPosition);
               },
               child: const Text('Next'),
             ),
@@ -49,18 +55,19 @@ class DialogService {
     );
   }
 
-  void showCreateTrip(BuildContext context, LocationData currentPosition) {
+  void showCreateTrip(BuildContext context, LocationData userCurrentPosition) {
     TimeOfDay? estimatedArrivalTime;
 
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
+        // Wrap with Riverpod Consumer to access neccessary providers
         return Consumer(
           builder: (context, ref, _) {
             final tripNotifier = ref.read(tripProvider.notifier);
             final timerNotifier = ref.read(timerProvider.notifier);
-            final VoiceRecognitionService voiceService =
-                ref.watch(voiceServiceProvider);
+            final checkinNotifier = ref.read(checkInProvider.notifier);
+            final voiceService = ref.watch(voiceServiceProvider);
 
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
@@ -77,14 +84,13 @@ class DialogService {
                       const SizedBox(height: 16.0),
                       TextButton(
                         onPressed: () async {
+                          // Choose duration of Trip
                           final TimeOfDay? picked = await showTimePicker(
                             context: context,
                             initialTime: TimeOfDay.now(),
                           );
                           if (picked != null) {
-                            setState(() {
-                              estimatedArrivalTime = picked;
-                            });
+                            setState(() => estimatedArrivalTime = picked);
                           }
                         },
                         child: Text(
@@ -99,18 +105,19 @@ class DialogService {
                         onPressed: () {
                           final LocationData startLocation =
                               LocationData.fromMap({
-                            'latitude': currentPosition.latitude,
-                            'longitude': currentPosition.longitude,
+                            'latitude': userCurrentPosition.latitude,
+                            'longitude': userCurrentPosition.longitude,
                           });
                           final Duration estimateDuration = Duration(
                             hours: estimatedArrivalTime!.hour,
                             minutes: estimatedArrivalTime!.minute,
                           );
+                          // TODO: use custom checkin timer duration
+                          // Creates a trip and starts timer before arrival
+                          // Starts listening sound to hear phrase calling for help
                           tripNotifier.addTrip(startLocation, estimateDuration);
                           timerNotifier.startTimer(estimateDuration);
-                          ref
-                              .read(checkInProvider.notifier)
-                              .startTimer(Duration(seconds: 10));
+                          checkinNotifier.startTimer(Duration(seconds: 10));
                           voiceService.toggleListening();
                           Navigator.pop(context);
                         },

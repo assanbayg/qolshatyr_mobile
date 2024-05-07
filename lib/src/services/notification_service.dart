@@ -5,15 +5,15 @@ class NotificationService {
   static final _notifications = FlutterLocalNotificationsPlugin();
   static final onClickNotification = BehaviorSubject<String>();
 
-// On tap on any notification
+  // On tap on any notification
   static void onNotificationTap(NotificationResponse notificationResponse) {
     if (notificationResponse.payload! == "test") {
-      print('TEST');
+      // TODO: send emergency message to contacts
     }
     onClickNotification.add(notificationResponse.payload!);
   }
 
-// Initialize the local notifications
+  // Initialize the local notifications
   static Future init() async {
     // Initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     const AndroidInitializationSettings initializationSettingsAndroid =

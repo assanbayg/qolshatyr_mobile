@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LocationService {
   final Location _location = Location();
 
+  // Get user's current location
+  // Requests for accessing user location
   Future<LocationData?> getCurrentLocation(BuildContext context) async {
     try {
       final serviceEnabled = await _location.serviceEnabled();
@@ -45,6 +47,7 @@ class LocationService {
     }
   }
 
+  // Locally saves user's current location for the next launch
   Future<void> saveLastLocation(LocationData location) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble('latitude', location.latitude ?? 0);
@@ -64,10 +67,12 @@ class LocationService {
     }
   }
 
+  // Returns stream to watch user's current location during a trip
   Stream<LocationData> getLocationUpdates() {
     return _location.onLocationChanged;
   }
 
+  // Shows SnackBar for user-friendly exception handling
   void _showSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
