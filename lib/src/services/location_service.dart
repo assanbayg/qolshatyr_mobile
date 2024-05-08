@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
 
 class LocationService {
   final Location _location = Location();
@@ -49,22 +49,11 @@ class LocationService {
 
   // Locally saves user's current location for the next launch
   Future<void> saveLastLocation(LocationData location) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble('latitude', location.latitude ?? 0);
-    await prefs.setDouble('longitude', location.longitude ?? 0);
+    await SharedPreferencesManager.saveLastLocation(location);
   }
 
   Future<LocationData?> getLastLocation() async {
-    final prefs = await SharedPreferences.getInstance();
-    final double? latitude = prefs.getDouble('latitude');
-    final double? longitude = prefs.getDouble('longitude');
-
-    if (latitude != null && longitude != null) {
-      return LocationData.fromMap(
-          {'latitude': latitude, 'longitude': longitude});
-    } else {
-      return null;
-    }
+    return await SharedPreferencesManager.getLastLocation();
   }
 
   // Returns stream to watch user's current location during a trip

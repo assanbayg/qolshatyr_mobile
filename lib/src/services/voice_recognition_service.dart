@@ -10,9 +10,6 @@ class VoiceRecognitionService {
   bool get isListening => _isListening;
   String get recognizedText => _recognizedText;
 
-  //TODO: fix to listen continuously once trip has started
-  // Toggles listening status when user has active Trip instances
-  // Starts voice recognition or stops it
   Future<void> toggleListening() async {
     if (!_isListening) {
       bool available = false;
@@ -20,8 +17,16 @@ class VoiceRecognitionService {
         available = await _speech.initialize(
           onError: (val) async {
             print('Initialization error: $val');
-            _speech.stop();
-            await Future.delayed(const Duration(seconds: 2));
+            if (val.errorMsg == 'error_no_match' ||
+                val.errorMsg == 'error_time_out') {
+              // Если возникли ошибки error_no_match или error_time_out,
+              // продолжаем прослушивание без остановки
+              _startListening();
+            } else {
+              // В случае других ошибок останавливаем прослушивание
+              _speech.stop();
+              await Future.delayed(const Duration(seconds: 2));
+            }
           },
         );
       }

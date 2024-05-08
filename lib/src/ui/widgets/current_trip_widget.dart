@@ -29,7 +29,7 @@ class CurrentTripWidget extends ConsumerWidget {
       // or at least update it for the release
       ref
           .read(checkInProvider.notifier)
-          .startTimer(const Duration(seconds: 15));
+          .startTimer(const Duration(seconds: 60));
     }
 
     String formatTime(int time) {

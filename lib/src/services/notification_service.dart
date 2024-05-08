@@ -1,4 +1,8 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qolshatyr_mobile/src/models/contact.dart';
+import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
+import 'package:qolshatyr_mobile/src/services/call_service.dart';
 import 'package:rxdart/rxdart.dart';
 
 class NotificationService {
@@ -59,11 +63,17 @@ class NotificationService {
       payload: payload,
     );
 
-    Future.delayed(Duration(minutes: 2), () {
+    Future.delayed(Duration(seconds: 5), () {
       // Check if user reacted on notification to confirm their safety status
       // if not clicked then should send a notification to emergency contacts
       if (!onClickNotification.hasValue) {
         print('OH NO');
+        final container = ProviderContainer();
+        List<Contact> contacts = container.read(contactListProvider);
+        if (contacts.isNotEmpty) {
+          CallService.callNumber(contacts.first.phoneNumber);
+        }
+        container.dispose();
       }
     });
   }

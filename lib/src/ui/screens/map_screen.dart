@@ -116,13 +116,12 @@ class _MapScreenState extends State<MapScreen> {
       });
     } else {
       if (mounted) {
-        
-      LocationData? currentLocation =
-          await _locationService.getCurrentLocation(context);
-      setState(() {
-        currentPosition =
-            LatLng(currentLocation!.latitude!, currentLocation.longitude!);
-      });
+        LocationData? currentLocation =
+            await _locationService.getCurrentLocation(context);
+        setState(() {
+          currentPosition =
+              LatLng(currentLocation!.latitude!, currentLocation.longitude!);
+        });
       }
     }
   }

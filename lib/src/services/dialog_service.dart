@@ -117,7 +117,7 @@ class DialogService {
                           // Starts listening sound to hear phrase calling for help
                           tripNotifier.addTrip(startLocation, estimateDuration);
                           timerNotifier.startTimer(estimateDuration);
-                          checkinNotifier.startTimer(Duration(seconds: 10));
+                          checkinNotifier.startTimer(Duration(seconds: 20));
                           voiceService.toggleListening();
                           Navigator.pop(context);
                         },

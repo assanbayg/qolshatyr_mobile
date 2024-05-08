@@ -33,9 +33,6 @@
 	<key>To display and track location</key>
 	<string>NSLocationAlwaysAndWhenInUseUsageDescription</string>
 	<key>To display and track location</key>
-	<!-- apparently those are not required anymore -->
-	<!-- <key>NSContactsUsageDescription</key>
-  <string>Save emergency contact list</string> -->
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
@@ -53,9 +50,9 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-  <string>sms</string>
-  <string>tel</string>
-</array>
+  	<string>sms</string>
+  	<string>tel</string>
+	</array>
 	<true/>
 </dict>
 </plist>

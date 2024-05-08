@@ -1,5 +1,9 @@
 import 'package:flutter/services.dart';
 
+// NOT USED
+// long story short: i didn't know how to message directly without phone dialer therefore i wrote this code
+// but it doesn't work the way i expected therefore it's not used for know (huh?)
+
 // This class provides a way to send SMS messages without user interaction
 // when user has no access to their phone in emergency sitations
 // It uses a platform channel to communicate with native code on the device.
@@ -18,9 +22,8 @@ class SmsSender {
         'phoneNumber': phoneNumber,
         'message': message,
       });
-    } on PlatformException catch (e) {
+    } on PlatformException {
       // Catches platform exceptions and prints an error message if sending fails.
-      print("Failed to send SMS: '${e.message}'.");
     }
   }
 }
