@@ -16,20 +16,19 @@ class CurrentTripWidget extends ConsumerWidget {
 
     if (timer == 0 && trip.isOngoing) {
       NotificationService.showSimpleNotification(
-          title: 'Trip has ended',
-          body: 'Confirm you are safe',
-          payload: 'payload');
+        title: 'Trip has ended',
+        body: 'Confirm you are safe',
+        payload: 'payload',
+      );
       trip.updateStatus(false);
     }
 
     if (checkinTimer == 0 && trip.isOngoing) {
       NotificationService.showSimpleNotification(
           title: 'Check In', body: 'Update your status', payload: 'test');
-      // TODO: use custom duration
-      // or at least update it for the release
       ref
           .read(checkInProvider.notifier)
-          .startTimer(const Duration(seconds: 60));
+          .startTimer(const Duration(minutes: 15));
     }
 
     String formatTime(int time) {

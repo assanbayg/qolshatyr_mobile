@@ -112,12 +112,11 @@ class DialogService {
                             hours: estimatedArrivalTime!.hour,
                             minutes: estimatedArrivalTime!.minute,
                           );
-                          // TODO: use custom checkin timer duration
                           // Creates a trip and starts timer before arrival
                           // Starts listening sound to hear phrase calling for help
                           tripNotifier.addTrip(startLocation, estimateDuration);
                           timerNotifier.startTimer(estimateDuration);
-                          checkinNotifier.startTimer(Duration(seconds: 20));
+                          checkinNotifier.startTimer(const Duration(minutes: 15));
                           voiceService.toggleListening();
                           Navigator.pop(context);
                         },

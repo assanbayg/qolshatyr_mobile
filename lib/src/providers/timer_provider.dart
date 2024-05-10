@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
 
 // This Provider holds the trip duration timer value (in seconds)
 // and provides functions to manage it.
@@ -37,6 +38,56 @@ class TimerNotifier extends StateNotifier<int> {
     // Cancels any existing timer before starting a new one.
     _timer?.cancel();
     _duration = duration;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_duration.inSeconds > 0) {
+        _duration = _duration - const Duration(seconds: 1);
+
+        _timerController.add(_duration.inSeconds);
+      } else {
+        // Cancels the timer if the duration reaches zero.
+        _timer?.cancel();
+      }
+    });
+  }
+
+  // Stops the timer.
+  void stopTimer() {
+    _timer?.cancel();
+    _timer = null;
+  }
+
+  // Cancels the timer and closes the stream controller when disposing the provider.
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _timerController.close();
+    super.dispose();
+  }
+}
+
+class CheckinTimerNotifier extends StateNotifier<int> {
+  // Initial state is set to 0 seconds.
+  CheckinTimerNotifier() : super(0) {
+    // Listens to the stream emitted by the _timerController and updates the state with the latest value.
+    _timerController.stream.listen((event) {
+      state = event;
+    });
+  }
+
+  // Internal StreamController to emit timer updates.
+  final StreamController<int> _timerController = StreamController<int>();
+
+  // Timer object used for periodic updates.
+  Timer? _timer;
+
+  // Stores the current timer duration.
+  Duration _duration = Duration.zero;
+
+  // Starts a timer with the specified duration (in seconds).
+  void startTimer() async {
+    // Cancels any existing timer before starting a new one.
+    _timer?.cancel();
+    _duration = Duration(minutes: SharedPreferencesManager.getTimerDuration()!);
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_duration.inSeconds > 0) {
         _duration = _duration - const Duration(seconds: 1);

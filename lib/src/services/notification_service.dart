@@ -1,8 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/models/contact.dart';
-import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
 import 'package:qolshatyr_mobile/src/services/call_service.dart';
+import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
 import 'package:rxdart/rxdart.dart';
 
 class NotificationService {
@@ -11,9 +10,7 @@ class NotificationService {
 
   // On tap on any notification
   static void onNotificationTap(NotificationResponse notificationResponse) {
-    if (notificationResponse.payload! == "test") {
-      // TODO: send emergency message to contacts
-    }
+    if (notificationResponse.payload! == "test") {}
     onClickNotification.add(notificationResponse.payload!);
   }
 
@@ -63,17 +60,14 @@ class NotificationService {
       payload: payload,
     );
 
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(const Duration(minutes: 2, seconds: 30), () async {
       // Check if user reacted on notification to confirm their safety status
       // if not clicked then should send a notification to emergency contacts
       if (!onClickNotification.hasValue) {
-        print('OH NO');
-        final container = ProviderContainer();
-        List<Contact> contacts = container.read(contactListProvider);
+        List<Contact> contacts = await SharedPreferencesManager.getContacts();
         if (contacts.isNotEmpty) {
           CallService.callNumber(contacts.first.phoneNumber);
         }
-        container.dispose();
       }
     });
   }

@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:qolshatyr_mobile/src/models/contact.dart';
+import 'package:qolshatyr_mobile/src/services/call_service.dart';
+import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class VoiceRecognitionService {
@@ -16,7 +19,6 @@ class VoiceRecognitionService {
       while (!available) {
         available = await _speech.initialize(
           onError: (val) async {
-            print('Initialization error: $val');
             if (val.errorMsg == 'error_no_match' ||
                 val.errorMsg == 'error_time_out') {
               // Если возникли ошибки error_no_match или error_time_out,
@@ -40,10 +42,13 @@ class VoiceRecognitionService {
 
   void _startListening() {
     _speech.listen(
-      onResult: (result) {
+      onResult: (result) async {
         _recognizedText = result.recognizedWords.toLowerCase();
+        if (_recognizedText.contains("help")) {
+          List<Contact> contacts = await SharedPreferencesManager.getContacts();
+          CallService.callNumber(contacts.first.phoneNumber);
+        }
         if (result.finalResult) {
-          print(_recognizedText);
           _startListening();
         }
       },
