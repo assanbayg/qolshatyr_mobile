@@ -34,23 +34,26 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
+
+  # Does not require any permissions
   google_fonts: ^6.2.1
-  permission_handler: ^11.3.1
-  location: ^6.0.1
-  latlong2: ^0.9.1
-  flutter_map: ^6.1.0
-  flutter_native_contact_picker: ^0.0.6
   flutter_riverpod: ^2.5.1
   shared_preferences: ^2.2.3
+  rxdart: ^0.27.7
+  flutter_native_contact_picker: ^0.0.6
+  latlong2: ^0.9.1
+  flutter_map: ^6.1.0
   firebase_auth: ^4.19.2
   firebase_core: ^2.30.0
   cloud_firestore: ^4.17.2
-  speech_to_text: ^6.6.0
-  flutter_tts: ^4.0.2
-  flutter_local_notifications: ^17.1.2
-  rxdart: ^0.27.7
-  workmanager: ^0.5.2
   flutter_phone_direct_caller: ^2.1.1
+  # TODO: set up permission_handler for iOS
+  permission_handler: ^11.3.1
+  # FOREGROUND_SERVICE and ACCESS_BACKGROUND_LOCATION
+  location: ^6.0.1
+  # RECORD_AUDIO, INTERNET, BLUETOOTH, BLUETOOTH_ADMIN, BLUETOOTH_CONNECT
+  speech_to_text: ^6.6.0
+  flutter_local_notifications: ^17.1.2
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

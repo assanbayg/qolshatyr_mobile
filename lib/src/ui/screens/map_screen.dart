@@ -84,7 +84,7 @@ class _MapScreenState extends State<MapScreen> {
                     TileLayer(
                       urlTemplate:
                           'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      userAgentPackageName: 'com.example.app',
+                      userAgentPackageName: 'com.qolshatyr.qolshatyr_mobile',
                     ),
                     MarkerLayer(markers: [
                       Marker(

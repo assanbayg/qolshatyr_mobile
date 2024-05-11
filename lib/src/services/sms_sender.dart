@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 class SmsSender {
   // The platform channel name. This should match the channel name
   // registered on the native side (e.g., Android and iOS).
-  static const platform = MethodChannel('com.example.sms_sender');
+  static const platform = MethodChannel('com.qolshatyr.sms_sender');
 
   // Sends an SMS message to the specified phone number with the given message.
   // This method uses platform channels to communicate with native code

@@ -19,7 +19,7 @@ class QolshatyrApp extends ConsumerWidget {
       title: 'Qolshatyr',
       theme: lightTheme,
       darkTheme: darkTheme,
-
+      debugShowCheckedModeBanner: false,
       // When app is initialized it checks whether user signed in AuthChecker
       // AuthChecker is responsible for that so don't do anything with it
       home: initialize.when(

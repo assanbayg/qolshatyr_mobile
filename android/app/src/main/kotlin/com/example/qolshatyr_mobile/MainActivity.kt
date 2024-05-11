@@ -1,11 +1,11 @@
-package com.example.qolshatyr_mobile
+package com.qolshatyr.qolshatyr_mobile
 import android.telephony.SmsManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity: FlutterActivity() {
-    private val CHANNEL = "com.example.sms_sender"
+    private val CHANNEL = "com.qolshatyr.sms_sender"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
