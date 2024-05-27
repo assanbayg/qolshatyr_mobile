@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
-import 'package:qolshatyr_mobile/src/services/call_service.dart';
+import 'package:location/location.dart';
 import 'package:qolshatyr_mobile/src/ui/widgets/current_trip_widget.dart';
-import 'package:qolshatyr_mobile/src/providers/voice_recognition_provider.dart';
 import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
+import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
+import 'package:qolshatyr_mobile/src/providers/voice_recognition_provider.dart';
+import 'package:qolshatyr_mobile/src/services/call_service.dart';
+import 'package:qolshatyr_mobile/src/services/twilio_service.dart';
 
 class TripStatusScreen extends StatefulWidget {
   static const routeName = '/base/sos/';
@@ -32,8 +34,15 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
             ),
             // future TODO: stop trip when button is pressed
             ElevatedButton(
-              onPressed: () {
-                CallService.callNumber(contacts[0].phoneNumber);
+              onPressed: () async {
+                LocationData location =
+                    await SharedPreferencesManager.getLastLocation()
+                        as LocationData;
+                if (contacts.isNotEmpty) {
+                  TwilioService.sendMessage(contacts.first.phoneNumber,
+                      'Help me $location! (testing application)');
+                  CallService.callNumber(contacts.first.phoneNumber);
+                }
               },
               child: const Text('Send SOS message'),
             ),

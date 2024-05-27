@@ -5,7 +5,6 @@ import 'package:location/location.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
-import 'package:qolshatyr_mobile/src/services/dialog_service.dart';
 import 'package:qolshatyr_mobile/src/services/location_service.dart';
 
 class MapScreen extends StatefulWidget {
@@ -18,7 +17,6 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final LocationService _locationService = LocationService();
-  final DialogService _dialogService = DialogService();
   LatLng? currentPosition;
   LatLng? endPosition;
   StreamSubscription<LocationData>? _locationSubscription;
@@ -33,14 +31,14 @@ class _MapScreenState extends State<MapScreen> {
           _updateLocation(currentLocation);
         },
       );
-      if (mounted) {
-        _dialogService.showInitialDialog(
-            context,
-            LocationData.fromMap({
-              'latitude': currentPosition!.latitude,
-              'longitude': currentPosition!.longitude,
-            }));
-      }
+      // if (mounted) {
+      //   _dialogService.showInitialDialog(
+      //       context,
+      //       LocationData.fromMap({
+      //         'latitude': currentPosition!.latitude,
+      //         'longitude': currentPosition!.longitude,
+      //       }));
+      // }
     });
   }
 

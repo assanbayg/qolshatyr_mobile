@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:location/location.dart';
 import 'package:qolshatyr_mobile/src/models/contact.dart';
 import 'package:qolshatyr_mobile/src/services/call_service.dart';
+import 'package:qolshatyr_mobile/src/services/twilio_service.dart';
 import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
@@ -21,11 +23,8 @@ class VoiceRecognitionService {
           onError: (val) async {
             if (val.errorMsg == 'error_no_match' ||
                 val.errorMsg == 'error_time_out') {
-              // Если возникли ошибки error_no_match или error_time_out,
-              // продолжаем прослушивание без остановки
               _startListening();
             } else {
-              // В случае других ошибок останавливаем прослушивание
               _speech.stop();
               await Future.delayed(const Duration(seconds: 2));
             }
@@ -46,7 +45,13 @@ class VoiceRecognitionService {
         _recognizedText = result.recognizedWords.toLowerCase();
         if (_recognizedText.contains("help")) {
           List<Contact> contacts = await SharedPreferencesManager.getContacts();
-          CallService.callNumber(contacts.first.phoneNumber);
+          LocationData location =
+              await SharedPreferencesManager.getLastLocation() as LocationData;
+          if (contacts.isNotEmpty) {
+            TwilioService.sendMessage(
+                contacts.first.phoneNumber, 'HELP: $location (testing an app)');
+            CallService.callNumber(contacts.first.phoneNumber);
+          }
         }
         if (result.finalResult) {
           _startListening();

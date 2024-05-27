@@ -54,6 +54,8 @@ dependencies:
   # RECORD_AUDIO, INTERNET, BLUETOOTH, BLUETOOTH_ADMIN, BLUETOOTH_CONNECT
   speech_to_text: ^6.6.0
   flutter_local_notifications: ^17.1.2
+  twilio_flutter: ^0.3.0
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
