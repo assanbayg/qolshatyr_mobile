@@ -16,5 +16,19 @@
   "signUpNow": "Sign up now",
   "logIn": "Log in",
   "signOut": "Sign Out",
-  "userTrips": "User Trips"
+  "userTrips": "User Trips",
+  "turnOnLocation": "Please turn on the location",
+  "toggleListening": "Toggle Listening",
+  "sendSosMessage": "Send SOS message",
+  "setNewCheckInTimer": "Set new check in timer",
+  "enterTimeInMinutes": "Enter a time in minutes",
+  "update": "Update",
+  "endTheTrip": "End the Trip",
+  "emergencyContactsCall": "Emergency Contacts Call",
+  "syncContacts": "Sync Contacts",
+  "sendLocation": "Send your location to your close ones",
+  "initialDialogMessage": "This is the initial dialog.",
+  "next": "Next",
+  "enterDestination": "Enter your destination address and estimated arrival time",
+  "startTrip": "Start a trip"
 }

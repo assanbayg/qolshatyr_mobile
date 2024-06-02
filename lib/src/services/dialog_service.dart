@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -7,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/providers/timer_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/voice_recognition_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DialogService {
-  // Shows the dialog with error message when it occurs
   Future<void> showAuthExceptionsDialog(
     BuildContext context,
     String title,
@@ -17,16 +16,18 @@ class DialogService {
   ) async {
     await showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(_).pop(),
-            child: const Text("OK"),
-          ),
-        ],
-      ),
+      builder: (_) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(_).pop(),
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -36,19 +37,20 @@ class DialogService {
     BuildContext context,
     LocationData userCurrentPosition,
   ) async {
+    final localization = AppLocalizations.of(context)!;
     await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Send your location to your close ones'),
-          content: const Text('This is the initial dialog.'),
+          title: Text(localization.sendLocation),
+          content: Text(localization.initialDialogMessage),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 showCreateTrip(context, userCurrentPosition);
               },
-              child: const Text('Next'),
+              child: Text(localization.next),
             ),
           ],
         );
@@ -58,6 +60,7 @@ class DialogService {
 
   void showCreateTrip(BuildContext context, LocationData userCurrentPosition) {
     TimeOfDay? estimatedArrivalTime;
+    final localization = AppLocalizations.of(context)!;
 
     showModalBottomSheet(
       context: context,
@@ -78,8 +81,8 @@ class DialogService {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Text(
-                        'Enter your destination address and estimated arrival time',
+                      Text(
+                        localization.enterDestination,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16.0),
@@ -88,7 +91,7 @@ class DialogService {
                           showModalBottomSheet(
                             context: context,
                             builder: (BuildContext builder) {
-                              return Container(
+                              return SizedBox(
                                 //change to SizedBox???
                                 height: MediaQuery.of(context).size.height / 3,
                                 child: CupertinoTimerPicker(
@@ -142,7 +145,7 @@ class DialogService {
                           voiceService.toggleListening();
                           Navigator.pop(context);
                         },
-                        child: const Text('Start a trip'),
+                        child: Text(localization.startTrip),
                       ),
                     ],
                   ),
