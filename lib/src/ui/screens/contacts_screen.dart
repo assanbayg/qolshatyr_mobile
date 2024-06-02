@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/models/contact.dart';
 import 'package:qolshatyr_mobile/src/providers/auth_provider.dart';
-
 import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
 import 'package:qolshatyr_mobile/src/ui/widgets/contact_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ContactsScreen extends ConsumerWidget {
   static const routeName = '/base/contacts';
@@ -12,6 +12,7 @@ class ContactsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final localization = AppLocalizations.of(context)!;
     final contacts = ref.watch(contactListProvider);
 
     void fetchContacts() async {
@@ -34,7 +35,7 @@ class ContactsScreen extends ConsumerWidget {
                 const Icon(Icons.account_circle_rounded, size: 80),
                 Expanded(
                   child: Text(
-                    'Emergency Contacts Call',
+                    localization.emergencyContactsCall,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
@@ -45,7 +46,7 @@ class ContactsScreen extends ConsumerWidget {
         ),
         ElevatedButton(
           onPressed: fetchContacts,
-          child: const Text("Sync Contacts"),
+          child: Text(localization.syncContacts),
         ),
         if (contacts.isNotEmpty)
           ...contacts.map(

@@ -6,6 +6,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
 import 'package:qolshatyr_mobile/src/services/location_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MapScreen extends StatefulWidget {
   static const routeName = '/base/map';
@@ -31,14 +32,6 @@ class _MapScreenState extends State<MapScreen> {
           _updateLocation(currentLocation);
         },
       );
-      // if (mounted) {
-      //   _dialogService.showInitialDialog(
-      //       context,
-      //       LocationData.fromMap({
-      //         'latitude': currentPosition!.latitude,
-      //         'longitude': currentPosition!.longitude,
-      //       }));
-      // }
     });
   }
 
@@ -50,13 +43,15 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     return currentPosition == null
-        ? const Center(
+        ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(),
-                Text('Please turn on the location'),
+                const CircularProgressIndicator(),
+                Text(localization.turnOnLocation),
               ],
             ),
           )

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:qolshatyr_mobile/src/providers/auth_provider.dart';
 import 'package:qolshatyr_mobile/src/utils/form_validation.dart';
@@ -60,6 +61,8 @@ class _LoginPageState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
@@ -88,16 +91,17 @@ class _LoginPageState extends State<LoginScreen> {
                                 ),
                               ),
                               const Spacer(flex: 1),
+                              const Spacer(flex: 1),
                               AuthInputField(
                                 controller: _email,
-                                hintText: 'Email address',
+                                hintText: localization.emailHint,
                                 icon: Icons.email_outlined,
                                 keyboardType: TextInputType.emailAddress,
                                 validator: LoginFormValidation.validateEmail,
                               ),
                               AuthInputField(
                                 controller: _password,
-                                hintText: 'Password',
+                                hintText: localization.passwordHint,
                                 icon: Icons.lock_rounded,
                                 validator: LoginFormValidation.validatePassword,
                                 isPassword: true,
@@ -105,7 +109,7 @@ class _LoginPageState extends State<LoginScreen> {
                               if (type == Status.signUp)
                                 AuthInputField(
                                   controller: _confirmPassword,
-                                  hintText: 'Confirm password',
+                                  hintText: localization.confirmPasswordHint,
                                   icon: Icons.lock_rounded,
                                   validator: (value) => LoginFormValidation
                                       .validateConfirmPassword(
@@ -144,8 +148,9 @@ class _LoginPageState extends State<LoginScreen> {
                                           context,
                                         ),
                                 ),
-                                label:
-                                    type == Status.login ? 'Log in' : 'Sign up',
+                                label: type == Status.login
+                                    ? localization.loginButton
+                                    : localization.signUpButton,
                               ),
                               const Spacer(),
                               Padding(
@@ -153,14 +158,14 @@ class _LoginPageState extends State<LoginScreen> {
                                 child: RichText(
                                   text: TextSpan(
                                     text: type == Status.login
-                                        ? 'Don\'t have an account? '
-                                        : 'Already have an account? ',
+                                        ? localization.loginPrompt
+                                        : localization.signUpPrompt,
                                     style: const TextStyle(color: Colors.black),
                                     children: [
                                       TextSpan(
                                         text: type == Status.login
-                                            ? 'Sign up now'
-                                            : 'Log in',
+                                            ? localization.signUpNow
+                                            : localization.logIn,
                                         style: TextStyle(
                                           color: Colors.blue.shade700,
                                           fontWeight: FontWeight.w600,

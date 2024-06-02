@@ -1,0 +1,33 @@
+{
+  "@@locale": "ru",
+  "language" : "Russian",
+  "@language" : {
+    "description" :"Текущий язык"
+  },
+  "helloWorld": "Привет, мир!",
+  "@helloWorld" : {"description": "A programmer greeting"},
+  "emailHint": "Электронная почта",
+  "passwordHint": "Пароль",
+  "confirmPasswordHint": "Подтвердите пароль",
+  "loginButton": "Войти",
+  "signUpButton": "Регистрация",
+  "loginPrompt": "Нет учетной записи? ",
+  "signUpPrompt": "Уже есть учетная запись? ",
+  "signUpNow": "Зарегистрируйтесь сейчас",
+  "logIn": "Войти",
+  "signOut": "Выйти",
+  "userTrips": "Мои поездки",
+  "turnOnLocation": "Включите местоположение",
+  "toggleListening": "Включить прослушивание",
+  "sendSosMessage": "Отправить SOS сообщение",
+  "setNewCheckInTimer": "Установить новый таймер регистрации",
+  "enterTimeInMinutes": "Введите время в минутах",
+  "endTheTrip": "Закончить поездку",
+  "emergencyContactsCall": "Экстренные вызовы",
+  "syncContacts": "Синхронизировать контакты",
+  "sendLocation": "Отправьте свое местоположение близким",
+  "initialDialogMessage": "Это начальный диалог.",
+  "next": "Далее",
+  "enterDestination": "Введите адрес назначения и предполагаемое время прибытия",
+  "startTrip": "Начать поездку"
+}

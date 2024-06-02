@@ -7,6 +7,7 @@ import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/voice_recognition_provider.dart';
 import 'package:qolshatyr_mobile/src/services/call_service.dart';
 import 'package:qolshatyr_mobile/src/services/twilio_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TripStatusScreen extends StatefulWidget {
   static const routeName = '/base/sos/';
@@ -19,6 +20,8 @@ class TripStatusScreen extends StatefulWidget {
 class _TripStatusScreenState extends State<TripStatusScreen> {
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     return Consumer(builder: (context, ref, child) {
       final voiceService = ref.watch(voiceServiceProvider);
       final contacts = ref.read(contactListProvider);
@@ -30,7 +33,7 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
             const CurrentTripWidget(),
             TextButton(
               onPressed: voiceService.toggleListening,
-              child: const Text('Toggle Listening'),
+              child: Text(localization.toggleListening),
             ),
             // future TODO: stop trip when button is pressed
             ElevatedButton(
@@ -44,11 +47,11 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
                   CallService.callNumber(contacts.first.phoneNumber);
                 }
               },
-              child: const Text('Send SOS message'),
+              child: Text(localization.sendSosMessage),
             ),
             ElevatedButton(
               onPressed: () => _showDialog(context),
-              child: const Text('Set new check in timer'),
+              child: Text(localization.setNewCheckInTimer),
             ),
           ],
         ),
@@ -57,6 +60,7 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
   }
 
   void _showDialog(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     final TextEditingController controller = TextEditingController();
     showDialog(
       context: context,
@@ -65,12 +69,12 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
           content: TextField(
             controller: controller,
             keyboardType: TextInputType.number,
-            decoration:
-                const InputDecoration(hintText: "Enter a time in minutes"),
+            decoration: InputDecoration(
+                hintText: localization.enterTimeInMinutes),
           ),
           actions: [
             TextButton(
-              child: const Text('Update'),
+              child: Text(localization.update),
               onPressed: () {
                 int? number = int.tryParse(controller.text);
                 if (number != null) {
@@ -80,7 +84,7 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
               },
             ),
             TextButton(
-              child: const Text('Cancel'),
+              child: Text(localization.endTheTrip),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],
