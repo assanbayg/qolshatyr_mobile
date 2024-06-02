@@ -1,0 +1,20 @@
+{
+  "@@locale": "ru",
+  "language" : "Russian",
+  "@language" : {
+    "description" :"Текущий язык"
+  },
+  "helloWorld": "Привет, мир!",
+  "@helloWorld" : {"description": "A programmer greeting"},
+  "emailHint": "Электронная почта",
+  "passwordHint": "Пароль",
+  "confirmPasswordHint": "Подтвердите пароль",
+  "loginButton": "Войти",
+  "signUpButton": "Регистрация",
+  "loginPrompt": "Нет учетной записи? ",
+  "signUpPrompt": "Уже есть учетная запись? ",
+  "signUpNow": "Зарегистрируйтесь сейчас",
+  "logIn": "Войти",
+  "signOut": "Выйти",
+  "userTrips": "Мои поездки"
+}

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qolshatyr_mobile/l10n/l10n.dart';
 import 'package:qolshatyr_mobile/src/themes.dart';
 import 'package:qolshatyr_mobile/src/ui/screens/base_screen.dart';
 import 'package:qolshatyr_mobile/src/ui/screens/auth/login.dart';
@@ -14,9 +16,16 @@ class QolshatyrApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final initialize = ref.watch(firebaseinitializerProvider);
-
     return MaterialApp(
       title: 'Qolshatyr',
+      // Declrare Localization Delegates
+      locale: const Locale('en'),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: L10n.all,
       theme: lightTheme,
       darkTheme: darkTheme,
       debugShowCheckedModeBanner: false,

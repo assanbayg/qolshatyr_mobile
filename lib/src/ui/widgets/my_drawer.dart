@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/providers/auth_provider.dart';
 import 'package:qolshatyr_mobile/src/ui/screens/trips_history_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyDrawer extends ConsumerWidget {
   const MyDrawer({super.key});
@@ -9,6 +10,7 @@ class MyDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authService = ref.read(fireBaseAuthProvider);
+    final localization = AppLocalizations.of(context)!;
 
     return Drawer(
       child: Container(
@@ -22,7 +24,7 @@ class MyDrawer extends ConsumerWidget {
               accountEmail: Text(authService.currentUser!.email ?? ''),
             ),
             ListTile(
-              title: const Text('Sign Out'),
+              title: Text(localization.signOut),
               leading: const Icon(Icons.logout_rounded),
               onTap: () async {
                 await authService.signOut();
@@ -32,7 +34,7 @@ class MyDrawer extends ConsumerWidget {
               },
             ),
             ListTile(
-              title: const Text('User Trips'),
+              title: Text(localization.userTrips),
               leading: const Icon(Icons.local_taxi_rounded),
               onTap: () {
                 Navigator.of(context)

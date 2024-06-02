@@ -1,0 +1,20 @@
+{
+  "@@locale": "en",
+  "language" : "English",
+  "@language" : {
+    "description" :"The current language"
+  },
+  "helloWorld": "Hello, world!",
+  "@helloWorld" : {"description": "A programmer greeting"},
+  "emailHint": "Email address",
+  "passwordHint": "Password",
+  "confirmPasswordHint": "Confirm password",
+  "loginButton": "Log in",
+  "signUpButton": "Sign up",
+  "loginPrompt": "Don't have an account? ",
+  "signUpPrompt": "Already have an account? ",
+  "signUpNow": "Sign up now",
+  "logIn": "Log in",
+  "signOut": "Sign Out",
+  "userTrips": "User Trips"
+}

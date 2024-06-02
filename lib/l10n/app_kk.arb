@@ -1,0 +1,20 @@
+{
+  "@@locale": "kk",
+  "language" : "Kazakh",
+  "@language" : {
+    "description" :"Қазіргі тіл"
+  },
+  "helloWorld": "Сәлем, әлем!",
+  "@helloWorld" : {"description": "A programmer greeting"},
+  "emailHint": "Электрондық пошта",
+  "passwordHint": "Құпия сөз",
+  "confirmPasswordHint": "Құпия сөзді растаңыз",
+  "loginButton": "Кіру",
+  "signUpButton": "Тіркелу",
+  "loginPrompt": "Тіркелгіңіз жоқ па? ",
+  "signUpPrompt": "Тіркелгіңіз бар ма? ",
+  "signUpNow": "Қазір тіркеліңіз",
+  "logIn": "Кіру",
+  "signOut": "Шығу",
+  "userTrips": "Сапарларым"
+}
