@@ -60,13 +60,47 @@ class NotificationService {
       payload: payload,
     );
 
-    Future.delayed(const Duration(minutes: 2, seconds: 30), () async {
+    Future.delayed(const Duration(minutes: 1, seconds: 30), () async {
       // Check if user reacted on notification to confirm their safety status
       // if not clicked then should send a notification to emergency contacts
       if (!onClickNotification.hasValue) {
         List<Contact> contacts = await SharedPreferencesManager.getContacts();
         if (contacts.isNotEmpty) {
           CallService.callNumber(contacts.first.phoneNumber);
+        }
+        showCallResultNotification();
+      }
+    });
+  }
+
+  static Future showCallResultNotification() async {
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+      'your channel id',
+      'your channel name',
+      channelDescription: 'your channel description',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+    );
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
+    await _notifications.show(
+      0,
+      "Did they answered?",
+      "React or another call will be made",
+      notificationDetails,
+      payload: 'worked',
+    );
+
+    Future.delayed(const Duration(seconds: 30), () async {
+      if (!onClickNotification.hasValue) {
+        List<Contact> contacts = await SharedPreferencesManager.getContacts();
+        if (contacts.isNotEmpty) {
+          int index = 0;
+          if (contacts.length >= index + 2) {
+            CallService.callNumber(contacts[index + 1].phoneNumber);
+          }
         }
       }
     });

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qolshatyr_mobile/src/providers/timer_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/voice_recognition_provider.dart';
@@ -31,8 +32,6 @@ class DialogService {
     );
   }
 
-  // Shows the dialog when MapScreen is initialized
-  // Opens Modular Sheet to create a new Trip instance
   Future<void> showInitialDialog(
     BuildContext context,
     LocationData userCurrentPosition,
@@ -59,13 +58,12 @@ class DialogService {
   }
 
   void showCreateTrip(BuildContext context, LocationData userCurrentPosition) {
-    TimeOfDay? estimatedArrivalTime;
+    Duration? estimatedArrivalDuration;
     final localization = AppLocalizations.of(context)!;
 
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        // Wrap with Riverpod Consumer to access neccessary providers
         return Consumer(
           builder: (context, ref, _) {
             final tripNotifier = ref.read(tripProvider.notifier);
@@ -92,24 +90,15 @@ class DialogService {
                             context: context,
                             builder: (BuildContext builder) {
                               return SizedBox(
-                                //change to SizedBox???
                                 height: MediaQuery.of(context).size.height / 3,
                                 child: CupertinoTimerPicker(
-                                  initialTimerDuration: estimatedArrivalTime !=
-                                          null
-                                      ? Duration(
-                                          hours: estimatedArrivalTime!.hour,
-                                          minutes: estimatedArrivalTime!.minute)
-                                      : Duration.zero,
+                                  initialTimerDuration:
+                                      estimatedArrivalDuration ?? Duration.zero,
                                   mode: CupertinoTimerPickerMode.hm,
                                   onTimerDurationChanged:
                                       (Duration newDuration) {
                                     setState(() {
-                                      estimatedArrivalTime = TimeOfDay(
-                                        hour: newDuration.inHours,
-                                        minute:
-                                            newDuration.inMinutes.remainder(60),
-                                      );
+                                      estimatedArrivalDuration = newDuration;
                                     });
                                   },
                                 ),
@@ -118,32 +107,29 @@ class DialogService {
                           );
                         },
                         child: Text(
-                          estimatedArrivalTime == null
-                              ? '00:00'
-                              : estimatedArrivalTime!.format(context),
+                          estimatedArrivalDuration == null
+                              ? '00:00:00'
+                              : formatDuration(estimatedArrivalDuration!),
                           textAlign: TextAlign.center,
                           style: const TextStyle(fontSize: 28),
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          final LocationData startLocation =
-                              LocationData.fromMap({
-                            'latitude': userCurrentPosition.latitude,
-                            'longitude': userCurrentPosition.longitude,
-                          });
-                          final Duration estimateDuration = Duration(
-                            hours: estimatedArrivalTime!.hour,
-                            minutes: estimatedArrivalTime!.minute,
-                          );
-                          // Creates a trip and starts timer before arrival
-                          // Starts listening sound to hear phrase calling for help
-                          tripNotifier.addTrip(startLocation, estimateDuration);
-                          timerNotifier.startTimer(estimateDuration);
-                          checkinNotifier
-                              .startTimer(const Duration(minutes: 15));
-                          voiceService.toggleListening();
-                          Navigator.pop(context);
+                        onPressed: () async {
+                          if (estimatedArrivalDuration != null) {
+                            final LocationData startLocation =
+                                LocationData.fromMap({
+                              'latitude': userCurrentPosition.latitude,
+                              'longitude': userCurrentPosition.longitude,
+                            });
+                            tripNotifier.addTrip(
+                                startLocation, estimatedArrivalDuration!);
+                            timerNotifier.startTimer(estimatedArrivalDuration!);
+                            checkinNotifier
+                                .startTimer(const Duration(minutes: 15));
+                            voiceService.toggleListening();
+                            Navigator.pop(context);
+                          }
                         },
                         child: Text(localization.startTrip),
                       ),
@@ -156,5 +142,13 @@ class DialogService {
         );
       },
     );
+  }
+
+  String formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(duration.inHours);
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$hours:$minutes:$seconds";
   }
 }

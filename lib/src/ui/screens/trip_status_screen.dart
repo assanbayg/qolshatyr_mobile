@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:location/location.dart';
+import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
+import 'package:qolshatyr_mobile/src/services/notification_service.dart';
 import 'package:qolshatyr_mobile/src/ui/widgets/current_trip_widget.dart';
 import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
 import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
@@ -25,7 +27,7 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
     return Consumer(builder: (context, ref, child) {
       final voiceService = ref.watch(voiceServiceProvider);
       final contacts = ref.read(contactListProvider);
-
+      final trip = ref.read(tripProvider.notifier);
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -36,6 +38,15 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
               child: Text(localization.toggleListening),
             ),
             // future TODO: stop trip when button is pressed
+            ElevatedButton(
+                onPressed: () {
+                  trip.updateStatus(false);
+                  NotificationService.showSimpleNotification(
+                      title: "Trip Ended",
+                      body: "Verify you are safe!",
+                      payload: 'endTrip');
+                },
+                child: Text(localization.endTheTrip)),
             ElevatedButton(
               onPressed: () async {
                 LocationData location =
@@ -69,8 +80,8 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
           content: TextField(
             controller: controller,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-                hintText: localization.enterTimeInMinutes),
+            decoration:
+                InputDecoration(hintText: localization.enterTimeInMinutes),
           ),
           actions: [
             TextButton(

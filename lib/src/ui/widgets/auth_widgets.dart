@@ -20,6 +20,8 @@ class AuthInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const primaryColor = Color(0xff129f9f);
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -36,7 +38,7 @@ class AuthInputField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: const TextStyle(color: Colors.black54),
-          icon: Icon(icon, color: Colors.blue.shade700, size: 24),
+          icon: Icon(icon, color: primaryColor, size: 24),
           alignLabelWithHint: true,
           border: InputBorder.none,
         ),
@@ -48,15 +50,19 @@ class AuthInputField extends StatelessWidget {
 class AuthButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String label;
-  final bool isLoading = false;
+  final bool isLoading;
+
   const AuthButton({
     super.key,
     required this.onPressed,
     required this.label,
+    required this.isLoading,
   });
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
+
     return Container(
       padding: const EdgeInsets.only(top: 32.0),
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -65,13 +71,13 @@ class AuthButton extends StatelessWidget {
           ? const Center(child: CircularProgressIndicator())
           : MaterialButton(
               onPressed: onPressed,
-              textColor: Colors.blue.shade700,
+              textColor: primaryColor,
               textTheme: ButtonTextTheme.primary,
               minWidth: 100,
               padding: const EdgeInsets.all(18),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),
-                side: BorderSide(color: Colors.blue.shade700),
+                side: BorderSide(color: primaryColor),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

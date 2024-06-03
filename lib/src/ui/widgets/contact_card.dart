@@ -17,11 +17,6 @@ class ContactCard extends ConsumerWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // IconButton(
-            //   onPressed: () {
-            //   },
-            //   icon: const Icon(Icons.visibility),
-            // ),
             IconButton(
               onPressed: () {
                 ref

@@ -4,6 +4,7 @@
   "@language" : {
     "description" :"Қазіргі тіл"
   },
+  "appTitle": "Qolshatyr",
   "helloWorld": "Сәлем, әлем!",
   "@helloWorld" : {"description": "A programmer greeting"},
   "emailHint": "Электрондық пошта",

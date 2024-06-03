@@ -35,7 +35,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
 
-  # Does not require any permissions
   google_fonts: ^6.2.1
   flutter_riverpod: ^2.5.1
   shared_preferences: ^2.2.3
@@ -49,9 +48,7 @@ dependencies:
   flutter_phone_direct_caller: ^2.1.1
   # TODO: set up permission_handler for iOS
   permission_handler: ^11.3.1
-  # FOREGROUND_SERVICE and ACCESS_BACKGROUND_LOCATION
   location: ^6.0.1
-  # RECORD_AUDIO, INTERNET, BLUETOOTH, BLUETOOTH_ADMIN, BLUETOOTH_CONNECT
   speech_to_text: ^6.6.0
   flutter_local_notifications: ^17.1.2
   twilio_flutter: ^0.3.0

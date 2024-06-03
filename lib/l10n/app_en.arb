@@ -4,6 +4,7 @@
   "@language" : {
     "description" :"The current language"
   },
+  "appTitle": "Qolshatyr",
   "helloWorld": "Hello, world!",
   "@helloWorld" : {"description": "A programmer greeting"},
   "emailHint": "Email address",

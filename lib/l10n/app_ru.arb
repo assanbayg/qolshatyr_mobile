@@ -4,6 +4,7 @@
   "@language" : {
     "description" :"Текущий язык"
   },
+  "appTitle": "Qolshatyr",
   "helloWorld": "Привет, мир!",
   "@helloWorld" : {"description": "A programmer greeting"},
   "emailHint": "Электронная почта",
@@ -21,6 +22,7 @@
   "toggleListening": "Включить прослушивание",
   "sendSosMessage": "Отправить SOS сообщение",
   "setNewCheckInTimer": "Установить новый таймер регистрации",
+  "update": "Обновить",
   "enterTimeInMinutes": "Введите время в минутах",
   "endTheTrip": "Закончить поездку",
   "emergencyContactsCall": "Экстренные вызовы",
