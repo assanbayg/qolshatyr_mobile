@@ -31,5 +31,7 @@
   "initialDialogMessage": "Бұл бастапқы диалог.",
   "next": "Келесі",
   "enterDestination": "Мекенжайыңызды және болжамды келу уақытыңызды енгізіңіз",
-  "startTrip": "Сапарды бастау"
+  "startTrip": "Сапарды бастау",
+  "additionalInfoRequest": "Қосымша ақпаратты енгізу.",
+  "pickAnyPoint": "Картада бір нүктеге басыңыз"
 }

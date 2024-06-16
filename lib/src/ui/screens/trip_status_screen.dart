@@ -53,9 +53,10 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
                     await SharedPreferencesManager.getLastLocation()
                         as LocationData;
                 if (contacts.isNotEmpty) {
-                  TwilioService.sendMessage(contacts.first.phoneNumber,
-                      'Help me $location! (testing application)');
+                  // TwilioService.sendMessage(contacts.first.phoneNumber,
+                  //     'Help me lat:${location.latitude} long:${location.longitude}!');
                   CallService.callNumber(contacts.first.phoneNumber);
+                  NotificationService.showCallResultNotification();
                 }
               },
               child: Text(localization.sendSosMessage),

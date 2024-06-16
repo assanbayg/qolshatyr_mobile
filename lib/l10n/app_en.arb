@@ -31,5 +31,7 @@
   "initialDialogMessage": "This is the initial dialog.",
   "next": "Next",
   "enterDestination": "Enter your destination address and estimated arrival time",
-  "startTrip": "Start a trip"
+  "startTrip": "Start a trip",
+  "additionalInfoRequest": "Add additional information.",
+  "pickAnyPoint": "Pick any point on map"
 }

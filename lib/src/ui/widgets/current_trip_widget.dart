@@ -21,6 +21,7 @@ class CurrentTripWidget extends ConsumerWidget {
         payload: 'payload',
       );
       trip.updateStatus(false);
+      
     }
 
     if (checkinTimer == 0 && trip.isOngoing) {

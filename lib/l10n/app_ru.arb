@@ -31,5 +31,7 @@
   "initialDialogMessage": "Это начальный диалог.",
   "next": "Далее",
   "enterDestination": "Введите адрес назначения и предполагаемое время прибытия",
-  "startTrip": "Начать поездку"
+  "startTrip": "Начать поездку",
+  "additionalInfoRequest": "Ввести дополнительную информацию",
+  "pickAnyPoint": "Нажмите на место на карте"
 }
