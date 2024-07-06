@@ -1,7 +1,12 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:location/location.dart';
+
+// Project imports:
 import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
 import 'package:qolshatyr_mobile/src/services/dialog_service.dart';
 import 'package:qolshatyr_mobile/src/services/location_service.dart';

@@ -1,6 +1,9 @@
+// Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:location/location.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:location/location.dart';
+
+// Project imports:
 import 'package:qolshatyr_mobile/src/models/trip.dart';
 import 'package:qolshatyr_mobile/src/services/firestore_service.dart';
 

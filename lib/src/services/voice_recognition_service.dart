@@ -1,10 +1,15 @@
+// Dart imports:
 import 'dart:async';
+
+// Package imports:
 import 'package:location/location.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+
+// Project imports:
 import 'package:qolshatyr_mobile/src/models/contact.dart';
 import 'package:qolshatyr_mobile/src/services/call_service.dart';
 import 'package:qolshatyr_mobile/src/services/twilio_service.dart';
 import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class VoiceRecognitionService {
   final _speech = stt.SpeechToText();

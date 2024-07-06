@@ -1,5 +1,10 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Project imports:
 import 'package:qolshatyr_mobile/src/models/contact.dart';
 import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
 

@@ -1,3 +1,4 @@
+// Package imports:
 import 'package:location/location.dart';
 
 class Trip {

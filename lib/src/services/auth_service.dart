@@ -1,5 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// Flutter imports:
 import 'package:flutter/widgets.dart';
+
+// Package imports:
+import 'package:firebase_auth/firebase_auth.dart';
+
+// Project imports:
 import 'package:qolshatyr_mobile/src/services/dialog_service.dart';
 import 'package:qolshatyr_mobile/src/services/firestore_service.dart';
 

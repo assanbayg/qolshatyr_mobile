@@ -1,8 +1,11 @@
+// Package imports:
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:rxdart/rxdart.dart';
+
+// Project imports:
 import 'package:qolshatyr_mobile/src/models/contact.dart';
 import 'package:qolshatyr_mobile/src/services/call_service.dart';
 import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
-import 'package:rxdart/rxdart.dart';
 
 class NotificationService {
   static final _notifications = FlutterLocalNotificationsPlugin();

@@ -1,10 +1,15 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Project imports:
 import 'package:qolshatyr_mobile/src/models/contact.dart';
 import 'package:qolshatyr_mobile/src/providers/auth_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
 import 'package:qolshatyr_mobile/src/ui/widgets/contact_card.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ContactsScreen extends ConsumerWidget {
   static const routeName = '/base/contacts';

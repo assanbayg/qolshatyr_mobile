@@ -1,15 +1,20 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:location/location.dart';
-import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
-import 'package:qolshatyr_mobile/src/services/notification_service.dart';
-import 'package:qolshatyr_mobile/src/ui/widgets/current_trip_widget.dart';
-import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
+
+// Project imports:
 import 'package:qolshatyr_mobile/src/providers/contact_provider.dart';
+import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/voice_recognition_provider.dart';
 import 'package:qolshatyr_mobile/src/services/call_service.dart';
+import 'package:qolshatyr_mobile/src/services/notification_service.dart';
 import 'package:qolshatyr_mobile/src/services/twilio_service.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:qolshatyr_mobile/src/ui/widgets/current_trip_widget.dart';
+import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
 
 class TripStatusScreen extends StatefulWidget {
   static const routeName = '/base/sos/';

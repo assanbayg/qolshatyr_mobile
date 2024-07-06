@@ -1,5 +1,10 @@
+// Dart imports:
 import 'dart:async';
+
+// Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Project imports:
 import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
 
 final timerProvider = StateNotifierProvider<TimerNotifier, int>((ref) {

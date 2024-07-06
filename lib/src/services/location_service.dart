@@ -1,5 +1,10 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:location/location.dart';
+
+// Project imports:
 import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
 
 class LocationService {

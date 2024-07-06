@@ -1,8 +1,12 @@
+// Dart imports:
 import 'dart:convert';
 
+// Package imports:
 import 'package:location/location.dart';
-import 'package:qolshatyr_mobile/src/models/contact.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
+import 'package:qolshatyr_mobile/src/models/contact.dart';
 
 class SharedPreferencesManager {
   static SharedPreferences? _sharedPreferences;

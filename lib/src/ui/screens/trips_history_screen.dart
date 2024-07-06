@@ -1,4 +1,7 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:qolshatyr_mobile/src/models/trip.dart';
 import 'package:qolshatyr_mobile/src/services/firestore_service.dart';
 
