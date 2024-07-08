@@ -11,15 +11,8 @@ class NotificationService {
   static final _notifications = FlutterLocalNotificationsPlugin();
   static final onClickNotification = BehaviorSubject<String>();
 
-  // On tap on any notification
-  static void onNotificationTap(NotificationResponse notificationResponse) {
-    if (notificationResponse.payload! == "test") {}
-    onClickNotification.add(notificationResponse.payload!);
-  }
-
   // Initialize the local notifications
-  static Future init() async {
-    // Initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+  static Future<void> init() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     final DarwinInitializationSettings initializationSettingsDarwin =
@@ -38,23 +31,43 @@ class NotificationService {
     );
   }
 
+  // On tap on any notification
+  static void onNotificationTap(NotificationResponse notificationResponse) {
+    final payload = notificationResponse.payload;
+    if (payload == "test") {
+      // Handle the test payload if needed
+    }
+    onClickNotification.add(payload ?? '');
+  }
+
+  // Handle no response from the user
+  static Future<void> _handleNoResponse() async {
+    List<Contact> contacts = await SharedPreferencesManager.getContacts();
+    if (contacts.isNotEmpty) {
+      CallService.callNumber(contacts.first.phoneNumber);
+      await showCallResultNotification();
+    }
+  }
+
   // Show a simple notification
-  static Future showSimpleNotification({
+  static Future<void> showReminderNotification({
     required String title,
     required String body,
     required String payload,
   }) async {
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
-      'your channel id',
-      'your channel name',
-      channelDescription: 'your channel description',
+      'reminder_notification',
+      'Reminder Notification',
+      channelDescription:
+          'Notifications for reminding about upcoming check-in.',
       importance: Importance.max,
       priority: Priority.high,
       ticker: 'ticker',
     );
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
+
     await _notifications.show(
       0,
       title,
@@ -62,35 +75,26 @@ class NotificationService {
       notificationDetails,
       payload: payload,
     );
-
-    Future.delayed(const Duration(minutes: 1, seconds: 30), () async {
-      // Check if user reacted on notification to confirm their safety status
-      // if not clicked then should send a notification to emergency contacts
-      if (!onClickNotification.hasValue) {
-        List<Contact> contacts = await SharedPreferencesManager.getContacts();
-        if (contacts.isNotEmpty) {
-          CallService.callNumber(contacts.first.phoneNumber);
-        }
-        showCallResultNotification();
-      }
-    });
   }
 
-  static Future showCallResultNotification() async {
+  // Show notification after calling emergency contact
+  static Future<void> showCallResultNotification() async {
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
-      'your channel id',
-      'your channel name',
-      channelDescription: 'your channel description',
+      'emergency_notification',
+      'Emergency Alerts',
+      channelDescription:
+          'Notifications for emergency situations requiring immediate attention.',
       importance: Importance.max,
       priority: Priority.high,
       ticker: 'ticker',
     );
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
+
     await _notifications.show(
       0,
-      "Did they answered?",
+      "Did they answer?",
       "React or another call will be made",
       notificationDetails,
       payload: 'worked',
@@ -98,24 +102,18 @@ class NotificationService {
 
     Future.delayed(const Duration(seconds: 30), () async {
       if (!onClickNotification.hasValue) {
-        List<Contact> contacts = await SharedPreferencesManager.getContacts();
-        if (contacts.isNotEmpty) {
-          int index = 0;
-          if (contacts.length >= index + 2) {
-            CallService.callNumber(contacts[index + 1].phoneNumber);
-          }
-        }
+        await _handleNoResponse();
       }
     });
   }
 
   // Close a specific channel notification
-  static Future cancel(int id) async {
+  static Future<void> cancel(int id) async {
     await _notifications.cancel(id);
   }
 
   // Close all the notifications available
-  static Future cancelAll() async {
+  static Future<void> cancelAll() async {
     await _notifications.cancelAll();
   }
 }

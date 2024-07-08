@@ -23,7 +23,7 @@
   "sendSosMessage": "Send SOS message",
   "setNewCheckInTimer": "Set new check in timer",
   "enterTimeInMinutes": "Enter a time in minutes",
-  "update": "Update",
+  "updateCheckInDuration": "Update Check-In Duration",
   "endTheTrip": "End the Trip",
   "emergencyContactsCall": "Emergency Contacts Call",
   "syncContacts": "Sync Contacts",

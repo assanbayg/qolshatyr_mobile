@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/providers/timer_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
 import 'package:qolshatyr_mobile/src/services/notification_service.dart';
+import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
 
 class CurrentTripWidget extends ConsumerWidget {
   const CurrentTripWidget({super.key});
@@ -15,26 +16,24 @@ class CurrentTripWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final Size size = MediaQuery.of(context).size;
-    final int timer = ref.watch(timerProvider);
+    final int timer = ref.watch(currentTripTimerProvider);
     final int checkinTimer = ref.watch(checkInProvider);
     final trip = ref.read(tripProvider.notifier);
 
-    if (timer == 0 && trip.isOngoing) {
-      NotificationService.showSimpleNotification(
-        title: 'Trip has ended',
-        body: 'Confirm you are safe',
-        payload: 'payload',
-      );
-      trip.updateStatus(false);
-      
-    }
+    // if (timer == 0 && trip.isOngoing) {
+    //   NotificationService.showReminderNotification(
+    //     title: 'Trip has ended',
+    //     body: 'Confirm you are safe',
+    //     payload: 'payload',
+    //   );
+    //   trip.updateStatus(false);
+    // }
 
     if (checkinTimer == 0 && trip.isOngoing) {
-      NotificationService.showSimpleNotification(
+      NotificationService.showReminderNotification(
           title: 'Check In', body: 'Update your status', payload: 'test');
-      ref
-          .read(checkInProvider.notifier)
-          .startTimer(const Duration(minutes: 15));
+      ref.read(checkInProvider.notifier).startTimer(Duration(
+          seconds: SharedPreferencesManager.getCheckInReminderDuration()!));
     }
 
     String formatTime(int time) {
@@ -45,6 +44,8 @@ class CurrentTripWidget extends ConsumerWidget {
     int remainingSeconds = timer % 3600;
     int minutes = remainingSeconds ~/ 60;
     int seconds = remainingSeconds % 60;
+
+    // TODO: fix circular progress indicator value
 
     return Center(
       child: AspectRatio(

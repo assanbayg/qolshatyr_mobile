@@ -22,7 +22,7 @@
   "toggleListening": "Включить прослушивание",
   "sendSosMessage": "Отправить SOS сообщение",
   "setNewCheckInTimer": "Установить новый таймер регистрации",
-  "update": "Обновить",
+  "updateCheckInDuration": "Обновить время проверки",
   "enterTimeInMinutes": "Введите время в минутах",
   "endTheTrip": "Закончить поездку",
   "emergencyContactsCall": "Экстренные вызовы",

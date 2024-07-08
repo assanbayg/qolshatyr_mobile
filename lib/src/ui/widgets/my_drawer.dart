@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/src/providers/auth_provider.dart';
+import 'package:qolshatyr_mobile/src/ui/screens/settings_screen.dart';
 import 'package:qolshatyr_mobile/src/ui/screens/trips_history_screen.dart';
 
 class MyDrawer extends ConsumerWidget {
@@ -48,7 +49,16 @@ class MyDrawer extends ConsumerWidget {
                 }));
               },
             ),
-            // TODO: add tech support screen
+            ListTile(
+              title: Text('Settings'),
+              leading: const Icon(Icons.settings_rounded),
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return SettingsScreen();
+                }));
+              },
+            )
           ],
         ),
       ),

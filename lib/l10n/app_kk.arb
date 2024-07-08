@@ -23,7 +23,7 @@
   "sendSosMessage": "SOS хабарламасын жіберу",
   "setNewCheckInTimer": "Жаңа тексеру уақытын орнату",
   "enterTimeInMinutes": "Уақытты минуттармен енгізіңіз",
-  "update": "Жаңарту",
+  "updateCheckInDuration": "Тексеру уақытын жаңарту",
   "endTheTrip": "Сапарды бітіру",
   "emergencyContactsCall": "Төтенше жағдайлардағы қоңыраулар",
   "syncContacts": "Контактілерді синхрондау",

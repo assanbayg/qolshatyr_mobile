@@ -14,6 +14,7 @@ import 'package:location/location.dart';
 import 'package:qolshatyr_mobile/src/providers/timer_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/voice_recognition_provider.dart';
+import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
 
 class DialogService {
   Future<void> showAuthExceptionsDialog(
@@ -73,7 +74,7 @@ class DialogService {
         return Consumer(
           builder: (context, ref, _) {
             final tripNotifier = ref.read(tripProvider.notifier);
-            final timerNotifier = ref.read(timerProvider.notifier);
+            final timerNotifier = ref.read(currentTripTimerProvider.notifier);
             final checkinNotifier = ref.read(checkInProvider.notifier);
             final voiceService = ref.watch(voiceServiceProvider);
 
@@ -130,9 +131,11 @@ class DialogService {
                             });
                             tripNotifier.addTrip(
                                 startLocation, estimatedArrivalDuration!);
+                            tripNotifier.updateStatus(true);
                             timerNotifier.startTimer(estimatedArrivalDuration!);
-                            checkinNotifier
-                                .startTimer(const Duration(minutes: 15));
+                            checkinNotifier.startTimer(Duration(
+                                seconds: SharedPreferencesManager
+                                    .getCheckInReminderDuration()!));
                             voiceService.toggleListening();
                             Navigator.pop(context);
                           }
