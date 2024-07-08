@@ -20,14 +20,14 @@ class CurrentTripWidget extends ConsumerWidget {
     final int checkinTimer = ref.watch(checkInProvider);
     final trip = ref.read(tripProvider.notifier);
 
-    // if (timer == 0 && trip.isOngoing) {
-    //   NotificationService.showReminderNotification(
-    //     title: 'Trip has ended',
-    //     body: 'Confirm you are safe',
-    //     payload: 'payload',
-    //   );
-    //   trip.updateStatus(false);
-    // }
+    if (timer == 0 && trip.isOngoing) {
+      NotificationService.showReminderNotification(
+        title: 'Trip has ended',
+        body: 'Confirm you are safe',
+        payload: 'payload',
+      );
+      trip.updateStatus(false);
+    }
 
     if (checkinTimer == 0 && trip.isOngoing) {
       NotificationService.showReminderNotification(
@@ -45,7 +45,9 @@ class CurrentTripWidget extends ConsumerWidget {
     int minutes = remainingSeconds ~/ 60;
     int seconds = remainingSeconds % 60;
 
-    // TODO: fix circular progress indicator value
+    final initialDuration = trip.estimateDuration.inSeconds;
+    final progress =
+        initialDuration == 0 ? 0 : timer.toDouble() / initialDuration;
 
     return Center(
       child: AspectRatio(
@@ -58,7 +60,7 @@ class CurrentTripWidget extends ConsumerWidget {
                 height: size.width * 2 / 3,
                 child: CircularProgressIndicator(
                   backgroundColor: Colors.grey,
-                  value: timer.toDouble() / 3600,
+                  value: 1 - progress.toDouble(),
                   strokeWidth: 10.0,
                 ),
               ),

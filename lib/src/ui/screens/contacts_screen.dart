@@ -53,6 +53,10 @@ class ContactsScreen extends ConsumerWidget {
           onPressed: fetchContacts,
           child: Text(localization.syncContacts),
         ),
+        if (contacts.isEmpty)
+          Center(
+            child: Text(localization.noEmergencyContacts),
+          ),
         if (contacts.isNotEmpty)
           ...contacts.map(
             (contact) => ContactCard(contact: contact),

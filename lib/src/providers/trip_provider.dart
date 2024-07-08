@@ -49,6 +49,5 @@ class TripNotifier extends StateNotifier<Trip> {
   }
 
   bool get isOngoing => state.isOngoing;
-  int get estimatedDurationInSeconds => state.estimateDuration.inSeconds;
   Duration get estimateDuration => state.estimateDuration;
 }

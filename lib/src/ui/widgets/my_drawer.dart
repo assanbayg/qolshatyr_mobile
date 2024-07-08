@@ -50,12 +50,12 @@ class MyDrawer extends ConsumerWidget {
               },
             ),
             ListTile(
-              title: Text('Settings'),
+              title: Text(localization.settings),
               leading: const Icon(Icons.settings_rounded),
               onTap: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) {
-                  return SettingsScreen();
+                  return const SettingsScreen();
                 }));
               },
             )

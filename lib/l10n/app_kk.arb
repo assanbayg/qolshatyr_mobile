@@ -27,11 +27,13 @@
   "endTheTrip": "Сапарды бітіру",
   "emergencyContactsCall": "Төтенше жағдайлардағы қоңыраулар",
   "syncContacts": "Контактілерді синхрондау",
+  "noEmergencyContacts": "Сізде төтеше жағдай контактілер жоқ!",
   "sendLocation": "Орныңызды жақындарыңызға жіберіңіз",
   "initialDialogMessage": "Бұл бастапқы диалог.",
   "next": "Келесі",
   "enterDestination": "Мекенжайыңызды және болжамды келу уақытыңызды енгізіңіз",
   "startTrip": "Сапарды бастау",
   "additionalInfoRequest": "Қосымша ақпаратты енгізу.",
-  "pickAnyPoint": "Картада бір нүктеге басыңыз"
+  "pickAnyPoint": "Картада бір нүктеге басыңыз",
+  "settings": "Баптаулар"
 }

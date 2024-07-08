@@ -168,9 +168,9 @@ class _LoginPageState extends State<LoginScreen> {
                                   text: type == Status.login
                                       ? localization.signUpNow
                                       : localization.logIn,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.w600,
-                                    color: const Color(0xff129f9f),
+                                    color: Color(0xff129f9f),
                                   ),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = _toggleType,

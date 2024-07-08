@@ -24,13 +24,13 @@ class DialogService {
   ) async {
     await showDialog(
       context: context,
-      builder: (_) {
+      builder: (context) {
         return AlertDialog(
           title: Text(title),
           content: Text(message),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(_).pop(),
+              onPressed: () => Navigator.of(context).pop(),
               child: const Text("OK"),
             ),
           ],

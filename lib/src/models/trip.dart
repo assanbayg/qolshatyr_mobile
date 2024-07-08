@@ -46,7 +46,6 @@ class Trip {
       'estimate_duration': estimateDuration.inMinutes,
       'start_time': startTime.millisecondsSinceEpoch,
       'end_time': endTime.millisecondsSinceEpoch,
-      'is_ongoing': isOngoing,
     };
   }
 
@@ -62,7 +61,7 @@ class Trip {
       }),
       estimateDuration: Duration(minutes: json['estimate_duration']),
       startTime: DateTime.fromMillisecondsSinceEpoch(json['start_time']),
-      isOngoing: json['is_ongoing'],
+      isOngoing: false,
     );
   }
 

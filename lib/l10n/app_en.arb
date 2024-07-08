@@ -27,11 +27,13 @@
   "endTheTrip": "End the Trip",
   "emergencyContactsCall": "Emergency Contacts Call",
   "syncContacts": "Sync Contacts",
+  "noEmergencyContacts": "You don't have any emergency contacts yet!",
   "sendLocation": "Send your location to your close ones",
   "initialDialogMessage": "This is the initial dialog.",
   "next": "Next",
   "enterDestination": "Enter your destination address and estimated arrival time",
   "startTrip": "Start a trip",
   "additionalInfoRequest": "Add additional information.",
-  "pickAnyPoint": "Pick any point on map"
+  "pickAnyPoint": "Pick any point on map",
+  "settings": "Settings"
 }
