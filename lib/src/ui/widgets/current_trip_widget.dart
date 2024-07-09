@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/src/providers/timer_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
 import 'package:qolshatyr_mobile/src/services/notification_service.dart';
+import 'package:qolshatyr_mobile/src/ui/screens/check_in_screen.dart';
 import 'package:qolshatyr_mobile/src/utils/shared_preferences.dart';
 
 class CurrentTripWidget extends ConsumerWidget {
@@ -26,6 +27,8 @@ class CurrentTripWidget extends ConsumerWidget {
         body: 'Confirm you are safe',
         payload: 'payload',
       );
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => const CheckInScreen()));
       trip.updateStatus(false);
     }
 

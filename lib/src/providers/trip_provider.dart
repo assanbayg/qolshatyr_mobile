@@ -50,4 +50,5 @@ class TripNotifier extends StateNotifier<Trip> {
 
   bool get isOngoing => state.isOngoing;
   Duration get estimateDuration => state.estimateDuration;
+  Trip get latestTrip => state;
 }
