@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:location/location.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
+import 'package:qolshatyr_mobile/src/ui/widgets/image_picker_widget.dart';
 
 class CheckInScreen extends ConsumerWidget {
   const CheckInScreen({super.key});
@@ -14,10 +14,10 @@ class CheckInScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final trip = ref.read(tripProvider.notifier);
-    LocationData? locationData = LocationData.fromMap({});
 
     return Scaffold(
       body: Container(
+        padding: const EdgeInsets.all(10),
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(30),
@@ -26,7 +26,6 @@ class CheckInScreen extends ConsumerWidget {
         ),
         child: Column(
           children: [
-            const Placeholder(fallbackHeight: 200),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -37,12 +36,10 @@ class CheckInScreen extends ConsumerWidget {
               ],
             ),
             const Divider(),
-            ElevatedButton(
-                onPressed: () {}, child: const Text("Video recording")),
-            const Placeholder(fallbackHeight: 250),
+            const ImagePickerWidget(),
             const Divider(),
             Text("Locatation A - ${trip.latestTrip.startLocation}"),
-            Text("Locatation B - ${currentPositionProvider.toString()}"),
+            Text("Locatation B - ${trip.latestTrip.endLocation}"),
           ],
         ),
       ),

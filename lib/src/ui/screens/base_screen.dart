@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
+import 'package:qolshatyr_mobile/src/ui/screens/check_in_screen.dart';
 import 'package:qolshatyr_mobile/src/ui/screens/contacts_screen.dart';
 import 'package:qolshatyr_mobile/src/ui/screens/map_screen.dart';
 import 'package:qolshatyr_mobile/src/ui/screens/trip_status_screen.dart';
@@ -21,6 +22,7 @@ class _BaseScreenState extends State<BaseScreen> {
   final List<Widget> _screens = const [
     MapScreen(),
     TripStatusScreen(),
+    // CheckInScreen(),
     ContactsScreen(),
   ];
 

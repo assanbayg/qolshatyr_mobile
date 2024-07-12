@@ -12,6 +12,7 @@ import 'package:qolshatyr_mobile/src/providers/trip_provider.dart';
 import 'package:qolshatyr_mobile/src/providers/voice_recognition_provider.dart';
 import 'package:qolshatyr_mobile/src/services/call_service.dart';
 import 'package:qolshatyr_mobile/src/services/notification_service.dart';
+import 'package:qolshatyr_mobile/src/ui/screens/check_in_screen.dart';
 import 'package:qolshatyr_mobile/src/ui/widgets/current_trip_widget.dart';
 
 class TripStatusScreen extends StatefulWidget {
@@ -54,6 +55,8 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
                             payload: 'endTrip');
                         timerNotifier.stopTimer();
                         checkinNotifier.stopTimer();
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const CheckInScreen()));
                       },
                       child: Text(localization.endTheTrip)),
                   ElevatedButton(

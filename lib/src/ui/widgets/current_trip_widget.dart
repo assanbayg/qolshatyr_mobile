@@ -27,8 +27,6 @@ class CurrentTripWidget extends ConsumerWidget {
         body: 'Confirm you are safe',
         payload: 'payload',
       );
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const CheckInScreen()));
       trip.updateStatus(false);
     }
 
