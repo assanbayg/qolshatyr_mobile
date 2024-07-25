@@ -2,14 +2,10 @@
 import 'dart:async';
 
 // Package imports:
-import 'package:location/location.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 // Project imports:
-import 'package:qolshatyr_mobile/features/common/services/twilio_service.dart';
-import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
-import 'package:qolshatyr_mobile/features/contacts/call_service.dart';
-import 'package:qolshatyr_mobile/features/contacts/contact_model.dart';
+import 'package:qolshatyr_mobile/features/common/services/check_in_service.dart';
 
 class VoiceRecognitionService {
   final _speech = stt.SpeechToText();
@@ -49,14 +45,8 @@ class VoiceRecognitionService {
       onResult: (result) async {
         _recognizedText = result.recognizedWords.toLowerCase();
         if (_recognizedText.contains("help")) {
-          List<Contact> contacts = await SharedPreferencesManager.getContacts();
-          LocationData location =
-              await SharedPreferencesManager.getLastLocation() as LocationData;
-          if (contacts.isNotEmpty) {
-            TwilioService.sendMessage(
-                contacts.first.phoneNumber, 'HELP: $location (testing an app)');
-            CallService.callNumber(contacts.first.phoneNumber);
-          }
+          final CheckInService checkInService = CheckInService();
+          checkInService.triggerSos();
         }
         if (result.finalResult) {
           _startListening();

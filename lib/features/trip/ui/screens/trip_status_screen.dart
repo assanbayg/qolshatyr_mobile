@@ -7,9 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/providers/timer_provider.dart';
+import 'package:qolshatyr_mobile/features/common/services/check_in_service.dart';
 import 'package:qolshatyr_mobile/features/common/services/notification_service.dart';
 import 'package:qolshatyr_mobile/features/common/ui/screens/check_in_screen.dart';
-import 'package:qolshatyr_mobile/features/contacts/call_service.dart';
 import 'package:qolshatyr_mobile/features/contacts/contact_provider.dart';
 import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/widgets/current_trip_widget.dart';
@@ -62,7 +62,8 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
                   ElevatedButton(
                     onPressed: () async {
                       if (contacts.isNotEmpty) {
-                        CallService.callNumber(contacts.first.phoneNumber);
+                        final CheckInService checkInService = CheckInService();
+                        checkInService.triggerSos();
                         NotificationService.showCallResultNotification();
                       }
                     },

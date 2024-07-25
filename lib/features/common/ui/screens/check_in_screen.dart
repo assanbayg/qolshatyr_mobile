@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
+import 'package:qolshatyr_mobile/features/common/services/check_in_service.dart';
 import 'package:qolshatyr_mobile/features/common/ui/widgets/image_picker_widget.dart';
 import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
 
@@ -13,6 +14,7 @@ class CheckInScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final CheckInService checkInService = CheckInService();
     final trip = ref.read(tripProvider.notifier);
 
     return Scaffold(
@@ -40,6 +42,9 @@ class CheckInScreen extends ConsumerWidget {
             const Divider(),
             Text("Locatation A - ${trip.latestTrip.startLocation}"),
             Text("Locatation B - ${trip.latestTrip.endLocation}"),
+            ElevatedButton(onPressed: () {
+              checkInService.saveCheckIn();
+            }, child: Text("Check In"))
           ],
         ),
       ),

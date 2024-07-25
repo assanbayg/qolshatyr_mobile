@@ -56,6 +56,8 @@ dependencies:
     sdk: flutter
   import_sorter: ^4.6.0
   image_picker: ^1.1.2
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
