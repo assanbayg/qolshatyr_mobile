@@ -87,7 +87,7 @@ class TripDialog {
                             timerNotifier.startTimer(estimatedArrivalDuration!);
                             checkinNotifier.startTimer(Duration(
                                 seconds: SharedPreferencesManager
-                                    .getCheckInReminderDuration()!));
+                                    .checkInReminderDuration!));
                             voiceService.toggleListening();
                             if (context.mounted) {
                               Navigator.pop(context);

@@ -32,8 +32,8 @@ class CurrentTripWidget extends ConsumerWidget {
     if (checkinTimer == 0 && trip.isOngoing) {
       NotificationService.showReminderNotification(
           title: 'Check In', body: 'Update your status', payload: 'test');
-      ref.read(checkInProvider.notifier).startTimer(Duration(
-          seconds: SharedPreferencesManager.getCheckInReminderDuration()!));
+      ref.read(checkInProvider.notifier).startTimer(
+          Duration(seconds: SharedPreferencesManager.checkInReminderDuration!));
     }
 
     String formatTime(int time) {

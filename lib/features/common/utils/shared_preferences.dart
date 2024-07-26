@@ -53,14 +53,20 @@ class SharedPreferencesManager {
     return contacts;
   }
 
+  // in seconds
   static Future<void> updateCheckInReminderDuration(int seconds) async {
-    // in seconds
     await _sharedPreferences?.setInt('checkinDuration', seconds);
   }
 
-  static int? getCheckInReminderDuration() {
-    // in seconds
-    // 6000s = 10min
-    return _sharedPreferences?.getInt('checkinDuration') ?? 6000;
+  // in seconds - 6000s = 10min
+  static int? get checkInReminderDuration =>
+      _sharedPreferences?.getInt('checkinDuration') ?? 6000;
+
+  static Future<void> updateSosPhrase(String newPhrase) async {
+    if (newPhrase.trim() == "") return;
+    await _sharedPreferences?.setString('sosPhrase', newPhrase);
   }
+
+  static String? get sosPhrase =>
+      _sharedPreferences?.getString('sosPhrase') ?? 'help';
 }

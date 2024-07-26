@@ -20,26 +20,40 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(localization.settings),
       ),
-      body: Column(
-        children: [
-          Text(
-            localization.updateCheckInDuration,
-            // Update Check-In timer duration (show reminder notification N minutes before trip ends)
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-          ),
-          CupertinoTimerPicker(
-            initialTimerDuration: Duration(
-                seconds:
-                    SharedPreferencesManager.getCheckInReminderDuration()!),
-            mode: CupertinoTimerPickerMode.ms,
-            onTimerDurationChanged: (Duration newDuration) {
-              final int durationInSeconds =
-                  newDuration.inSeconds + newDuration.inMinutes * 60;
-              SharedPreferencesManager.updateCheckInReminderDuration(
-                  durationInSeconds);
-            },
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              localization.updateCheckInDuration,
+              // Update Check-In timer duration (show reminder notification N minutes before trip ends)
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            ),
+            CupertinoTimerPicker(
+              initialTimerDuration: Duration(
+                  seconds: SharedPreferencesManager.checkInReminderDuration!),
+              mode: CupertinoTimerPickerMode.ms,
+              onTimerDurationChanged: (Duration newDuration) {
+                final int durationInSeconds =
+                    newDuration.inSeconds + newDuration.inMinutes * 60;
+                SharedPreferencesManager.updateCheckInReminderDuration(
+                    durationInSeconds);
+              },
+            ),
+            const Divider(thickness: 2),
+            Text(
+            localization.updateKeyPhrase,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            ),
+            TextField(
+              decoration:
+                  InputDecoration(hintText: SharedPreferencesManager.sosPhrase),
+              onChanged: (value) =>
+                  SharedPreferencesManager.updateSosPhrase(value),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -36,5 +36,7 @@
   "additionalInfoRequest": "Ввести дополнительную информацию",
   "pickAnyPoint": "Нажмите на место на карте",
   "settings": "Настройки",
-  "noActiveTrip": "Нет активных поездок"
+  "noActiveTrip": "Нет активных поездок",
+  "updateKeyPhrase": "Изменить СОС фразу",
+  "checkIn": "Чекин"
 }

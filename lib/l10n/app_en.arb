@@ -36,5 +36,7 @@
   "additionalInfoRequest": "Add additional information.",
   "pickAnyPoint": "Pick any point on map",
   "settings": "Settings",
-  "noActiveTrip": "No active trip"
+  "noActiveTrip": "No active trip",
+  "updateKeyPhrase": "Update key phrase",
+  "checkIn": "Check in"
 }

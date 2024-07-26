@@ -36,8 +36,15 @@ cd qolshatyr_mobile
 ```bash
 flutter pub get
 ```
+3. Add config files
 
-3. Run the app:
+```bash
+- firebase.json: ./
+- google-services.json: ./android/app/
+- firebase_options.dart: ./lib/
+```
+
+4. Run the app:
 
 ```bash
 flutter run

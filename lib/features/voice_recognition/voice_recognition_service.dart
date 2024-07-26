@@ -2,6 +2,7 @@
 import 'dart:async';
 
 // Package imports:
+import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 // Project imports:
@@ -9,6 +10,9 @@ import 'package:qolshatyr_mobile/features/common/services/check_in_service.dart'
 
 class VoiceRecognitionService {
   final _speech = stt.SpeechToText();
+  final CheckInService checkInService = CheckInService();
+
+  final String? sosPhrase = SharedPreferencesManager.sosPhrase;
 
   bool _isListening = false;
   String _recognizedText = '';
@@ -44,8 +48,7 @@ class VoiceRecognitionService {
     _speech.listen(
       onResult: (result) async {
         _recognizedText = result.recognizedWords.toLowerCase();
-        if (_recognizedText.contains("help")) {
-          final CheckInService checkInService = CheckInService();
+        if (_recognizedText.contains(sosPhrase!)) {
           checkInService.triggerSos();
         }
         if (result.finalResult) {

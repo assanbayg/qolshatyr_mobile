@@ -36,5 +36,7 @@
   "additionalInfoRequest": "Қосымша ақпаратты енгізу.",
   "pickAnyPoint": "Картада бір нүктеге басыңыз",
   "settings": "Баптаулар",
-  "noActiveTrip": "Қазір сапарда емессіз!"
+  "noActiveTrip": "Қазір сапарда емессіз!",
+  "updateKeyPhrase": "Шұғыл сөзді жаңарту",
+  "checkIn": "Чекин"
 }
