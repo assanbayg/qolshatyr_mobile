@@ -2,11 +2,11 @@
 import 'dart:async';
 
 // Package imports:
-import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/services/check_in_service.dart';
+import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 
 class VoiceRecognitionService {
   final _speech = stt.SpeechToText();

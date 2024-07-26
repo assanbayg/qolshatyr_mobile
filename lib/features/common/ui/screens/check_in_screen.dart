@@ -2,14 +2,13 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/services/check_in_service.dart';
 import 'package:qolshatyr_mobile/features/common/ui/widgets/image_picker_widget.dart';
 import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
-
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CheckInScreen extends ConsumerWidget {
   static const routeName = 'check-in';
