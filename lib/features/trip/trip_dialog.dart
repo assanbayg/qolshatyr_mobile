@@ -1,6 +1,3 @@
-// Dart imports:
-import 'dart:async';
-
 // Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,57 +13,14 @@ import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
 import 'package:qolshatyr_mobile/features/voice_recognition/voice_recognition_provider.dart';
 
-class DialogService {
-  Future<void> showAuthExceptionsDialog(
-    BuildContext context,
-    String title,
-    String message,
-  ) async {
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> showInitialDialog(
-    BuildContext context,
-    LocationData userCurrentPosition,
-  ) async {
-    final localization = AppLocalizations.of(context)!;
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(localization.sendLocation),
-          content: Text(localization.initialDialogMessage),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                showCreateTrip(context, userCurrentPosition);
-              },
-              child: Text(localization.next),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void showCreateTrip(BuildContext context, LocationData userCurrentPosition) {
+class TripDialog {
+  void showCreateTrip(BuildContext context) {
     Duration? estimatedArrivalDuration;
     final localization = AppLocalizations.of(context)!;
+
+    Future<LocationData?> getLastLocation() async {
+      return await SharedPreferencesManager.getLastLocation();
+    }
 
     showModalBottomSheet(
       context: context,
@@ -124,20 +78,20 @@ class DialogService {
                       ElevatedButton(
                         onPressed: () async {
                           if (estimatedArrivalDuration != null) {
-                            final LocationData startLocation =
-                                LocationData.fromMap({
-                              'latitude': userCurrentPosition.latitude,
-                              'longitude': userCurrentPosition.longitude,
-                            });
+                            final LocationData? startLocation =
+                                await getLastLocation();
+
                             tripNotifier.addTrip(
-                                startLocation, estimatedArrivalDuration!);
+                                startLocation!, estimatedArrivalDuration!);
                             tripNotifier.updateStatus(true);
                             timerNotifier.startTimer(estimatedArrivalDuration!);
                             checkinNotifier.startTimer(Duration(
                                 seconds: SharedPreferencesManager
                                     .getCheckInReminderDuration()!));
                             voiceService.toggleListening();
-                            Navigator.pop(context);
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                            }
                           }
                         },
                         child: Text(localization.startTrip),

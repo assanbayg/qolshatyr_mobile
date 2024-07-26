@@ -35,5 +35,6 @@
   "startTrip": "Start a trip",
   "additionalInfoRequest": "Add additional information.",
   "pickAnyPoint": "Pick any point on map",
-  "settings": "Settings"
+  "settings": "Settings",
+  "noActiveTrip": "No active trip"
 }

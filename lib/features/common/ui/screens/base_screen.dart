@@ -36,7 +36,7 @@ class _BaseScreenState extends State<BaseScreen> {
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.call_rounded),
-      label: 'Emergy Contacts',
+      label: 'Emergency Contacts',
     ),
   ];
 

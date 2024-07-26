@@ -43,20 +43,14 @@ class MyDrawer extends ConsumerWidget {
               title: Text(localization.userTrips),
               leading: const Icon(Icons.local_taxi_rounded),
               onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return TripsHistoryScreen();
-                }));
+                Navigator.of(context).pushNamed(TripsHistoryScreen.routeName);
               },
             ),
             ListTile(
               title: Text(localization.settings),
               leading: const Icon(Icons.settings_rounded),
               onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return const SettingsScreen();
-                }));
+                Navigator.of(context).pushNamed(SettingsScreen.routeName);
               },
             )
           ],

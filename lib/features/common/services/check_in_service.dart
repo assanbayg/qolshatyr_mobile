@@ -4,6 +4,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 // Project imports:
+import 'package:qolshatyr_mobile/features/common/services/notification_service.dart';
 import 'package:qolshatyr_mobile/features/common/services/twilio_service.dart';
 import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 import 'package:qolshatyr_mobile/features/contacts/call_service.dart';
@@ -88,5 +89,6 @@ class CheckInService {
           contacts.first.phoneNumber, 'HELP: $location (testing an app)');
       CallService.callNumber(contacts.first.phoneNumber);
     }
+    NotificationService.showCallResultNotification();
   }
 }

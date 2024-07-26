@@ -13,11 +13,11 @@ import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 import 'package:qolshatyr_mobile/firebase_options.dart';
 
 void main() async {
-  // Ensure that neccessary sesrvices are initialized
+  // Ensure that neccessary services are initialized
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await SharedPreferencesManager.init();
-  NotificationService.init();
+  await NotificationService.init();
 
   // Lock device orientation
   SystemChrome.setPreferredOrientations([
@@ -27,6 +27,3 @@ void main() async {
   // Wrap QolshatyrApp to read Riverpod providers
   runApp(const ProviderScope(child: QolshatyrApp()));
 }
-
-// TODO: don't require to sync contacts all the time
-// so i kinda need to store the locally???

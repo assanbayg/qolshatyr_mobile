@@ -10,6 +10,7 @@ import 'package:qolshatyr_mobile/features/common/ui/widgets/image_picker_widget.
 import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
 
 class CheckInScreen extends ConsumerWidget {
+  static const routeName = 'check-in';
   const CheckInScreen({super.key});
 
   @override
@@ -42,9 +43,11 @@ class CheckInScreen extends ConsumerWidget {
             const Divider(),
             Text("Locatation A - ${trip.latestTrip.startLocation}"),
             Text("Locatation B - ${trip.latestTrip.endLocation}"),
-            ElevatedButton(onPressed: () {
-              checkInService.saveCheckIn();
-            }, child: Text("Check In"))
+            ElevatedButton(
+                onPressed: () {
+                  checkInService.saveCheckIn();
+                },
+                child: Text("Check In"))
           ],
         ),
       ),

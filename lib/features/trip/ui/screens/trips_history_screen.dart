@@ -7,9 +7,11 @@ import 'package:qolshatyr_mobile/features/trip/trip.dart';
 
 // TODO: make it user-friendly screen
 class TripsHistoryScreen extends StatelessWidget {
-  final FirestoreService _firestoreService = FirestoreService();
+  static const routeName = '/trips-history';
 
   TripsHistoryScreen({super.key});
+
+  final FirestoreService _firestoreService = FirestoreService();
 
   @override
   Widget build(BuildContext context) {

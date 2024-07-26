@@ -9,6 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 
 class SettingsScreen extends StatelessWidget {
+  static const routeName = "/settings";
   const SettingsScreen({super.key});
 
   @override

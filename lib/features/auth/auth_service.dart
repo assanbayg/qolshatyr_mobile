@@ -5,8 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 // Project imports:
-import 'package:qolshatyr_mobile/features/common/services/dialog_service.dart';
 import 'package:qolshatyr_mobile/features/common/services/firestore_service.dart';
+import 'package:qolshatyr_mobile/features/common/ui/widgets/dialogs.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -22,9 +22,7 @@ class AuthService {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       if (context.mounted) {
-        DialogService dialogService = DialogService();
-        dialogService.showAuthExceptionsDialog(
-            context, 'Error Occurred', e.toString());
+        showAuthExceptionsDialog(context, 'Error Occurred', e.toString());
       }
     }
   }
@@ -34,27 +32,25 @@ class AuthService {
   // Displays an error dialog if there's an issue.
   Future<void> signUpWithEmailAndPassword(
       String email, String password, BuildContext context) async {
-    DialogService dialogService = DialogService();
     try {
       UserCredential userCredential = await _auth
           .createUserWithEmailAndPassword(email: email, password: password);
       await _firecloudService.addUser(userCredential.user!);
     } on FirebaseAuthException catch (e) {
       if (context.mounted) {
-        dialogService.showAuthExceptionsDialog(
-            context, 'Error Occurred', e.toString());
+        showAuthExceptionsDialog(context, 'Error Occurred', e.toString());
       }
     } catch (e) {
       if (e == 'email-already-in-use') {
         if (context.mounted) {
-          dialogService.showAuthExceptionsDialog(
+          showAuthExceptionsDialog(
               context, 'Email already in use', e.toString());
         }
       }
     }
   }
 
-  // Signs out the current user.
+  // Signs out the current user
   Future<void> signOut() async {
     await _auth.signOut();
   }

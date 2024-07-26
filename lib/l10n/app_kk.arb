@@ -35,5 +35,6 @@
   "startTrip": "Сапарды бастау",
   "additionalInfoRequest": "Қосымша ақпаратты енгізу.",
   "pickAnyPoint": "Картада бір нүктеге басыңыз",
-  "settings": "Баптаулар"
+  "settings": "Баптаулар",
+  "noActiveTrip": "Қазір сапарда емессіз!"
 }

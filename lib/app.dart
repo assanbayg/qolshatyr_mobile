@@ -13,6 +13,12 @@ import 'package:qolshatyr_mobile/features/auth/ui/screens/error.dart';
 import 'package:qolshatyr_mobile/features/auth/ui/screens/loading.dart';
 import 'package:qolshatyr_mobile/features/auth/ui/screens/login.dart';
 import 'package:qolshatyr_mobile/features/common/ui/screens/base_screen.dart';
+import 'package:qolshatyr_mobile/features/common/ui/screens/check_in_screen.dart';
+import 'package:qolshatyr_mobile/features/common/ui/screens/map_screen.dart';
+import 'package:qolshatyr_mobile/features/common/ui/screens/settings_screen.dart';
+import 'package:qolshatyr_mobile/features/contacts/ui/contacts_screen.dart';
+import 'package:qolshatyr_mobile/features/trip/ui/screens/trip_status_screen.dart';
+import 'package:qolshatyr_mobile/features/trip/ui/screens/trips_history_screen.dart';
 import 'package:qolshatyr_mobile/themes.dart';
 
 class QolshatyrApp extends ConsumerWidget {
@@ -49,10 +55,15 @@ class QolshatyrApp extends ConsumerWidget {
         error: (e, stackTrace) => ErrorScreen(e, stackTrace),
       ),
 
-      // Routes in the app. Maybe add other ones but now I navigate using BottomNavigationBar
       routes: {
-        '/base': (context) => const BaseScreen(),
         '/auth': (context) => const LoginScreen(),
+        '/base': (context) => const BaseScreen(),
+        '/base/map': (context) => const MapScreen(),
+        '/base/trip-status': (context) => const TripStatusScreen(),
+        '/base/contacts': (context) => const ContactsScreen(),
+        '/settings': (context) => const SettingsScreen(),
+        '/trips-history': (context) => TripsHistoryScreen(),
+        '/check-in': (context) => const CheckInScreen()
       },
     );
   }

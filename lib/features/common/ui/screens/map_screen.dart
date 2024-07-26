@@ -25,8 +25,8 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final LocationService _locationService = LocationService();
-  LatLng? currentPosition;
-  LatLng? endPosition;
+  LocationData? _currentLocation;
+  LocationData? _endLocation;
   StreamSubscription<LocationData>? _locationSubscription;
 
   @override
@@ -52,7 +52,7 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
 
-    return currentPosition == null
+    return _currentLocation == null
         ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -66,18 +66,21 @@ class _MapScreenState extends State<MapScreen> {
             builder: (context, ref, child) {
               return FlutterMap(
                   options: MapOptions(
-                    initialCenter: currentPosition!,
-                    initialZoom: 9.2,
+                    initialCenter: LatLng(
+                      _currentLocation!.latitude!,
+                      _currentLocation!.longitude!,
+                    ),
+                    initialZoom: 11,
                     onTap: (tapPosition, point) {
                       setState(() {
-                        endPosition = point;
+                        _endLocation = LocationData.fromMap({
+                          "latitude": point.latitude,
+                          "longitude": point.longitude
+                        });
                       });
                       ref
                           .read(tripProvider.notifier)
-                          .updateEndLocation(LocationData.fromMap({
-                            'latitude': endPosition!.latitude,
-                            'longitude': endPosition!.longitude,
-                          }));
+                          .updateEndLocation(_endLocation!);
                     },
                   ),
                   children: [
@@ -86,51 +89,53 @@ class _MapScreenState extends State<MapScreen> {
                           'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                       userAgentPackageName: 'com.qolshatyr.qolshatyr_mobile',
                     ),
-                    MarkerLayer(markers: [
-                      Marker(
-                        point: currentPosition!,
-                        child: const Icon(
-                          Icons.location_on_rounded,
-                          color: Colors.red,
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: LatLng(
+                            _currentLocation!.latitude!,
+                            _currentLocation!.longitude!,
+                          ),
+                          child: const Icon(
+                            Icons.location_on_rounded,
+                            color: Colors.red,
+                          ),
                         ),
-                      ),
-                      Marker(
-                        point: endPosition ?? currentPosition!,
-                        child: const Icon(
-                          Icons.location_on_rounded,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ]),
+                        if (_endLocation != null)
+                          Marker(
+                            point: LatLng(
+                              _endLocation!.latitude!,
+                              _endLocation!.longitude!,
+                            ),
+                            child: const Icon(
+                              Icons.location_on_rounded,
+                              color: Colors.blue,
+                            ),
+                          ),
+                      ],
+                    ),
                   ]);
             },
           );
   }
 
   Future<void> _getLastLocation() async {
-    final lastLocation = await _locationService.getLastLocation();
+    final LocationData? lastLocation = await _locationService.getLastLocation();
     if (lastLocation != null) {
       setState(() {
-        currentPosition =
-            LatLng(lastLocation.latitude!, lastLocation.longitude!);
+        _currentLocation = lastLocation;
       });
     } else {
       if (mounted) {
-        LocationData? currentLocation =
-            await _locationService.getCurrentLocation(context);
-        setState(() {
-          currentPosition =
-              LatLng(currentLocation!.latitude!, currentLocation.longitude!);
+        setState(() async {
+          _currentLocation = await _locationService.getCurrentLocation(context);
         });
       }
     }
   }
 
   Future<void> _updateLocation(LocationData currentLocation) async {
-    setState(() {
-      currentPosition =
-          LatLng(currentLocation.latitude!, currentLocation.longitude!);
-    });
+    setState(() {});
     _locationService.saveLastLocation(currentLocation);
   }
 }
