@@ -18,7 +18,7 @@ final authStateProvider = StreamProvider<User?>((ref) {
 });
 
 // Provides an instance of FirebaseAuth (firebase_auth).
-final fireBaseAuthProvider = Provider<FirebaseAuth>((ref) {
+final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
   return FirebaseAuth.instance;
 });
 

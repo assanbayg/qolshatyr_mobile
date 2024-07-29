@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/features/contacts/contact_model.dart';
-import 'package:qolshatyr_mobile/features/contacts/contact_provider.dart';
+import 'package:qolshatyr_mobile/features/contacts/providers/contact_provider.dart';
 
 // Project imports:
 
@@ -25,7 +25,7 @@ class ContactCard extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              onPressed: () {
+              onPressed: () async {
                 ref
                     .read(contactListProvider.notifier)
                     .removeContact(contact.phoneNumber);

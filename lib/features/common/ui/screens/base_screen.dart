@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/ui/screens/map_screen.dart';
 import 'package:qolshatyr_mobile/features/common/ui/widgets/my_drawer.dart';
-import 'package:qolshatyr_mobile/features/contacts/ui/contact_floating_action_button.dart';
+import 'package:qolshatyr_mobile/features/common/ui/widgets/open_drawer_button.dart';
 import 'package:qolshatyr_mobile/features/contacts/ui/contacts_screen.dart';
+import 'package:qolshatyr_mobile/features/contacts/ui/widgets/contact_floating_action_button.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/screens/trip_status_screen.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/widgets/create_trip_floating_action_button.dart';
 
@@ -45,7 +46,12 @@ class _BaseScreenState extends State<BaseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: _screens[_selectedIndex]),
+      body: Stack(
+        children: [
+          SafeArea(child: _screens[_selectedIndex]),
+          const OpenDrawerButton(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: _items,
         currentIndex: _selectedIndex,

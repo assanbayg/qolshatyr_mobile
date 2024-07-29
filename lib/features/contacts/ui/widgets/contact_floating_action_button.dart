@@ -6,7 +6,7 @@ import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
-import 'package:qolshatyr_mobile/features/contacts/contact_provider.dart';
+import 'package:qolshatyr_mobile/features/contacts/providers/contact_provider.dart';
 
 class ContactFloatingActionButton extends ConsumerWidget {
   const ContactFloatingActionButton({super.key});

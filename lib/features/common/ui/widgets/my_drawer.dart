@@ -15,7 +15,7 @@ class MyDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authService = ref.read(fireBaseAuthProvider);
+    final authService = ref.read(firebaseAuthProvider);
     final localization = AppLocalizations.of(context)!;
 
     return Drawer(

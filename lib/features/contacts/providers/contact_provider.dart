@@ -41,8 +41,12 @@ class ContactNotifier extends StateNotifier<List<Contact>> {
   }
 
   void removeContact(String number) async {
-    state.removeWhere((contact) => contact.phoneNumber == number);
+    List<Contact> updatedContacts =
+        state.where((contact) => contact.phoneNumber != number).toList();
 
+    state = updatedContacts;
+
+    SharedPreferencesManager.saveContacts(updatedContacts);
     await _firestoreService.deleteEmergencyContact(
       _firebaseAuth.currentUser!.uid,
       number,
