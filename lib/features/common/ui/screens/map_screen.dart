@@ -127,8 +127,9 @@ class _MapScreenState extends State<MapScreen> {
       });
     } else {
       if (mounted) {
-        setState(() async {
-          _currentLocation = await _locationService.getCurrentLocation(context);
+        final newLocation = await _locationService.getCurrentLocation(context);
+        setState(() {
+          _currentLocation = newLocation;
         });
       }
     }
