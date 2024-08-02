@@ -28,6 +28,8 @@ if (flutterVersionName == null) {
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
+def googleMapsApiKey = properties.getProperty('googleMapsApiKey')
+
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
@@ -65,6 +67,8 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
+        manifestPlaceholders = [googleMapsApiKey: googleMapsApiKey]
+
     }
 
     signingConfigs {

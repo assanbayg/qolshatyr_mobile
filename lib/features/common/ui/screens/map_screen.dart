@@ -6,24 +6,22 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/features/trip/services/location_service.dart';
-import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
 
 class MapScreen extends StatefulWidget {
   static const routeName = '/base/map';
   const MapScreen({super.key});
 
   @override
-  State<MapScreen> createState() => _MapScreenState();
+  State<MapScreen> createState() => _GoogleMapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _GoogleMapScreenState extends State<MapScreen> {
   final LocationService _locationService = LocationService();
   LocationData? _currentLocation;
   LocationData? _endLocation;
@@ -64,57 +62,39 @@ class _MapScreenState extends State<MapScreen> {
           )
         : Consumer(
             builder: (context, ref, child) {
-              return FlutterMap(
-                  options: MapOptions(
-                    initialCenter: LatLng(
-                      _currentLocation!.latitude!,
-                      _currentLocation!.longitude!,
-                    ),
-                    initialZoom: 11,
-                    onTap: (tapPosition, point) {
-                      setState(() {
-                        _endLocation = LocationData.fromMap({
-                          "latitude": point.latitude,
-                          "longitude": point.longitude
-                        });
-                      });
-                      ref
-                          .read(tripProvider.notifier)
-                          .updateEndLocation(_endLocation!);
-                    },
+              return GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(_currentLocation!.latitude!,
+                      _currentLocation!.longitude!),
+                  //  _currentLocation!,
+                  zoom: 13,
+                ),
+                markers: {
+                  Marker(
+                    markerId: const MarkerId('Me'),
+                    position: LatLng(_currentLocation!.latitude!,
+                        _currentLocation!.longitude!),
                   ),
-                  children: [
-                    TileLayer(
-                      urlTemplate:
-                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      userAgentPackageName: 'com.qolshatyr.qolshatyr_mobile',
-                    ),
-                    MarkerLayer(
-                      markers: [
-                        Marker(
-                          point: LatLng(
-                            _currentLocation!.latitude!,
-                            _currentLocation!.longitude!,
-                          ),
-                          child: const Icon(
-                            Icons.location_on_rounded,
-                            color: Colors.red,
-                          ),
+                  if (_endLocation != null)
+                    Marker(
+                        position: LatLng(
+                          _endLocation!.latitude!,
+                          _endLocation!.longitude!,
                         ),
-                        if (_endLocation != null)
-                          Marker(
-                            point: LatLng(
-                              _endLocation!.latitude!,
-                              _endLocation!.longitude!,
-                            ),
-                            child: const Icon(
-                              Icons.location_on_rounded,
-                              color: Colors.blue,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ]);
+                        markerId: const MarkerId('B'),
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueAzure)),
+                },
+                onTap: (LatLng location) {
+                  setState(() {
+                    _endLocation = LocationData.fromMap({
+                      'latitude': location.latitude,
+                      'longitude': location.longitude
+                    });
+                    // endPosition = location;
+                  });
+                },
+              );
             },
           );
   }
