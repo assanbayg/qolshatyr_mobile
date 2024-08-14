@@ -1,6 +1,3 @@
-// Dart imports:
-import 'dart:developer';
-
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
@@ -12,9 +9,6 @@ import 'package:qolshatyr_mobile/features/common/services/firestore_service.dart
 import 'package:qolshatyr_mobile/features/common/services/geocoding_service.dart';
 import 'package:qolshatyr_mobile/features/trip/models/trip.dart';
 import 'package:qolshatyr_mobile/features/trip/models/trip_with_placemark.dart';
-
-// import 'package:latlong2/latlong.dart';
-
 
 // Provides user's current position
 final currentPositionProvider =
@@ -46,10 +40,6 @@ class TripNotifier extends StateNotifier<Trip> {
         'longitude': startLocation.longitude
       }),
     );
-    log('endLocation');
-    log(endLocation.toString());
-    log('end Location 2');
-    log(state.endLocation.toString());
 
     Placemark endPlacemark = await GeocodingService.translateFromLatLng(
       LocationData.fromMap({

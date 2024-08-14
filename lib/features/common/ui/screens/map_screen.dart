@@ -1,5 +1,11 @@
+//TODO: store state of start and end location in riverpod
+// because after updating state _endLocation is lost
+// so gotta store it till trip ends
+// gosh so much work i'm not paid for this
+
 // Dart imports:
 import 'dart:async';
+import 'dart:developer';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -13,6 +19,7 @@ import 'package:location/location.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/services/geocoding_service.dart';
+import 'package:qolshatyr_mobile/features/common/ui/widgets/loading_indicator.dart';
 import 'package:qolshatyr_mobile/features/trip/services/location_service.dart';
 import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
 
@@ -29,8 +36,11 @@ class _GoogleMapScreenState extends State<MapScreen> {
   final Completer<GoogleMapController> _mapController = Completer();
   final TextEditingController _addressController = TextEditingController();
   LocationData? _currentLocation;
+  LocationData? _startLocation;
   LocationData? _endLocation;
   StreamSubscription<LocationData>? _locationSubscription;
+
+  Set<Polyline> polylines = {};
 
   @override
   void initState() {
@@ -62,7 +72,7 @@ class _GoogleMapScreenState extends State<MapScreen> {
     await _getLastLocation();
     _locationSubscription = _locationService.getLocationUpdates().listen(
       (LocationData currentLocation) {
-        _updateLocation(currentLocation);
+        _updateCurrentLocation(currentLocation);
       },
     );
   }
@@ -74,7 +84,7 @@ class _GoogleMapScreenState extends State<MapScreen> {
 
   Widget _buildMap(AppLocalizations localization) {
     return _currentLocation == null
-        ? _buildLoadingIndicator(localization)
+        ? const LoadingIndicator()
         : Consumer(
             builder: (context, ref, child) {
               return GoogleMap(
@@ -85,7 +95,11 @@ class _GoogleMapScreenState extends State<MapScreen> {
                   ),
                   zoom: 13,
                 ),
+                myLocationEnabled: true,
+                myLocationButtonEnabled: true,
+                compassEnabled: true,
                 markers: _buildMarkers(),
+                polylines: polylines,
                 onTap: (location) => _handleMapTap(location, ref),
                 onMapCreated: (GoogleMapController controller) {
                   _mapController.complete(controller);
@@ -93,18 +107,6 @@ class _GoogleMapScreenState extends State<MapScreen> {
               );
             },
           );
-  }
-
-  Widget _buildLoadingIndicator(AppLocalizations localization) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const CircularProgressIndicator(),
-          Text(localization.turnOnLocation),
-        ],
-      ),
-    );
   }
 
   Widget _buildSearchCard(AppLocalizations localization) {
@@ -137,13 +139,13 @@ class _GoogleMapScreenState extends State<MapScreen> {
 
   Set<Marker> _buildMarkers() {
     return {
-      Marker(
-        markerId: const MarkerId('Me'),
-        position: LatLng(
-          _currentLocation!.latitude!,
-          _currentLocation!.longitude!,
-        ),
-      ),
+      if (_startLocation != null)
+        Marker(
+            markerId: const MarkerId('A'),
+            position: LatLng(
+              _startLocation!.latitude!,
+              _startLocation!.longitude!,
+            )),
       if (_endLocation != null)
         Marker(
           position: LatLng(
@@ -158,6 +160,8 @@ class _GoogleMapScreenState extends State<MapScreen> {
   }
 
   void _handleMapTap(LatLng location, WidgetRef ref) async {
+    log(location.toString());
+
     setState(() {
       _endLocation = LocationData.fromMap(
           {'latitude': location.latitude, 'longitude': location.longitude});
@@ -191,7 +195,7 @@ class _GoogleMapScreenState extends State<MapScreen> {
     if (address.isNotEmpty) {
       LocationData location = await GeocodingService.translateToLatLng(res);
       LatLng latLng = LatLng(location.latitude!, location.longitude!);
-      _updateMapLocation(latLng);
+      _updateEndLocation(latLng);
     }
   }
 
@@ -211,16 +215,32 @@ class _GoogleMapScreenState extends State<MapScreen> {
     }
   }
 
-  Future<void> _updateLocation(LocationData currentLocation) async {
+  Future<void> _updateCurrentLocation(LocationData currentLocation) async {
+    LatLng currentLatLng = LatLng(
+      currentLocation.latitude!,
+      currentLocation.longitude!,
+    );
+
+    Polyline polyline = const Polyline(
+      polylineId: PolylineId('trip_route'),
+      color: Color.fromARGB(255, 78, 157, 147),
+      width: 5,
+      points: [],
+    );
+    polyline.points.add(currentLatLng);
+    polylines.add(polyline);
+
     setState(() {
       _currentLocation = currentLocation;
+      polyline.points.add(currentLatLng);
     });
     _locationService.saveLastLocation(currentLocation);
   }
 
-  Future<void> _updateMapLocation(LatLng latLng) async {
+  Future<void> _updateEndLocation(LatLng latLng) async {
     final GoogleMapController controller = await _mapController.future;
     controller.animateCamera(CameraUpdate.newLatLng(latLng));
+
     setState(() {
       _endLocation = LocationData.fromMap({
         'latitude': latLng.latitude,
