@@ -1,10 +1,10 @@
+// Package imports:
 import 'package:geocoding/geocoding.dart';
 import 'package:location/location.dart' as location;
 
 class GeocodingService {
   // geocoding
-  static Future<List<location.LocationData>> translateToLatLng(
-      String address) async {
+  static Future<location.LocationData> translateToLatLng(String address) async {
     // here Location class means lat lng
     List<Location> latLngList = await locationFromAddress(address);
 
@@ -20,15 +20,16 @@ class GeocodingService {
         ),
       );
     }
-    return locationDataList;
+    return locationDataList.first;
   }
 
   // reverse geocoding
-  static Future<List<Placemark>> translateFromLatLng(
+  static Future<Placemark> translateFromLatLng(
       location.LocationData location) async {
-    return await placemarkFromCoordinates(
+    List<Placemark> placemarks = await placemarkFromCoordinates(
       location.latitude!,
       location.longitude!,
     );
+    return placemarks.first;
   }
 }

@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/features/contacts/contact_model.dart';
-import 'package:qolshatyr_mobile/features/trip/trip.dart';
+import 'package:qolshatyr_mobile/features/trip/models/trip.dart';
 
 class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

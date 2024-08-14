@@ -1,12 +1,20 @@
+// Dart imports:
+import 'dart:developer';
+
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/services/firestore_service.dart';
-import 'package:qolshatyr_mobile/features/trip/trip.dart';
+import 'package:qolshatyr_mobile/features/common/services/geocoding_service.dart';
+import 'package:qolshatyr_mobile/features/trip/models/trip.dart';
+import 'package:qolshatyr_mobile/features/trip/models/trip_with_placemark.dart';
+
+// import 'package:latlong2/latlong.dart';
+
 
 // Provides user's current position
 final currentPositionProvider =
@@ -21,14 +29,45 @@ class TripNotifier extends StateNotifier<Trip> {
 
   // Adds a new trip to cloud firestore
   void addTrip(LocationData startLocation, Duration estimateDuration) async {
+    LocationData endLocation = state.endLocation;
+
     final newTrip = Trip(
       startLocation: startLocation,
-      endLocation: state.endLocation,
+      endLocation: endLocation,
       estimateDuration: estimateDuration,
       startTime: DateTime.now(),
+      endTime: DateTime.now(),
       isOngoing: true,
     );
-    await _firestoreService.addTrip(newTrip.toJson());
+
+    Placemark startPlacemark = await GeocodingService.translateFromLatLng(
+      LocationData.fromMap({
+        'latitude': startLocation.latitude,
+        'longitude': startLocation.longitude
+      }),
+    );
+    log('endLocation');
+    log(endLocation.toString());
+    log('end Location 2');
+    log(state.endLocation.toString());
+
+    Placemark endPlacemark = await GeocodingService.translateFromLatLng(
+      LocationData.fromMap({
+        'latitude': endLocation.latitude,
+        'longitude': endLocation.longitude
+      }),
+    );
+
+    final TripWithPlacemark newTripWithPlacemark = TripWithPlacemark(
+        startLocation: startLocation,
+        endLocation: state.endLocation,
+        estimateDuration: estimateDuration,
+        startTime: DateTime.now(),
+        endTime: DateTime.now(),
+        isOngoing: true,
+        startPlacemark: startPlacemark,
+        endPlacemark: endPlacemark);
+    await _firestoreService.addTrip(newTripWithPlacemark.toJson());
     state = newTrip;
   }
 
@@ -39,6 +78,7 @@ class TripNotifier extends StateNotifier<Trip> {
       endLocation: newEndLocation,
       estimateDuration: state.estimateDuration,
       startTime: state.startTime,
+      endTime: state.endTime,
       isOngoing: state.isOngoing,
     );
     state = updatedTrip;

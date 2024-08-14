@@ -6,7 +6,7 @@ class Trip {
   final LocationData endLocation;
   final Duration estimateDuration;
   final DateTime startTime;
-  final DateTime endTime = DateTime(2024);
+  final DateTime endTime;
   bool isOngoing;
 
   Trip({
@@ -14,6 +14,7 @@ class Trip {
     required this.endLocation,
     required this.estimateDuration,
     required this.startTime,
+    required this.endTime,
     required this.isOngoing,
   });
 
@@ -29,6 +30,7 @@ class Trip {
       }),
       estimateDuration: const Duration(minutes: 0),
       startTime: DateTime.now(),
+      endTime: DateTime.now(),
       isOngoing: true,
     );
   }
@@ -46,6 +48,7 @@ class Trip {
       'estimate_duration': estimateDuration.inMinutes,
       'start_time': startTime.millisecondsSinceEpoch,
       'end_time': endTime.millisecondsSinceEpoch,
+      'is_ongoing': isOngoing,
     };
   }
 
@@ -61,12 +64,13 @@ class Trip {
       }),
       estimateDuration: Duration(minutes: json['estimate_duration']),
       startTime: DateTime.fromMillisecondsSinceEpoch(json['start_time']),
-      isOngoing: false,
+      endTime: DateTime.fromMillisecondsSinceEpoch(json['end_time']),
+      isOngoing: json['is_ongoing'],
     );
   }
 
   @override
   String toString() {
-    return 'Trip(startLocation: $startLocation, endLocation: $endLocation, estimateDuration: $estimateDuration, startTime: $startTime, endTime: $endTime)';
+    return 'Trip(startLocation: $startLocation, endLocation: $endLocation, estimateDuration: $estimateDuration, startTime: $startTime, endTime: $endTime, isOngoing: $isOngoing)';
   }
 }

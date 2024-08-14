@@ -1,6 +1,5 @@
 // Dart imports:
 import 'dart:async';
-import 'dart:developer';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -15,6 +14,7 @@ import 'package:location/location.dart';
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/services/geocoding_service.dart';
 import 'package:qolshatyr_mobile/features/trip/services/location_service.dart';
+import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
 
 class MapScreen extends StatefulWidget {
   static const routeName = '/base/map';
@@ -86,7 +86,7 @@ class _GoogleMapScreenState extends State<MapScreen> {
                   zoom: 13,
                 ),
                 markers: _buildMarkers(),
-                onTap: _handleMapTap,
+                onTap: (location) => _handleMapTap(location, ref),
                 onMapCreated: (GoogleMapController controller) {
                   _mapController.complete(controller);
                 },
@@ -157,24 +157,27 @@ class _GoogleMapScreenState extends State<MapScreen> {
     };
   }
 
-  void _handleMapTap(LatLng location) async {
+  void _handleMapTap(LatLng location, WidgetRef ref) async {
     setState(() {
       _endLocation = LocationData.fromMap(
           {'latitude': location.latitude, 'longitude': location.longitude});
     });
 
-    List<Placemark> res = await GeocodingService.translateFromLatLng(
+    ref.read(tripProvider.notifier).updateEndLocation(_endLocation!);
+
+    Placemark res = await GeocodingService.translateFromLatLng(
       LocationData.fromMap(
           {'latitude': location.latitude, 'longitude': location.longitude}),
     );
     setState(() {
-      _addressController.text = res[0].street!;
+      _addressController.text = res.street!;
     });
   }
 
   void _handleSearch() async {
     String address = _addressController.text;
-    List<Placemark> myLocation = await GeocodingService.translateFromLatLng(
+    Placemark currentLocationPlacemark =
+        await GeocodingService.translateFromLatLng(
       LocationData.fromMap(
         {
           'latitude': _currentLocation!.latitude,
@@ -183,18 +186,12 @@ class _GoogleMapScreenState extends State<MapScreen> {
       ),
     );
     String res =
-        "$address, ${myLocation[0].administrativeArea!}, ${myLocation[0].country!}";
+        "$address, ${currentLocationPlacemark.administrativeArea!}, ${currentLocationPlacemark.country!}";
 
     if (address.isNotEmpty) {
-      log(res);
-      List<LocationData> locations =
-          await GeocodingService.translateToLatLng(res);
-      if (locations.isNotEmpty) {
-        log(locations.first.toString());
-        LocationData location = locations.first;
-        LatLng latLng = LatLng(location.latitude!, location.longitude!);
-        _updateMapLocation(latLng);
-      }
+      LocationData location = await GeocodingService.translateToLatLng(res);
+      LatLng latLng = LatLng(location.latitude!, location.longitude!);
+      _updateMapLocation(latLng);
     }
   }
 
