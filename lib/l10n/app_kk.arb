@@ -38,5 +38,6 @@
   "settings": "Баптаулар",
   "noActiveTrip": "Қазір сапарда емессіз!",
   "updateKeyPhrase": "Шұғыл сөзді жаңарту",
-  "checkIn": "Чекин"
+  "checkIn": "Чекин",
+  "enterAddress": "Мекен-жайды еңгізіңіз"
 }

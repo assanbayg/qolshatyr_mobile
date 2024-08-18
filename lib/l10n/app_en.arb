@@ -38,5 +38,6 @@
   "settings": "Settings",
   "noActiveTrip": "No active trip",
   "updateKeyPhrase": "Update key phrase",
-  "checkIn": "Check in"
+  "checkIn": "Check in",
+  "enterAddress": "Enter address"
 }

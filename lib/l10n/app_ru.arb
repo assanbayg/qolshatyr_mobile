@@ -38,5 +38,6 @@
   "settings": "Настройки",
   "noActiveTrip": "Нет активных поездок",
   "updateKeyPhrase": "Изменить СОС фразу",
-  "checkIn": "Чекин"
+  "checkIn": "Чекин",
+  "enterAddress": "Введите адрес"
 }
