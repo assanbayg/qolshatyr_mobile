@@ -20,6 +20,8 @@ import 'package:location/location.dart';
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/services/geocoding_service.dart';
 import 'package:qolshatyr_mobile/features/common/ui/widgets/loading_indicator.dart';
+import 'package:qolshatyr_mobile/features/common/utils/convert_to_geojson.dart';
+// import 'package:qolshatyr_mobile/features/common/utils/share_geojson.dart';
 import 'package:qolshatyr_mobile/features/trip/services/location_service.dart';
 import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
 
@@ -42,12 +44,31 @@ class _GoogleMapScreenState extends State<MapScreen> {
 
   Set<Polyline> polylines = {};
 
+  List<LatLng> polylineCoordinates = [
+    const LatLng(43.21813442382432, 76.8463621661067),
+    const LatLng(43.21313027612295, 76.85722377151251),
+    const LatLng(43.23100233570027, 76.87257371842861),
+    const LatLng(43.236068768829355, 76.88954707235098)
+  ];
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _initializeLocation();
     });
+
+    for (int i = 0; i < polylineCoordinates.length; i++) {
+      polylines.add(
+        Polyline(
+          polylineId: const PolylineId('1'),
+          points: polylineCoordinates,
+          color: const Color.fromARGB(255, 78, 157, 147),
+          width: 4,
+        ),
+      );
+      setState(() {});
+    }
   }
 
   @override
@@ -64,6 +85,7 @@ class _GoogleMapScreenState extends State<MapScreen> {
       children: [
         _buildMap(localization),
         _buildSearchCard(localization),
+        _buildExportButton(localization),
       ],
     );
   }
@@ -133,6 +155,18 @@ class _GoogleMapScreenState extends State<MapScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildExportButton(AppLocalizations localization) {
+    return Positioned(
+      bottom: 10,
+      left: 15,
+      right: 15,
+      child: ElevatedButton(
+        onPressed: _exportRouteToGeoJSON,
+        child: Text('Export'),
       ),
     );
   }
@@ -221,7 +255,7 @@ class _GoogleMapScreenState extends State<MapScreen> {
       currentLocation.longitude!,
     );
 
-    Polyline polyline = const Polyline(
+    Polyline polyline = Polyline(
       polylineId: PolylineId('trip_route'),
       color: Color.fromARGB(255, 78, 157, 147),
       width: 5,
@@ -247,5 +281,11 @@ class _GoogleMapScreenState extends State<MapScreen> {
         'longitude': latLng.longitude,
       });
     });
+  }
+
+  void _exportRouteToGeoJSON() {
+    final String geoJson = convertPolylinesToGeoJSON(polylines);
+    log(geoJson);
+    // saveAndShareGeoJSON(geoJson);
   }
 }
