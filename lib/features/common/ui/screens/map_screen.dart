@@ -20,7 +20,7 @@ import 'package:location/location.dart';
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/services/geocoding_service.dart';
 import 'package:qolshatyr_mobile/features/common/ui/widgets/loading_indicator.dart';
-import 'package:qolshatyr_mobile/features/common/utils/convert_to_geojson.dart';
+import 'package:qolshatyr_mobile/features/common/utils/geojson_utils.dart';
 import 'package:qolshatyr_mobile/features/trip/services/location_service.dart';
 import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
 

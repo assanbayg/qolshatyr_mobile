@@ -65,7 +65,6 @@ Future<String?> pickDirectory() async {
 }
 
 Future<Set<Polyline>> createPolylinesFromGeoJson() async {
-  // Allow the user to pick a GeoJSON file
   String? filePath = await pickGeoJsonFile();
 
   if (filePath == null) {
@@ -73,7 +72,6 @@ Future<Set<Polyline>> createPolylinesFromGeoJson() async {
     return {};
   }
 
-  // Read the selected file
   String geoJsonString = await readFile(filePath);
   final geoJson = jsonDecode(geoJsonString);
 
@@ -106,7 +104,6 @@ Future<Set<Polyline>> createPolylinesFromGeoJson() async {
 }
 
 Future<String?> pickGeoJsonFile() async {
-  // Use FilePicker to allow the user to select a GeoJSON file
   FilePickerResult? result = await FilePicker.platform.pickFiles(
     // type: FileType.custom,
     // allowedExtensions: ['json', 'geojson'],
@@ -117,7 +114,6 @@ Future<String?> pickGeoJsonFile() async {
   if (result != null && result.files.single.path != null) {
     return result.files.single.path;
   } else {
-    // User canceled the picker or no file was picked
     return null;
   }
 }
