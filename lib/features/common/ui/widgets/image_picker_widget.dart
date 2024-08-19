@@ -32,13 +32,16 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        _image == null
+            ? const Padding(
+                padding: EdgeInsets.all(75),
+                child: Icon(Icons.person_rounded, size: 100),
+              )
+            : Image.file(_image!, height: 250),
         ElevatedButton(
           onPressed: _pickImage,
           child: const Text('Take Picture'),
         ),
-        _image == null
-            ? const Placeholder(fallbackHeight: 250)
-            : Image.file(_image!, height: 250),
       ],
     );
   }

@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qolshatyr_mobile/features/auth/auth_provider.dart';
 import 'package:qolshatyr_mobile/features/auth/form_validation.dart';
 import 'package:qolshatyr_mobile/features/auth/ui/auth_widgets.dart';
+import 'package:qolshatyr_mobile/themes.dart';
 
 enum Status { login, signUp }
 
@@ -63,6 +64,15 @@ class _LoginPageState extends State<LoginScreen> {
   }
 
   @override
+  void dispose() {
+    _formKey.currentState?.dispose();
+    _email.dispose();
+    _password.dispose();
+    _confirmPassword.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
 
@@ -83,16 +93,24 @@ class _LoginPageState extends State<LoginScreen> {
                     margin: const EdgeInsets.only(top: 48),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Center(
                           child: SizedBox(
-                            height: 250,
+                            height: 230,
                             child: Image.asset('assets/logo.jpg'),
                           ),
                         ),
                         const Spacer(flex: 1),
                         const Spacer(flex: 1),
+                        Text(
+                          'Qolshatyr',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(color: darkPrimaryColor),
+                        ),
                         AuthInputField(
                           controller: _email,
                           hintText: localization.emailHint,
@@ -119,7 +137,7 @@ class _LoginPageState extends State<LoginScreen> {
                             ),
                             isPassword: true,
                           ),
-                        const Spacer()
+                        // const Spacer()
                       ],
                     ),
                   ),

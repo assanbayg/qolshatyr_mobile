@@ -38,8 +38,12 @@ class ContactCard extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(contact.phoneNumber),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Number: ${contact.phoneNumber}'),
+                ),
               ],
             ),
           ),

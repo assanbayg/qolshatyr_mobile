@@ -37,6 +37,7 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
 
       void endTrip() {
         tripNotifier.updateStatus(false);
+        setState(() {});
         NotificationService.showReminderNotification(
             title: "Trip Ended",
             body: "Verify you are safe!",

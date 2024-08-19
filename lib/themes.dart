@@ -4,20 +4,23 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:google_fonts/google_fonts.dart';
 
+const primaryColor = Color(0xFF81D1C6);
+const darkPrimaryColor = Color.fromARGB(255, 67, 147, 136);
+
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   useMaterial3: true,
-  textTheme: GoogleFonts.robotoTextTheme(),
-  colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF81D1C6)),
+  textTheme: GoogleFonts.ralewayTextTheme(),
+  colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
 );
 
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
   useMaterial3: true,
-  textTheme: GoogleFonts.robotoTextTheme(
+  textTheme: GoogleFonts.ralewayTextTheme(
       ThemeData(brightness: Brightness.dark).textTheme),
   colorScheme: ColorScheme.fromSeed(
-    seedColor: const Color(0xFF81D1C6),
+    seedColor: primaryColor,
     brightness: Brightness.dark,
   ),
 );

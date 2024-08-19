@@ -9,6 +9,7 @@ import 'package:qolshatyr_mobile/features/contacts/ui/contacts_screen.dart';
 import 'package:qolshatyr_mobile/features/contacts/ui/widgets/contact_floating_action_button.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/screens/trip_status_screen.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/widgets/create_trip_floating_action_button.dart';
+import 'package:qolshatyr_mobile/themes.dart';
 
 class BaseScreen extends StatefulWidget {
   static const routeName = '/base';
@@ -52,14 +53,30 @@ class _BaseScreenState extends State<BaseScreen> {
           const OpenDrawerButton(),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: _items,
-        currentIndex: _selectedIndex,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        onTap: (value) => setState(() {
-          _selectedIndex = value;
-        }),
+      bottomNavigationBar: Container(
+        height: MediaQuery.of(context).size.height * 0.085,
+        decoration: const BoxDecoration(
+          color: primaryColor,
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(30),
+            topLeft: Radius.circular(30),
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+          child: BottomNavigationBar(
+            items: _items,
+            currentIndex: _selectedIndex,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            onTap: (value) => setState(() {
+              _selectedIndex = value;
+            }),
+          ),
+        ),
       ),
       drawer: const MyDrawer(),
       floatingActionButton: _selectedIndex == 0

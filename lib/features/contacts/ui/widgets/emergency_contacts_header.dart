@@ -21,7 +21,7 @@ class EmergencyContactsHeader extends StatelessWidget {
               child: Text(
                 localization.emergencyContactsCall,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
           ],

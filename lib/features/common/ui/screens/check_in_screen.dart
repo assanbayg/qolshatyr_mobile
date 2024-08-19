@@ -24,15 +24,19 @@ class CheckInScreen extends ConsumerWidget {
     final trip = ref.read(tripProvider.notifier);
 
     Future<String> getPlacemarkStreet(LocationData location) async {
-      Placemark placemark = await GeocodingService.translateFromLatLng(
-        LocationData.fromMap(
-          {
-            'latitude': location.latitude,
-            'longitude': location.longitude,
-          },
-        ),
-      );
-      return placemark.street.toString();
+      try {
+        Placemark placemark = await GeocodingService.translateFromLatLng(
+          LocationData.fromMap(
+            {
+              'latitude': location.latitude,
+              'longitude': location.longitude,
+            },
+          ),
+        );
+        return placemark.street.toString();
+      } catch (e) {
+        return 'Unknown Street';
+      }
     }
 
     Future<Map<String, String>> getStreets() async {
@@ -54,38 +58,39 @@ class CheckInScreen extends ConsumerWidget {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
           final streets = snapshot.data!;
-          return Scaffold(
-            body: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30),
-                  topLeft: Radius.circular(30),
+          return SafeArea(
+            child: Scaffold(
+              body: Container(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const ImagePickerWidget(),
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                                "Start time ${trip.latestTrip.startTime.hour}:${trip.latestTrip.startTime.minute}   -   "),
+                            Text(
+                                "End time ${DateTime.now().hour}:${DateTime.now().minute}"),
+                          ],
+                        ),
+                        Text("Location A - ${streets['startStreet']}"),
+                        Text("Location B - ${streets['endStreet']}"),
+                      ],
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        checkInService.saveCheckIn();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Checked in!')));
+                      },
+                      child: Text(localization.checkIn),
+                    )
+                  ],
                 ),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                          "Start time ${trip.latestTrip.startTime.hour}:${trip.latestTrip.startTime.minute}"),
-                      Text(
-                          "End time ${DateTime.now().hour}:${DateTime.now().minute}"),
-                    ],
-                  ),
-                  const Divider(),
-                  const ImagePickerWidget(),
-                  const Divider(),
-                  Text("Location A - ${streets['startStreet']}"),
-                  Text("Location B - ${streets['endStreet']}"),
-                  ElevatedButton(
-                    onPressed: () {
-                      checkInService.saveCheckIn();
-                    },
-                    child: Text(localization.checkIn),
-                  )
-                ],
               ),
             ),
           );

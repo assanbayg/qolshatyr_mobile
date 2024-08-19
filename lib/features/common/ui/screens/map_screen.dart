@@ -88,8 +88,7 @@ class _GoogleMapScreenState extends State<MapScreen> {
       children: [
         _buildMap(localization),
         _buildSearchCard(localization),
-        _buildExportButton(localization),
-        _buildImportButton(localization),
+        _buildButtons(localization),
       ],
     );
   }
@@ -141,15 +140,20 @@ class _GoogleMapScreenState extends State<MapScreen> {
       left: 15,
       right: 15,
       child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           child: Row(
             children: [
               Expanded(
                 child: TextField(
                   controller: _addressController,
-                  decoration:
-                      InputDecoration(hintText: localization.enterAddress),
+                  decoration: InputDecoration(
+                    hintText: localization.enterAddress,
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
                 ),
               ),
               IconButton(
@@ -163,26 +167,24 @@ class _GoogleMapScreenState extends State<MapScreen> {
     );
   }
 
-  Widget _buildExportButton(AppLocalizations localization) {
+  Widget _buildButtons(AppLocalizations localization) {
     return Positioned(
-      bottom: 10,
+      bottom: 20,
       left: 15,
       right: 15,
-      child: ElevatedButton(
-        onPressed: _exportRouteToGeoJSON,
-        child: const Text('Export'),
-      ),
-    );
-  }
-
-  Widget _buildImportButton(AppLocalizations localization) {
-    return Positioned(
-      bottom: 60,
-      left: 15,
-      right: 15,
-      child: ElevatedButton(
-        onPressed: _importRouteFromGeoJSON,
-        child: const Text('Import'),
+      child: Column(
+        children: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(elevation: 4),
+            onPressed: _importRouteFromGeoJSON,
+            child: const Text('Import'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(elevation: 4),
+            onPressed: _exportRouteToGeoJSON,
+            child: const Text('Export'),
+          ),
+        ],
       ),
     );
   }

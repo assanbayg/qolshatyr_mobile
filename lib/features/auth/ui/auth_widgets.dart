@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:qolshatyr_mobile/themes.dart';
 
 class AuthInputField extends StatelessWidget {
   final TextEditingController controller;
@@ -24,7 +25,7 @@ class AuthInputField extends StatelessWidget {
     const primaryColor = Color(0xff129f9f);
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -62,8 +63,6 @@ class AuthButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).primaryColor;
-
     return Container(
       padding: const EdgeInsets.only(top: 32.0),
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -72,13 +71,13 @@ class AuthButton extends StatelessWidget {
           ? const Center(child: CircularProgressIndicator())
           : MaterialButton(
               onPressed: onPressed,
-              textColor: primaryColor,
+              textColor: darkPrimaryColor,
               textTheme: ButtonTextTheme.primary,
               minWidth: 100,
               padding: const EdgeInsets.all(18),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),
-                side: BorderSide(color: primaryColor),
+                side: const BorderSide(color: darkPrimaryColor),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
