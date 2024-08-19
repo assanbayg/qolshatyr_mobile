@@ -31,7 +31,7 @@ class Trip {
       estimateDuration: const Duration(minutes: 0),
       startTime: DateTime.now(),
       endTime: DateTime.now(),
-      isOngoing: true,
+      isOngoing: false,
     );
   }
 

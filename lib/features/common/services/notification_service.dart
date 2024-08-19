@@ -1,5 +1,6 @@
 // Package imports:
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 
 // Project imports:
@@ -11,19 +12,36 @@ class NotificationService {
   static final _notifications = FlutterLocalNotificationsPlugin();
   static final onClickNotification = BehaviorSubject<String>();
 
-  // Initialize the local notifications
+  // Initialize the local notifications with permission check
   static Future<void> init() async {
+    // Check and request notification permissions
+    final PermissionStatus status = await Permission.notification.status;
+    if (status.isDenied) {
+      final result = await Permission.notification.request();
+      if (!result.isGranted) {
+        // Handle the case where the permission is denied
+        return;
+      }
+    }
+
+    // Android settings
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    // iOS settings
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
       onDidReceiveLocalNotification: (id, title, body, payload) => {},
     );
+
+    // Combined settings
     final InitializationSettings initializationSettings =
         InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsDarwin,
     );
+
+    // Initialize the plugin
     _notifications.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: onNotificationTap,

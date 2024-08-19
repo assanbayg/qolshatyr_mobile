@@ -26,6 +26,9 @@ class GeocodingService {
   // reverse geocoding
   static Future<Placemark> translateFromLatLng(
       location.LocationData location) async {
+    if (location.latitude == null || location.longitude == null) {
+      return const Placemark(street: 'does not exists');
+    }
     List<Placemark> placemarks = await placemarkFromCoordinates(
       location.latitude!,
       location.longitude!,
@@ -33,3 +36,5 @@ class GeocodingService {
     return placemarks.first;
   }
 }
+// Exception has occurred.
+// PlatformException (PlatformException(notFound, No address information found for supplied coordinates (latitude: 0.000000, longitude: 0.000000)., null, null))
