@@ -45,6 +45,7 @@ class _GoogleMapScreenState extends State<MapScreen> {
 
   Set<Polyline> polylines = {};
 
+// uncomment only during development
   // List<LatLng> polylineCoordinates = [
   //   const LatLng(43.21813442382432, 76.8463621661067),
   //   const LatLng(43.21313027612295, 76.85722377151251),
@@ -59,6 +60,7 @@ class _GoogleMapScreenState extends State<MapScreen> {
       await _initializeLocation();
     });
 
+    // uncomment only during development
     // for (int i = 0; i < polylineCoordinates.length; i++) {
     //   polylines.add(
     //     Polyline(
@@ -175,12 +177,12 @@ class _GoogleMapScreenState extends State<MapScreen> {
 
   Widget _buildImportButton(AppLocalizations localization) {
     return Positioned(
-      bottom: 10,
+      bottom: 60,
       left: 15,
       right: 15,
       child: ElevatedButton(
         onPressed: _importRouteFromGeoJSON,
-        child: const Text('Export'),
+        child: const Text('Import'),
       ),
     );
   }
@@ -307,5 +309,12 @@ class _GoogleMapScreenState extends State<MapScreen> {
     }
   }
 
-  void _importRouteFromGeoJSON() async {}
+  void _importRouteFromGeoJSON() async {
+    Set<Polyline> importPolylines = await createPolylinesFromGeoJson();
+    log(importPolylines.toString());
+
+    setState(() {
+      polylines = importPolylines;
+    });
+  }
 }
