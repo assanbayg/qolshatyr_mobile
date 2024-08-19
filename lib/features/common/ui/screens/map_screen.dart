@@ -5,7 +5,6 @@
 
 // Dart imports:
 import 'dart:async';
-import 'dart:developer';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -212,8 +211,6 @@ class _GoogleMapScreenState extends State<MapScreen> {
   }
 
   void _handleMapTap(LatLng location, WidgetRef ref) async {
-    log(location.toString());
-
     setState(() {
       _endLocation = LocationData.fromMap(
           {'latitude': location.latitude, 'longitude': location.longitude});
@@ -313,7 +310,6 @@ class _GoogleMapScreenState extends State<MapScreen> {
 
   void _importRouteFromGeoJSON() async {
     Set<Polyline> importPolylines = await createPolylinesFromGeoJson();
-    log(importPolylines.toString());
 
     setState(() {
       polylines = importPolylines;

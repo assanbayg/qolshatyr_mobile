@@ -1,6 +1,5 @@
 // Dart imports:
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 // Flutter imports:
@@ -48,10 +47,7 @@ Future<void> saveGeoJsonToFile(String geoJson) async {
     // ensure directory exists
     await file.create(recursive: true);
     await file.writeAsString(geoJson);
-
-    log('GeoJson saved to $filePath');
   } else {
-    log('No directory selected');
   }
 }
 
@@ -68,7 +64,6 @@ Future<Set<Polyline>> createPolylinesFromGeoJson() async {
   String? filePath = await pickGeoJsonFile();
 
   if (filePath == null) {
-    log('No file selected');
     return {};
   }
 
