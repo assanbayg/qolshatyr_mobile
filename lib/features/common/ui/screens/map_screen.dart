@@ -21,9 +21,10 @@ import 'package:location/location.dart';
 import 'package:qolshatyr_mobile/features/common/services/geocoding_service.dart';
 import 'package:qolshatyr_mobile/features/common/ui/widgets/loading_indicator.dart';
 import 'package:qolshatyr_mobile/features/common/utils/convert_to_geojson.dart';
-// import 'package:qolshatyr_mobile/features/common/utils/share_geojson.dart';
 import 'package:qolshatyr_mobile/features/trip/services/location_service.dart';
 import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
+
+// import 'package:qolshatyr_mobile/features/common/utils/share_geojson.dart';
 
 class MapScreen extends StatefulWidget {
   static const routeName = '/base/map';
@@ -44,12 +45,12 @@ class _GoogleMapScreenState extends State<MapScreen> {
 
   Set<Polyline> polylines = {};
 
-  List<LatLng> polylineCoordinates = [
-    const LatLng(43.21813442382432, 76.8463621661067),
-    const LatLng(43.21313027612295, 76.85722377151251),
-    const LatLng(43.23100233570027, 76.87257371842861),
-    const LatLng(43.236068768829355, 76.88954707235098)
-  ];
+  // List<LatLng> polylineCoordinates = [
+  //   const LatLng(43.21813442382432, 76.8463621661067),
+  //   const LatLng(43.21313027612295, 76.85722377151251),
+  //   const LatLng(43.23100233570027, 76.87257371842861),
+  //   const LatLng(43.236068768829355, 76.88954707235098)
+  // ];
 
   @override
   void initState() {
@@ -58,17 +59,17 @@ class _GoogleMapScreenState extends State<MapScreen> {
       await _initializeLocation();
     });
 
-    for (int i = 0; i < polylineCoordinates.length; i++) {
-      polylines.add(
-        Polyline(
-          polylineId: const PolylineId('1'),
-          points: polylineCoordinates,
-          color: const Color.fromARGB(255, 78, 157, 147),
-          width: 4,
-        ),
-      );
-      setState(() {});
-    }
+    // for (int i = 0; i < polylineCoordinates.length; i++) {
+    //   polylines.add(
+    //     Polyline(
+    //       polylineId: const PolylineId('1'),
+    //       points: polylineCoordinates,
+    //       color: const Color.fromARGB(255, 78, 157, 147),
+    //       width: 4,
+    //     ),
+    //   );
+    //   setState(() {});
+    // }
   }
 
   @override
@@ -86,6 +87,7 @@ class _GoogleMapScreenState extends State<MapScreen> {
         _buildMap(localization),
         _buildSearchCard(localization),
         _buildExportButton(localization),
+        _buildImportButton(localization),
       ],
     );
   }
@@ -166,7 +168,19 @@ class _GoogleMapScreenState extends State<MapScreen> {
       right: 15,
       child: ElevatedButton(
         onPressed: _exportRouteToGeoJSON,
-        child: Text('Export'),
+        child: const Text('Export'),
+      ),
+    );
+  }
+
+  Widget _buildImportButton(AppLocalizations localization) {
+    return Positioned(
+      bottom: 10,
+      left: 15,
+      right: 15,
+      child: ElevatedButton(
+        onPressed: _importRouteFromGeoJSON,
+        child: const Text('Export'),
       ),
     );
   }
@@ -255,10 +269,12 @@ class _GoogleMapScreenState extends State<MapScreen> {
       currentLocation.longitude!,
     );
 
+    // ignore: prefer_const_constructors
     Polyline polyline = Polyline(
-      polylineId: PolylineId('trip_route'),
-      color: Color.fromARGB(255, 78, 157, 147),
+      polylineId: const PolylineId('trip_route'),
+      color: const Color.fromARGB(255, 78, 157, 147),
       width: 5,
+      // ignore: prefer_const_literals_to_create_immutables
       points: [],
     );
     polyline.points.add(currentLatLng);
@@ -283,9 +299,13 @@ class _GoogleMapScreenState extends State<MapScreen> {
     });
   }
 
-  void _exportRouteToGeoJSON() {
-    final String geoJson = convertPolylinesToGeoJSON(polylines);
-    log(geoJson);
-    // saveAndShareGeoJSON(geoJson);
+  void _exportRouteToGeoJSON() async {
+    await saveGeoJsonToFile(convertPolylinesToGeoJson(polylines));
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Successfully stored route!')));
+    }
   }
+
+  void _importRouteFromGeoJSON() async {}
 }
