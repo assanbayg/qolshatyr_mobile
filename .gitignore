@@ -144,7 +144,7 @@ web/
 
 # API keys and credentials
 local.properties
-
+/lib/features/common/services/twilio_options.dart
 /lib/firebase_options.dart
 GoogleService-Info.plist
 google-services.json
