@@ -109,14 +109,10 @@ class CheckInService {
           'latitude': lastTrip['end_location_lat'],
           'longitude': lastTrip['end_location_lon'],
         }),
-        estimateDuration: Duration(
-            minutes: lastTrip['estimate_duration']
-                as int), //тут хз почему с ошибком вытаскивает
-
-        startTime: DateTime.fromMillisecondsSinceEpoch(lastTrip['start_time']
-            as int), // need to convert from Object? to appropriate data type
-
-        // этого не было
+        estimateDuration:
+            Duration(minutes: lastTrip['estimate_duration'] as int),
+        startTime:
+            DateTime.fromMillisecondsSinceEpoch(lastTrip['start_time'] as int),
         endTime:
             DateTime.fromMillisecondsSinceEpoch(lastTrip['end_time'] as int),
         isOngoing: false,
@@ -146,8 +142,6 @@ class CheckInService {
             Duration(minutes: tripData['estimate_duration'] as int),
         startTime:
             DateTime.fromMillisecondsSinceEpoch(tripData['start_time'] as int),
-
-        // этого не было
         endTime:
             DateTime.fromMillisecondsSinceEpoch(tripData['end_time'] as int),
         isOngoing: false,

@@ -1,12 +1,16 @@
 // отображат поездки локально
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:qolshatyr_mobile/features/trip/models/trip.dart'; // Update this import path as needed
-import 'package:qolshatyr_mobile/features/common/services/check_in_service.dart'; // Update this import path as needed
 
-class TripSummaryScreen extends StatelessWidget {
-  static const routeName = '/trip-summary';
+// Project imports:
+import 'package:qolshatyr_mobile/features/common/services/check_in_service.dart';
+import 'package:qolshatyr_mobile/features/trip/models/trip.dart';
 
-  TripSummaryScreen({super.key});
+class TripsLocalHistoryScreen extends StatelessWidget {
+  static const routeName = '/trips-local-history';
+
+  TripsLocalHistoryScreen({super.key});
 
   final CheckInService _tripCheckInService = CheckInService();
 
@@ -42,7 +46,8 @@ class TripSummaryScreen extends StatelessWidget {
                   ListTile(
                     title: Text(lastTrip.startLocation.toString()),
                     subtitle: Text(lastTrip.endLocation.toString()),
-                    trailing: Text('${lastTrip.estimateDuration.inMinutes} mins'),
+                    trailing:
+                        Text('${lastTrip.estimateDuration.inMinutes} mins'),
                   ),
                   const Divider(),
                 ],
@@ -54,7 +59,8 @@ class TripSummaryScreen extends StatelessWidget {
                       return ListTile(
                         title: Text(trip.startLocation.toString()),
                         subtitle: Text(trip.endLocation.toString()),
-                        trailing: Text('${trip.estimateDuration.inMinutes} mins'),
+                        trailing:
+                            Text('${trip.estimateDuration.inMinutes} mins'),
                       );
                     },
                   ),
