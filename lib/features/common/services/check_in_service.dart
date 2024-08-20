@@ -109,8 +109,16 @@ class CheckInService {
           'latitude': lastTrip['end_location_lat'],
           'longitude': lastTrip['end_location_lon'],
         }),
-        estimateDuration: Duration(minutes: lastTrip['estimate_duration'] as int), //тут хз почему с ошибком вытаскивает
-        startTime: DateTime.fromMillisecondsSinceEpoch(lastTrip['start_time'] as int), // need to convert from Object? to appropriate data type
+        estimateDuration: Duration(
+            minutes: lastTrip['estimate_duration']
+                as int), //тут хз почему с ошибком вытаскивает
+
+        startTime: DateTime.fromMillisecondsSinceEpoch(lastTrip['start_time']
+            as int), // need to convert from Object? to appropriate data type
+
+        // этого не было
+        endTime:
+            DateTime.fromMillisecondsSinceEpoch(lastTrip['end_time'] as int),
         isOngoing: false,
       );
     }
@@ -134,8 +142,14 @@ class CheckInService {
           'latitude': tripData['end_location_lat'],
           'longitude': tripData['end_location_lon'],
         }),
-        estimateDuration: Duration(minutes: tripData['estimate_duration'] as int),
-        startTime: DateTime.fromMillisecondsSinceEpoch(tripData['start_time'] as int),
+        estimateDuration:
+            Duration(minutes: tripData['estimate_duration'] as int),
+        startTime:
+            DateTime.fromMillisecondsSinceEpoch(tripData['start_time'] as int),
+
+        // этого не было
+        endTime:
+            DateTime.fromMillisecondsSinceEpoch(tripData['end_time'] as int),
         isOngoing: false,
       );
       trips.add(trip);
@@ -143,8 +157,6 @@ class CheckInService {
 
     return trips;
   }
-
-
 
   // Проверка необходимости активации SOS с учетом поездки
   Future<void> checkForOverdueTrip(Duration tripInterval) async {
@@ -164,7 +176,7 @@ class CheckInService {
   Future<void> triggerSos() async {
     List<Contact> contacts = await SharedPreferencesManager.getContacts();
     LocationData location =
-    await SharedPreferencesManager.getLastLocation() as LocationData;
+        await SharedPreferencesManager.getLastLocation() as LocationData;
     if (contacts.isNotEmpty) {
       TwilioService.sendMessage(
           contacts.first.phoneNumber, 'HELP: $location (testing an app)');

@@ -83,7 +83,7 @@ class CheckInScreen extends ConsumerWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        checkInService.saveCheckIn();
+                        checkInService.saveTrip(trip.latestTrip );
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Checked in!')));
                       },
