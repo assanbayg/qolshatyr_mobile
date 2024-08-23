@@ -1,5 +1,3 @@
-// отображат поездки локально
-
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -20,11 +18,48 @@ class TripsLocalHistoryScreen extends StatelessWidget {
     return [lastTrip, allTrips];
   }
 
+  Future<void> _deleteAllTrips(BuildContext context) async {
+    await _tripCheckInService.deleteAllTrips();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('All trips deleted successfully')),
+    );
+    // Перезагружаем данные после удаления
+    (context as Element).reassemble();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Trip Summary'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete_forever),
+            onPressed: () async {
+              final confirm = await showDialog<bool>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Confirm Delete'),
+                  content: const Text('Are you sure you want to delete all trips?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      child: const Text('Delete'),
+                    ),
+                  ],
+                ),
+              );
+
+              if (confirm == true) {
+                await _deleteAllTrips(context);
+              }
+            },
+          ),
+        ],
       ),
       body: FutureBuilder<List<dynamic>>(
         future: _fetchTripsData(),
@@ -47,7 +82,7 @@ class TripsLocalHistoryScreen extends StatelessWidget {
                     title: Text(lastTrip.startLocation.toString()),
                     subtitle: Text(lastTrip.endLocation.toString()),
                     trailing:
-                        Text('${lastTrip.estimateDuration.inMinutes} mins'),
+                    Text('${lastTrip.estimateDuration.inMinutes} mins'),
                   ),
                   const Divider(),
                 ],
@@ -60,7 +95,7 @@ class TripsLocalHistoryScreen extends StatelessWidget {
                         title: Text(trip.startLocation.toString()),
                         subtitle: Text(trip.endLocation.toString()),
                         trailing:
-                            Text('${trip.estimateDuration.inMinutes} mins'),
+                        Text('${trip.estimateDuration.inMinutes} mins'),
                       );
                     },
                   ),

@@ -152,6 +152,26 @@ class CheckInService {
     return trips;
   }
 
+
+  // Удалить все поездки
+  Future<void> deleteAllTrips() async {
+    final db = await database;
+    await db.delete('trips');
+  }
+
+  // Удалить поездку по дате
+  Future<void> deleteTripByDate(DateTime date) async {
+    final db = await database;
+    final startOfDay = DateTime(date.year, date.month, date.day).millisecondsSinceEpoch;
+    final endOfDay = DateTime(date.year, date.month, date.day, 23, 59, 59).millisecondsSinceEpoch;
+
+    await db.delete(
+      'trips',
+      where: 'start_time >= ? AND start_time <= ?',
+      whereArgs: [startOfDay, endOfDay],
+    );
+  }
+
   // Проверка необходимости активации SOS с учетом поездки
   Future<void> checkForOverdueTrip(Duration tripInterval) async {
     final lastTrip = await getLastTrip();
