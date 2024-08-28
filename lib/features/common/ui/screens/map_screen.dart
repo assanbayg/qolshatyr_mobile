@@ -222,9 +222,13 @@ class _GoogleMapScreenState extends State<MapScreen> {
       LocationData.fromMap(
           {'latitude': location.latitude, 'longitude': location.longitude}),
     );
-    setState(() {
-      _addressController.text = res.street!;
-    });
+
+    String newText = "${res.thoroughfare!} ${res.subThoroughfare!}";
+
+    if (res.thoroughfare!.isEmpty == true) {
+      newText = "${res.subThoroughfare}, ${res.subLocality}";
+    }
+    setState(() => _addressController.text = newText);
   }
 
   void _handleSearch() async {
