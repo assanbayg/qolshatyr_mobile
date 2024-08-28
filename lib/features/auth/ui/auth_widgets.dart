@@ -1,5 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:qolshatyr_mobile/themes.dart';
 
 class AuthInputField extends StatelessWidget {

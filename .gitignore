@@ -146,6 +146,7 @@ web/
 local.properties
 /lib/features/common/services/twilio_options.dart
 /lib/firebase_options.dart
+/lib/features/common/services/twilio_options.dart
 GoogleService-Info.plist
 google-services.json
 firebase.json

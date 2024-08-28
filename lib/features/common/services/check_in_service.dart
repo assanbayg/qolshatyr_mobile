@@ -9,6 +9,7 @@ import 'package:qolshatyr_mobile/features/common/services/twilio_service.dart';
 import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 import 'package:qolshatyr_mobile/features/contacts/call_service.dart';
 import 'package:qolshatyr_mobile/features/contacts/contact_model.dart';
+import 'package:qolshatyr_mobile/features/trip/models/trip.dart';
 
 class CheckInService {
   static final CheckInService _instance = CheckInService._internal();
@@ -30,51 +31,137 @@ class CheckInService {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: (db, version) async {
+        // Создаём таблицы
         await db.execute('''
           CREATE TABLE check_ins(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             check_in_time INTEGER
           )
         ''');
+
+        // Новую таблицу для поездок
+        await db.execute('''
+          CREATE TABLE trips(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            start_location_lat REAL,
+            start_location_lon REAL,
+            end_location_lat REAL,
+            end_location_lon REAL,
+            estimate_duration INTEGER,
+            start_time INTEGER,
+            end_time INTEGER
+          )
+        ''');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          // Обновление схемы базы данных, если необходимо
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS trips(
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              start_location_lat REAL,
+              start_location_lon REAL,
+              end_location_lat REAL,
+              end_location_lon REAL,
+              estimate_duration INTEGER,
+              start_time INTEGER,
+              end_time INTEGER
+            )
+          ''');
+        }
       },
     );
   }
 
-  // Сохранить текущее время чекина
-  Future<void> saveCheckIn() async {
+  // Сохранить текущую поездку
+  Future<void> saveTrip(Trip trip) async {
     final db = await database;
-    final now = DateTime.now().millisecondsSinceEpoch;
-    await db.insert('check_ins', {'check_in_time': now});
+    await db.insert('trips', {
+      'start_location_lat': trip.startLocation.latitude,
+      'start_location_lon': trip.startLocation.longitude,
+      'end_location_lat': trip.endLocation.latitude,
+      'end_location_lon': trip.endLocation.longitude,
+      'estimate_duration': trip.estimateDuration.inMinutes,
+      'start_time': trip.startTime.millisecondsSinceEpoch,
+      'end_time': trip.endTime.millisecondsSinceEpoch,
+    });
   }
 
-  // Получить время последнего чекина
-  Future<DateTime?> getLastCheckIn() async {
+  // Получить данные о последней поездке
+  Future<Trip?> getLastTrip() async {
     final db = await database;
     final result = await db.query(
-      'check_ins',
-      orderBy: 'check_in_time DESC',
+      'trips',
+      orderBy: 'start_time DESC',
       limit: 1,
     );
 
     if (result.isNotEmpty) {
-      final lastCheckIn = result.first['check_in_time'] as int;
-      return DateTime.fromMillisecondsSinceEpoch(lastCheckIn);
+      final lastTrip = result.first;
+      return Trip(
+        startLocation: LocationData.fromMap({
+          'latitude': lastTrip['start_location_lat'],
+          'longitude': lastTrip['start_location_lon'],
+        }),
+        endLocation: LocationData.fromMap({
+          'latitude': lastTrip['end_location_lat'],
+          'longitude': lastTrip['end_location_lon'],
+        }),
+        estimateDuration:
+            Duration(minutes: lastTrip['estimate_duration'] as int),
+        startTime:
+            DateTime.fromMillisecondsSinceEpoch(lastTrip['start_time'] as int),
+        endTime:
+            DateTime.fromMillisecondsSinceEpoch(lastTrip['end_time'] as int),
+        isOngoing: false,
+      );
     }
     return null;
   }
 
-  // Проверка необходимости активации SOS
-  Future<void> checkForOverdueCheckIn(Duration checkInInterval) async {
-    final lastCheckIn = await getLastCheckIn();
-    if (lastCheckIn == null) {
+  // Получить данные о ВСЕХ поездках
+  Future<List<Trip>> getAllTrips() async {
+    final db = await database;
+    final result = await db.query('trips');
+
+    List<Trip> trips = [];
+
+    for (var tripData in result) {
+      Trip trip = Trip(
+        startLocation: LocationData.fromMap({
+          'latitude': tripData['start_location_lat'],
+          'longitude': tripData['start_location_lon'],
+        }),
+        endLocation: LocationData.fromMap({
+          'latitude': tripData['end_location_lat'],
+          'longitude': tripData['end_location_lon'],
+        }),
+        estimateDuration:
+            Duration(minutes: tripData['estimate_duration'] as int),
+        startTime:
+            DateTime.fromMillisecondsSinceEpoch(tripData['start_time'] as int),
+        endTime:
+            DateTime.fromMillisecondsSinceEpoch(tripData['end_time'] as int),
+        isOngoing: false,
+      );
+      trips.add(trip);
+    }
+
+    return trips;
+  }
+
+  // Проверка необходимости активации SOS с учетом поездки
+  Future<void> checkForOverdueTrip(Duration tripInterval) async {
+    final lastTrip = await getLastTrip();
+    if (lastTrip == null) {
       await triggerSos();
       return;
     }
 
     final now = DateTime.now();
-    if (now.difference(lastCheckIn) > checkInInterval) {
+    if (now.difference(lastTrip.startTime) > tripInterval) {
       await triggerSos();
     }
   }

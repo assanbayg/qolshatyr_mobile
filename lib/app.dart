@@ -19,6 +19,7 @@ import 'package:qolshatyr_mobile/features/common/ui/screens/settings_screen.dart
 import 'package:qolshatyr_mobile/features/contacts/ui/contacts_screen.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/screens/trip_status_screen.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/screens/trips_history_screen.dart';
+import 'package:qolshatyr_mobile/features/trip/ui/screens/trips_local_history_screen.dart';
 import 'package:qolshatyr_mobile/themes.dart';
 
 class QolshatyrApp extends ConsumerWidget {
@@ -63,6 +64,7 @@ class QolshatyrApp extends ConsumerWidget {
         '/base/contacts': (context) => const ContactsScreen(),
         '/settings': (context) => const SettingsScreen(),
         '/trips-history': (context) => TripsHistoryScreen(),
+        '/trips-local-history': (context) => TripsLocalHistoryScreen(),
         '/check-in': (context) => const CheckInScreen()
       },
     );
