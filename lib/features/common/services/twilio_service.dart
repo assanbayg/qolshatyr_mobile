@@ -1,6 +1,8 @@
 // Package imports:
-import 'package:qolshatyr_mobile/features/common/services/twilio_options.dart';
 import 'package:twilio_flutter/twilio_flutter.dart';
+
+// Project imports:
+import 'package:qolshatyr_mobile/features/common/services/twilio_options.dart';
 
 class TwilioService {
   // TODO: configure twilio_options. take it from app notion page.

@@ -1,6 +1,13 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
+// Package imports:
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Project imports:
+import 'package:qolshatyr_mobile/features/auth/auth_provider.dart';
+import 'package:qolshatyr_mobile/features/common/services/email_service.dart';
+
 class TechSupportScreen extends StatefulWidget {
   static const routeName = "/tech-support";
   const TechSupportScreen({super.key});
@@ -11,14 +18,35 @@ class TechSupportScreen extends StatefulWidget {
 
 class _TechSupportScreenState extends State<TechSupportScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _nameEditingController = TextEditingController();
+  final _titleEditingController = TextEditingController();
+  final _contentEditingController = TextEditingController();
 
-  void _submitForm() {
+  Future<void> _submitForm(WidgetRef ref) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+      final authService = ref.read(firebaseAuthProvider);
+
+      await sendEmail(
+        senderEmail: authService.currentUser!.email ?? 'unknown@gmail.com',
+        subject: _titleEditingController.text,
+        body: _contentEditingController.text,
+      );
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Form submitted successfully')),
       );
     }
+  }
+
+  @override
+  void dispose() {
+    _formKey.currentState?.dispose();
+    _nameEditingController.dispose();
+    _titleEditingController.dispose();
+    _contentEditingController.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -74,12 +102,16 @@ class _TechSupportScreenState extends State<TechSupportScreen> {
           children: [
             _buildNameField(),
             const SizedBox(height: 20),
+            _buildTitleField(),
+            const SizedBox(height: 20),
             _buildProblemDescriptionField(),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _submitForm,
-              child: const Text('Submit'),
-            ),
+            Consumer(builder: (context, ref, child) {
+              return ElevatedButton(
+                onPressed: () async => _submitForm(ref),
+                child: const Text('Submit'),
+              );
+            }),
           ],
         ),
       ),
@@ -88,6 +120,7 @@ class _TechSupportScreenState extends State<TechSupportScreen> {
 
   Widget _buildNameField() {
     return TextFormField(
+      controller: _nameEditingController,
       decoration: _inputDecoration("Name"),
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -99,8 +132,23 @@ class _TechSupportScreenState extends State<TechSupportScreen> {
     );
   }
 
+  Widget _buildTitleField() {
+    return TextFormField(
+      controller: _titleEditingController,
+      decoration: _inputDecoration("Title"),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter email title';
+        }
+        return null;
+      },
+      onSaved: (value) {},
+    );
+  }
+
   Widget _buildProblemDescriptionField() {
     return TextFormField(
+      controller: _contentEditingController,
       decoration: _inputDecoration('Problem Description'),
       maxLines: 5,
       validator: (value) {
