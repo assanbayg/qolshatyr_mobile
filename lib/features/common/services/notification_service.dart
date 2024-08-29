@@ -1,12 +1,9 @@
 // Package imports:
+import 'dart:developer';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
-
-// Project imports:
-import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
-import 'package:qolshatyr_mobile/features/contacts/call_service.dart';
-import 'package:qolshatyr_mobile/features/contacts/contact_model.dart';
 
 class NotificationService {
   static final _notifications = FlutterLocalNotificationsPlugin();
@@ -14,12 +11,10 @@ class NotificationService {
 
   // Initialize the local notifications with permission check
   static Future<void> init() async {
-    // Check and request notification permissions
     final PermissionStatus status = await Permission.notification.status;
     if (status.isDenied) {
       final result = await Permission.notification.request();
       if (!result.isGranted) {
-        // Handle the case where the permission is denied
         return;
       }
     }
@@ -52,18 +47,8 @@ class NotificationService {
   // On tap on any notification
   static void onNotificationTap(NotificationResponse notificationResponse) {
     final payload = notificationResponse.payload;
-    if (payload == "test") {
-      // Handle the test payload if needed
-    }
-    onClickNotification.add(payload ?? '');
-  }
-
-  // Handle no response from the user
-  static Future<void> _handleNoResponse() async {
-    List<Contact> contacts = await SharedPreferencesManager.getContacts();
-    if (contacts.isNotEmpty) {
-      CallService.callNumber(contacts.first.phoneNumber);
-      await showCallResultNotification();
+    if (payload == "didTheyAnswer") {
+      onClickNotification.add('true');
     }
   }
 
@@ -96,7 +81,7 @@ class NotificationService {
   }
 
   // Show notification after calling emergency contact
-  static Future<void> showCallResultNotification() async {
+  static Future<bool> showCallResultNotification() async {
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
       'emergency_notification',
@@ -115,14 +100,15 @@ class NotificationService {
       "Did they answer?",
       "React or another call will be made",
       notificationDetails,
-      payload: 'worked',
+      payload: 'didTheyAnswer',
     );
 
-    Future.delayed(const Duration(seconds: 30), () async {
-      if (!onClickNotification.hasValue) {
-        await _handleNoResponse();
-      }
-    });
+    onClickNotification.add('');
+    await Future.delayed(const Duration(seconds: 15));
+    if (onClickNotification.value != 'true') {
+      return false;
+    }
+    return true;
   }
 
   // Close a specific channel notification
