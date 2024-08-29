@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:qolshatyr_mobile/features/auth/auth_provider.dart';
 import 'package:qolshatyr_mobile/features/common/ui/screens/settings_screen.dart';
+import 'package:qolshatyr_mobile/features/common/ui/screens/tech_support_screen.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/screens/trips_history_screen.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/screens/trips_local_history_screen.dart';
 import 'package:qolshatyr_mobile/themes.dart';
@@ -43,7 +44,7 @@ class MyDrawer extends ConsumerWidget {
                 },
               ),
               ListTile(
-                title: Text(localization.userTrips),
+                title: const Text('Local History Screen'),
                 leading: const Icon(Icons.local_taxi_rounded),
                 onTap: () {
                   Navigator.of(context)
@@ -65,6 +66,13 @@ class MyDrawer extends ConsumerWidget {
                   if (context.mounted) {
                     Navigator.of(context).pop();
                   }
+                },
+              ),
+              ListTile(
+                title: const Text('Tech support'),
+                leading: const Icon(Icons.flag_rounded),
+                onTap: () async {
+                  Navigator.of(context).pushNamed(TechSupportScreen.routeName);
                 },
               ),
             ],
