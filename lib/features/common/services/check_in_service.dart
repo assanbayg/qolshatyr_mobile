@@ -1,4 +1,7 @@
 // Package imports:
+import 'dart:developer';
+
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:location/location.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -7,7 +10,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:qolshatyr_mobile/features/common/services/notification_service.dart';
 import 'package:qolshatyr_mobile/features/common/services/twilio_service.dart';
 import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
-import 'package:qolshatyr_mobile/features/contacts/call_service.dart';
 import 'package:qolshatyr_mobile/features/contacts/contact_model.dart';
 import 'package:qolshatyr_mobile/features/trip/models/trip.dart';
 
@@ -189,13 +191,20 @@ class CheckInService {
   // Активировать SOS
   Future<void> triggerSos() async {
     List<Contact> contacts = await SharedPreferencesManager.getContacts();
-    LocationData location =
-        await SharedPreferencesManager.getLastLocation() as LocationData;
     if (contacts.isNotEmpty) {
-      TwilioService.sendMessage(
-          contacts.first.phoneNumber, 'HELP: $location (testing an app)');
-      CallService.callNumber(contacts.first.phoneNumber);
+      LocationData location =
+          await SharedPreferencesManager.getLastLocation() as LocationData;
+
+      for (int i = 0; i < contacts.length; i++) {
+        TwilioService.sendMessage(contacts[i].phoneNumber.trim(),
+            'QOLSHATYR: Help me lat:${location.latitude} long:${location.longitude}!');
+        await FlutterPhoneDirectCaller.callNumber(contacts[i].phoneNumber);
+        bool didAnswer = await NotificationService.showCallResultNotification();
+        log('TEST: $didAnswer');
+        if (didAnswer) {
+          break;
+        }
+      }
     }
-    NotificationService.showCallResultNotification();
   }
 }

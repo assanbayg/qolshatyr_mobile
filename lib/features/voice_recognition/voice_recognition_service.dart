@@ -1,5 +1,6 @@
 // Dart imports:
 import 'dart:async';
+import 'dart:developer';
 
 // Package imports:
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -20,7 +21,10 @@ class VoiceRecognitionService {
   bool get isListening => _isListening;
   String get recognizedText => _recognizedText;
 
-  Future<void> toggleListening() async {
+  Future<void> toggleListening({triggerStop = false}) async {
+    if (triggerStop) {
+      _speech.stop();
+    }
     if (!_isListening) {
       bool available = false;
       while (!available) {
@@ -47,6 +51,7 @@ class VoiceRecognitionService {
   void _startListening() {
     _speech.listen(
       onResult: (result) async {
+        log(result.recognizedWords);
         _recognizedText = result.recognizedWords.toLowerCase();
         if (_recognizedText.contains(sosPhrase!)) {
           checkInService.triggerSos();

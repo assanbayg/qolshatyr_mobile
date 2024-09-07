@@ -1,9 +1,10 @@
 // Package imports:
-import 'package:qolshatyr_mobile/features/common/services/twilio_options.dart';
 import 'package:twilio_flutter/twilio_flutter.dart';
 
+// Project imports:
+import 'package:qolshatyr_mobile/features/common/services/twilio_options.dart';
+
 class TwilioService {
-  // TODO: configure twilio_options. take it from app notion page.
   static TwilioFlutter twilio = TwilioFlutter(
     accountSid: TwilioOptions.accounntSid,
     authToken: TwilioOptions.authToken,
@@ -12,5 +13,9 @@ class TwilioService {
 
   static void sendMessage(String phoneNumber, messageBody) async {
     twilio.sendSMS(toNumber: phoneNumber, messageBody: messageBody);
+  }
+
+  static void sendWhatsApp(String phoneNumber, messageBody) async {
+    twilio.sendWhatsApp(toNumber: phoneNumber, messageBody: messageBody);
   }
 }

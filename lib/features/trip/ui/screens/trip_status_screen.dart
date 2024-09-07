@@ -43,6 +43,7 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
             body: "Verify you are safe!",
             payload: 'endTrip');
         timerNotifier.stopTimer();
+        voiceService.toggleListening(triggerStop: true);
         checkinNotifier.stopTimer();
         Navigator.of(context).pushNamed(CheckInScreen.routeName);
       }
