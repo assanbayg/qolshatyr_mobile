@@ -1,32 +1,13 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
+// Project imports:
+import 'package:qolshatyr_mobile/features/common/data/faq_data.dart';
+
 class FAQScreen extends StatelessWidget {
   static const routeName = '/faq';
 
-  FAQScreen({super.key});
-
-  final List<Map<String, String>> faqData = [
-    {
-      "question": "Question 1",
-      "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-    },
-    {
-      "question": "Question 2",
-      "answer":
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-    },
-    {
-      "question": "Question 3",
-      "answer":
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    },
-    {
-      "question": "Question 4",
-      "answer":
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    },
-  ];
+  const FAQScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

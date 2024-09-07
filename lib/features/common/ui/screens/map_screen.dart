@@ -148,10 +148,11 @@ class _GoogleMapScreenState extends State<MapScreen> {
               Expanded(
                 child: TextField(
                   controller: _addressController,
-                  decoration: InputDecoration(
+                  // TODO: localize
+                  decoration: const InputDecoration(
                     // hintText: localization.enterAddress,
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    contentPadding: EdgeInsets.symmetric(vertical: 12),
                   ),
                 ),
               ),

@@ -20,11 +20,9 @@ class TimerService {
 
   Future<void> _deleteAllTrips() async {
     await _tripCheckInService.deleteAllTrips();
-    print('All trips deleted after 3 days');
   }
 
   void cancelTimer() {
     _timer?.cancel();
-    print('Timer cancelled');
   }
 }
