@@ -1,4 +1,7 @@
+// Dart imports:
 import 'dart:async';
+
+// Project imports:
 import 'package:qolshatyr_mobile/features/common/services/check_in_service.dart';
 
 class TimerService {
