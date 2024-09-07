@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/features/auth/auth_provider.dart';
+import 'package:qolshatyr_mobile/features/common/ui/screens/faq_screen.dart';
 import 'package:qolshatyr_mobile/features/common/ui/screens/settings_screen.dart';
 import 'package:qolshatyr_mobile/features/common/ui/screens/tech_support_screen.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/screens/trips_history_screen.dart';
@@ -52,6 +53,20 @@ class MyDrawer extends ConsumerWidget {
                 },
               ),
               ListTile(
+                title: const Text('FAQ'),
+                leading: const Icon(Icons.info_rounded),
+                onTap: () async {
+                  Navigator.of(context).pushNamed(FAQScreen.routeName);
+                },
+              ),
+              ListTile(
+                title: const Text('Tech support'),
+                leading: const Icon(Icons.flag_rounded),
+                onTap: () async {
+                  Navigator.of(context).pushNamed(TechSupportScreen.routeName);
+                },
+              ),
+              ListTile(
                 title: Text(localization.settings),
                 leading: const Icon(Icons.settings_rounded),
                 onTap: () {
@@ -66,13 +81,6 @@ class MyDrawer extends ConsumerWidget {
                   if (context.mounted) {
                     Navigator.of(context).pop();
                   }
-                },
-              ),
-              ListTile(
-                title: const Text('Tech support'),
-                leading: const Icon(Icons.flag_rounded),
-                onTap: () async {
-                  Navigator.of(context).pushNamed(TechSupportScreen.routeName);
                 },
               ),
             ],

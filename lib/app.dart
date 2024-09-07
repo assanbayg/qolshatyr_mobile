@@ -14,6 +14,7 @@ import 'package:qolshatyr_mobile/features/auth/ui/screens/loading.dart';
 import 'package:qolshatyr_mobile/features/auth/ui/screens/login.dart';
 import 'package:qolshatyr_mobile/features/common/ui/screens/base_screen.dart';
 import 'package:qolshatyr_mobile/features/common/ui/screens/check_in_screen.dart';
+import 'package:qolshatyr_mobile/features/common/ui/screens/faq_screen.dart';
 import 'package:qolshatyr_mobile/features/common/ui/screens/map_screen.dart';
 import 'package:qolshatyr_mobile/features/common/ui/screens/settings_screen.dart';
 import 'package:qolshatyr_mobile/features/common/ui/screens/tech_support_screen.dart';
@@ -59,15 +60,16 @@ class QolshatyrApp extends ConsumerWidget {
 
       routes: {
         '/auth': (context) => const LoginScreen(),
-        '/base': (context) => const BaseScreen(),
-        '/base/map': (context) => const MapScreen(),
-        '/base/trip-status': (context) => const TripStatusScreen(),
-        '/base/contacts': (context) => const ContactsScreen(),
         '/settings': (context) => const SettingsScreen(),
         '/tech-support': (context) => const TechSupportScreen(),
         '/trips-history': (context) => TripsHistoryScreen(),
         '/trips-local-history': (context) => TripsLocalHistoryScreen(),
-        '/check-in': (context) => const CheckInScreen()
+        '/check-in': (context) => const CheckInScreen(),
+        '/faq': (context) => FAQScreen(),
+        '/base': (context) => const BaseScreen(),
+        '/base/map': (context) => const MapScreen(),
+        '/base/trip-status': (context) => const TripStatusScreen(),
+        '/base/contacts': (context) => const ContactsScreen(),
       },
     );
   }
