@@ -1,4 +1,6 @@
 // Package imports:
+import 'dart:nativewrappers/_internal/vm/lib/typed_data_patch.dart';
+
 import 'package:location/location.dart';
 
 class Trip {
@@ -8,6 +10,7 @@ class Trip {
   final DateTime startTime;
   final DateTime endTime;
   bool isOngoing;
+  final Uint8List? image;
 
   Trip({
     required this.startLocation,
@@ -16,6 +19,7 @@ class Trip {
     required this.startTime,
     required this.endTime,
     required this.isOngoing,
+    this.image,
   });
 
   factory Trip.empty() {
@@ -32,6 +36,7 @@ class Trip {
       startTime: DateTime.now(),
       endTime: DateTime.now(),
       isOngoing: false,
+      image: null, //empty image
     );
   }
 

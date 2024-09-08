@@ -1,5 +1,5 @@
-// Dart imports:
 import 'dart:developer';
+import 'dart:typed_data';
 
 // Package imports:
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -34,7 +34,7 @@ class CheckInService {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 3, //Увеличиваем версию
       onCreate: (db, version) async {
         // Создаём таблицы
         await db.execute('''
@@ -44,7 +44,7 @@ class CheckInService {
           )
         ''');
 
-        // Новую таблицу для поездок
+        //Таблица для поездок с изображением
         await db.execute('''
           CREATE TABLE trips(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -54,13 +54,14 @@ class CheckInService {
             end_location_lon REAL,
             estimate_duration INTEGER,
             start_time INTEGER,
-            end_time INTEGER
+            end_time INTEGER,
+            image BLOB
           )
         ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < 2) {
-          // Обновление схемы базы данных, если необходимо
+        if (oldVersion < 3) {
+          //Добавляем колонку image для версии 3
           await db.execute('''
             CREATE TABLE IF NOT EXISTS trips(
               id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -70,16 +71,17 @@ class CheckInService {
               end_location_lon REAL,
               estimate_duration INTEGER,
               start_time INTEGER,
-              end_time INTEGER
-            )
+              end_time INTEGER,
+              image BLOB
+            ) 
           ''');
         }
       },
     );
   }
 
-  // Сохранить текущую поездку
-  Future<void> saveTrip(Trip trip) async {
+  // Сохранить текущую поездку с изображением
+  Future<void> saveTrip(Trip trip, Uint8List? imageBytes) async {
     final db = await database;
     await db.insert('trips', {
       'start_location_lat': trip.startLocation.latitude,
@@ -89,6 +91,7 @@ class CheckInService {
       'estimate_duration': trip.estimateDuration.inMinutes,
       'start_time': trip.startTime.millisecondsSinceEpoch,
       'end_time': trip.endTime.millisecondsSinceEpoch,
+      'image': imageBytes // Сохраняем изображение
     });
   }
 
@@ -103,6 +106,8 @@ class CheckInService {
 
     if (result.isNotEmpty) {
       final lastTrip = result.first;
+      final imageBytes = lastTrip['image'] as Uint8List?; //Извлекаем изображение
+
       return Trip(
         startLocation: LocationData.fromMap({
           'latitude': lastTrip['start_location_lat'],
@@ -119,6 +124,7 @@ class CheckInService {
         endTime:
             DateTime.fromMillisecondsSinceEpoch(lastTrip['end_time'] as int),
         isOngoing: false,
+        image: imageBytes, // Возвращаем изображение
       );
     }
     return null;
@@ -132,6 +138,7 @@ class CheckInService {
     List<Trip> trips = [];
 
     for (var tripData in result) {
+      final imageBytes = tripData['image'] as Uint8List?;
       Trip trip = Trip(
         startLocation: LocationData.fromMap({
           'latitude': tripData['start_location_lat'],
@@ -148,14 +155,13 @@ class CheckInService {
         endTime:
             DateTime.fromMillisecondsSinceEpoch(tripData['end_time'] as int),
         isOngoing: false,
+        image: imageBytes, // Возвращаем изображение для каждой поездки
       );
       trips.add(trip);
     }
 
     return trips;
   }
-
-
   // Удалить все поездки
   Future<void> deleteAllTrips() async {
     final db = await database;
@@ -209,3 +215,4 @@ class CheckInService {
     }
   }
 }
+
