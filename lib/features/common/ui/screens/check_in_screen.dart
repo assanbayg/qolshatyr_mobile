@@ -8,20 +8,27 @@ import 'package:geocoding/geocoding.dart';
 import 'package:location/location.dart';
 
 // Project imports:
+import 'package:qolshatyr_mobile/features/common/providers/checkin_image_provider.dart';
 import 'package:qolshatyr_mobile/features/common/services/check_in_service.dart';
 import 'package:qolshatyr_mobile/features/common/services/geocoding_service.dart';
 import 'package:qolshatyr_mobile/features/common/ui/widgets/image_picker_widget.dart';
 import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
 
-class CheckInScreen extends ConsumerWidget {
+class CheckInScreen extends ConsumerStatefulWidget {
   static const routeName = '/check-in';
   const CheckInScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CheckInScreen> createState() => _CheckInScreenState();
+}
+
+class _CheckInScreenState extends ConsumerState<CheckInScreen> {
+  @override
+  Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     final CheckInService checkInService = CheckInService();
     final trip = ref.read(tripProvider.notifier);
+    final imageBytes = ref.watch(checkinImageProvider);
 
     Future<String> getPlacemarkStreet(LocationData location) async {
       try {
@@ -83,12 +90,13 @@ class CheckInScreen extends ConsumerWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        checkInService.saveTrip(trip.latestTrip );
+                        checkInService.saveTrip(trip.latestTrip,
+                            imageBytes); // Pass the image to saveTrip
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Checked in!')));
                       },
                       child: Text(localization.checkIn),
-                    )
+                    ),
                   ],
                 ),
               ),
