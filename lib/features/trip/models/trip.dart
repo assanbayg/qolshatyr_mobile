@@ -1,5 +1,5 @@
 // Package imports:
-import 'dart:nativewrappers/_internal/vm/lib/typed_data_patch.dart';
+import 'dart:typed_data';
 
 import 'package:location/location.dart';
 
