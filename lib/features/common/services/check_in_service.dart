@@ -35,51 +35,40 @@ class CheckInService {
 
     return await openDatabase(
       path,
-      version: 3, //Увеличиваем версию
+      version: 3, // Увеличиваем версию базы данных
       onCreate: (db, version) async {
-        // Создаём таблицы
         await db.execute('''
-          CREATE TABLE check_ins(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            check_in_time INTEGER
-          )
-        ''');
+        CREATE TABLE check_ins(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          check_in_time INTEGER
+        )
+      ''');
 
-        //Таблица для поездок с изображением
         await db.execute('''
-          CREATE TABLE trips(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            start_location_lat REAL,
-            start_location_lon REAL,
-            end_location_lat REAL,
-            end_location_lon REAL,
-            estimate_duration INTEGER,
-            start_time INTEGER,
-            end_time INTEGER,
-            image BLOB
-          )
-        ''');
+        CREATE TABLE trips(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          start_location_lat REAL,
+          start_location_lon REAL,
+          end_location_lat REAL,
+          end_location_lon REAL,
+          estimate_duration INTEGER,
+          start_time INTEGER,
+          end_time INTEGER,
+          image BLOB
+        )
+      ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 3) {
-          //Добавляем колонку image для версии 3
+          // Обновляем таблицу trips
           await db.execute('''
-            CREATE TABLE IF NOT EXISTS trips(
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              start_location_lat REAL,
-              start_location_lon REAL,
-              end_location_lat REAL,
-              end_location_lon REAL,
-              estimate_duration INTEGER,
-              start_time INTEGER,
-              end_time INTEGER,
-              image BLOB
-            ) 
-          ''');
+          ALTER TABLE trips ADD COLUMN image BLOB
+        ''');
         }
       },
     );
   }
+
 
   // Сохранить текущую поездку с изображением
   Future<void> saveTrip(Trip trip, Uint8List? imageBytes) async {
