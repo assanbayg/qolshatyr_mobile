@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 const primaryColor = Color(0xFF81D1C6);
-const darkPrimaryColor = Color.fromARGB(255, 67, 147, 136);
+const darkPrimaryColor = Color.fromARGB(255, 60, 164, 155);
 
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,

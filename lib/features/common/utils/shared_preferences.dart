@@ -70,3 +70,5 @@ class SharedPreferencesManager {
   static String? get sosPhrase =>
       _sharedPreferences?.getString('sosPhrase') ?? 'help';
 }
+
+bool isFirstLaunch = true;

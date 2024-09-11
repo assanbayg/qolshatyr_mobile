@@ -65,6 +65,7 @@ dependencies:
   file_picker: ^8.0.7
   permission_handler: ^11.3.1
   http: ^1.2.2
+  carousel_slider: ^5.0.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

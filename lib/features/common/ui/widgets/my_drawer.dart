@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qolshatyr_mobile/features/auth/ui/screens/auth_checker_screen.dart';
+import 'package:qolshatyr_mobile/features/common/ui/screens/onboarding_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/features/auth/auth_provider.dart';
@@ -60,6 +63,17 @@ class MyDrawer extends ConsumerWidget {
                 },
               ),
               ListTile(
+                title: const Text('User Guide'),
+                leading: const Icon(Icons.book_rounded),
+                onTap: () async {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const OnboardingScreen()),
+                  );
+                },
+              ),
+              ListTile(
                 title: const Text('Tech support'),
                 leading: const Icon(Icons.flag_rounded),
                 onTap: () async {
@@ -74,12 +88,28 @@ class MyDrawer extends ConsumerWidget {
                 },
               ),
               ListTile(
+                title: Text(localization.settings),
+                leading: const Icon(Icons.settings_rounded),
+                onTap: () {
+                  Navigator.of(context).pushNamed(SettingsScreen.routeName);
+                },
+              ),
+              ListTile(
                 title: Text(localization.signOut),
                 leading: const Icon(Icons.logout_rounded),
                 onTap: () async {
                   await authService.signOut();
+
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  await prefs.setBool('isFirstLaunch', true);
+
                   if (context.mounted) {
-                    Navigator.of(context).pop();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AuthChecker()),
+                    );
                   }
                 },
               ),

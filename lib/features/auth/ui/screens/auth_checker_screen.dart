@@ -9,7 +9,7 @@ import 'package:qolshatyr_mobile/features/auth/auth_provider.dart';
 import 'package:qolshatyr_mobile/features/auth/ui/screens/error.dart';
 import 'package:qolshatyr_mobile/features/auth/ui/screens/loading.dart';
 import 'package:qolshatyr_mobile/features/auth/ui/screens/login.dart';
-import 'package:qolshatyr_mobile/features/common/ui/screens/base_screen.dart';
+import 'package:qolshatyr_mobile/features/common/ui/screens/splash_screen.dart';
 
 class AuthChecker extends ConsumerWidget {
   const AuthChecker({super.key});
@@ -19,7 +19,7 @@ class AuthChecker extends ConsumerWidget {
     final authState = ref.watch(authStateProvider);
     return authState.when(
         data: (data) {
-          return data != null ? const BaseScreen() : const LoginScreen();
+          return data != null ? const SplashScreen() : const LoginScreen();
         },
         loading: () => const LoadingScreen(),
         error: (e, trace) => ErrorScreen(e, trace));
