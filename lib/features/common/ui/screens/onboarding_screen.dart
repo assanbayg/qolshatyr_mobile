@@ -1,10 +1,10 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:qolshatyr_mobile/features/common/ui/widgets/privacy_policy_modal_window.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/ui/widgets/daily_guide.dart';
 import 'package:qolshatyr_mobile/features/common/ui/widgets/emergency_guide.dart';
+import 'package:qolshatyr_mobile/features/common/ui/widgets/privacy_policy_modal_window.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});

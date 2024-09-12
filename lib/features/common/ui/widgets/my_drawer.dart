@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qolshatyr_mobile/features/auth/ui/screens/auth_checker_screen.dart';
-import 'package:qolshatyr_mobile/features/common/ui/screens/onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/features/auth/auth_provider.dart';
+import 'package:qolshatyr_mobile/features/auth/ui/screens/auth_checker_screen.dart';
 import 'package:qolshatyr_mobile/features/common/ui/screens/faq_screen.dart';
+import 'package:qolshatyr_mobile/features/common/ui/screens/onboarding_screen.dart';
 import 'package:qolshatyr_mobile/features/common/ui/screens/settings_screen.dart';
 import 'package:qolshatyr_mobile/features/common/ui/screens/tech_support_screen.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/screens/trips_history_screen.dart';

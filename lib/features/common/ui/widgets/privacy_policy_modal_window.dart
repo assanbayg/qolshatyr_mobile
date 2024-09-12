@@ -1,7 +1,13 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:qolshatyr_mobile/features/common/ui/screens/base_screen.dart';
+
+// Package imports:
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+// Project imports:
+import 'package:qolshatyr_mobile/features/common/data/privacy_policy_text.dart';
+import 'package:qolshatyr_mobile/features/common/ui/screens/base_screen.dart';
 
 Future<void> showPrivacyPolicyDialog(BuildContext context) async {
   await showDialog(
@@ -9,8 +15,9 @@ Future<void> showPrivacyPolicyDialog(BuildContext context) async {
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text('Privacy Policy'),
-        content: const Text(
-            'By using our application you agree to our privacy policy'),
+        content: const SingleChildScrollView(
+          child: Text(privacyPolicyText),
+        ),
         actions: [
           TextButton(
             onPressed: () async {
