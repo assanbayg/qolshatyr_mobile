@@ -14,6 +14,7 @@ import 'package:qolshatyr_mobile/features/common/services/twilio_service.dart';
 import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 import 'package:qolshatyr_mobile/features/contacts/contact_model.dart';
 import 'package:qolshatyr_mobile/features/trip/models/trip.dart';
+import 'package:qolshatyr_mobile/features/common/services/image_to_file_service.dart';
 
 class CheckInService {
   static final CheckInService _instance = CheckInService._internal();
@@ -38,31 +39,30 @@ class CheckInService {
       version: 3, // Увеличиваем версию базы данных
       onCreate: (db, version) async {
         await db.execute('''
-        CREATE TABLE check_ins(
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          check_in_time INTEGER
-        )
-      ''');
+          CREATE TABLE check_ins(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            check_in_time INTEGER
+          )
+        ''');
 
         await db.execute('''
-        CREATE TABLE trips(
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          start_location_lat REAL,
-          start_location_lon REAL,
-          end_location_lat REAL,
-          end_location_lon REAL,
-          estimate_duration INTEGER,
-          start_time INTEGER,
-          end_time INTEGER,
-          image BLOB
-        )
-      ''');
+         CREATE TABLE trips(
+           id INTEGER PRIMARY KEY AUTOINCREMENT,
+           start_location_lat REAL,
+           start_location_lon REAL,
+           end_location_lat REAL,
+           end_location_lon REAL,
+           estimate_duration INTEGER,
+           start_time INTEGER,
+           end_time INTEGER,
+           image_path TEXT  -- Store the image file path
+          )
+        ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 3) {
-          // Обновляем таблицу trips
           await db.execute('''
-          ALTER TABLE trips ADD COLUMN image BLOB
+          ALTER TABLE trips ADD COLUMN image_path TEXT
         ''');
         }
       },
@@ -73,6 +73,15 @@ class CheckInService {
   // Сохранить текущую поездку с изображением
   Future<void> saveTrip(Trip trip, Uint8List? imageBytes) async {
     final db = await database;
+
+    String? imagePath;
+    if (imageBytes != null) {
+      imagePath = await ImageToFileService().saveImageToFile(
+        imageBytes,
+        'trip_${trip.startTime.millisecondsSinceEpoch}',
+      );
+    }
+
     await db.insert('trips', {
       'start_location_lat': trip.startLocation.latitude,
       'start_location_lon': trip.startLocation.longitude,
@@ -81,7 +90,7 @@ class CheckInService {
       'estimate_duration': trip.estimateDuration.inMinutes,
       'start_time': trip.startTime.millisecondsSinceEpoch,
       'end_time': trip.endTime.millisecondsSinceEpoch,
-      'image': imageBytes // Сохраняем изображение
+      'image_path': imagePath, // Store the image file path
     });
   }
 
@@ -96,7 +105,13 @@ class CheckInService {
 
     if (result.isNotEmpty) {
       final lastTrip = result.first;
-      final imageBytes = lastTrip['image'] as Uint8List?; //Извлекаем изображение
+      final imagePath = lastTrip['image_path'] as String?;
+
+      Uint8List? imageBytes;
+      if (imagePath != null) {
+        final imageFile = await ImageToFileService().getImageFile(imagePath);
+        imageBytes = await imageFile.readAsBytes();
+      }
 
       return Trip(
         startLocation: LocationData.fromMap({
@@ -107,14 +122,11 @@ class CheckInService {
           'latitude': lastTrip['end_location_lat'],
           'longitude': lastTrip['end_location_lon'],
         }),
-        estimateDuration:
-            Duration(minutes: lastTrip['estimate_duration'] as int),
-        startTime:
-            DateTime.fromMillisecondsSinceEpoch(lastTrip['start_time'] as int),
-        endTime:
-            DateTime.fromMillisecondsSinceEpoch(lastTrip['end_time'] as int),
+        estimateDuration: Duration(minutes: lastTrip['estimate_duration'] as int),
+        startTime: DateTime.fromMillisecondsSinceEpoch(lastTrip['start_time'] as int),
+        endTime: DateTime.fromMillisecondsSinceEpoch(lastTrip['end_time'] as int),
         isOngoing: false,
-        image: imageBytes, // Возвращаем изображение
+        image: imageBytes, // Load image bytes from the file
       );
     }
     return null;
@@ -128,7 +140,14 @@ class CheckInService {
     List<Trip> trips = [];
 
     for (var tripData in result) {
-      final imageBytes = tripData['image'] as Uint8List?;
+      final imagePath = tripData['image_path'] as String?;
+
+      Uint8List? imageBytes;
+      if (imagePath != null) {
+        final imageFile = await ImageToFileService().getImageFile(imagePath);
+        imageBytes = await imageFile.readAsBytes();
+      }
+
       Trip trip = Trip(
         startLocation: LocationData.fromMap({
           'latitude': tripData['start_location_lat'],
@@ -138,14 +157,11 @@ class CheckInService {
           'latitude': tripData['end_location_lat'],
           'longitude': tripData['end_location_lon'],
         }),
-        estimateDuration:
-            Duration(minutes: tripData['estimate_duration'] as int),
-        startTime:
-            DateTime.fromMillisecondsSinceEpoch(tripData['start_time'] as int),
-        endTime:
-            DateTime.fromMillisecondsSinceEpoch(tripData['end_time'] as int),
+        estimateDuration: Duration(minutes: tripData['estimate_duration'] as int),
+        startTime: DateTime.fromMillisecondsSinceEpoch(tripData['start_time'] as int),
+        endTime: DateTime.fromMillisecondsSinceEpoch(tripData['end_time'] as int),
         isOngoing: false,
-        image: imageBytes, // Возвращаем изображение для каждой поездки
+        image: imageBytes, // Return image bytes for each trip
       );
       trips.add(trip);
     }
@@ -189,12 +205,13 @@ class CheckInService {
   Future<void> triggerSos() async {
     List<Contact> contacts = await SharedPreferencesManager.getContacts();
     if (contacts.isNotEmpty) {
-      LocationData location =
-          await SharedPreferencesManager.getLastLocation() as LocationData;
+      LocationData location = await SharedPreferencesManager.getLastLocation() as LocationData;
 
       for (int i = 0; i < contacts.length; i++) {
-        TwilioService.sendMessage(contacts[i].phoneNumber.trim(),
-            'QOLSHATYR: Help me lat:${location.latitude} long:${location.longitude}!');
+        TwilioService.sendMessage(
+          contacts[i].phoneNumber.trim(),
+          'QOLSHATYR: Help me lat:${location.latitude} long:${location.longitude}!',
+        );
         await FlutterPhoneDirectCaller.callNumber(contacts[i].phoneNumber);
         bool didAnswer = await NotificationService.showCallResultNotification();
         log('TEST: $didAnswer');
