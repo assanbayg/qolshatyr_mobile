@@ -6,7 +6,7 @@ import 'package:qolshatyr_mobile/features/common/services/twilio_options.dart';
 
 class TwilioService {
   static TwilioFlutter twilio = TwilioFlutter(
-    accountSid: TwilioOptions.accounntSid,
+    accountSid: TwilioOptions.accountSid,
     authToken: TwilioOptions.authToken,
     twilioNumber: TwilioOptions.twilioNumber,
   );

@@ -24,8 +24,10 @@ class _ImagePickerWidgetState extends ConsumerState<ImagePickerWidget> {
   File? _image;
 
   Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+      imageQuality: 15,
+    );
     if (pickedFile != null) {
       final pickedImageFile = File(pickedFile.path);
       setState(() {
