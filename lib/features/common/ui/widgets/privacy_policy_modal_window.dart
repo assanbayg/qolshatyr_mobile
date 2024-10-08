@@ -22,7 +22,7 @@ Future<void> showPrivacyPolicyDialog(BuildContext context) async {
           TextButton(
             onPressed: () async {
               final Uri url =
-                  Uri.parse('https://qolshatyr.vercel.app/privacy-policy');
+                  Uri.parse('https://qolshatyr.netlify.app/privacy-policy');
               if (!await launchUrl(url)) {
                 throw Exception('Could not launch $url');
               }

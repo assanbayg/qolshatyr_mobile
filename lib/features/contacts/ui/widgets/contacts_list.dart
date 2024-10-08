@@ -20,7 +20,14 @@ class ContactsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (contacts.isEmpty) {
-      return Text(localization.noEmergencyContacts);
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 60),
+        child: Text(
+          localization.noEmergencyContacts,
+          style: Theme.of(context).textTheme.bodyLarge,
+          textAlign: TextAlign.center,
+        ),
+      );
     }
 
     return SizedBox(

@@ -19,14 +19,30 @@ class FAQScreen extends StatelessWidget {
         itemCount: faqData.length,
         itemBuilder: (context, index) {
           final faq = faqData[index];
-          return ExpansionTile(
-            title: Text(faq['question']!),
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(faq['answer']!),
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            elevation: 4,
+            child: ExpansionTile(
+              title: Text(
+                faq['question']!,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ],
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                  child: Text(
+                    faq['answer']!,
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),

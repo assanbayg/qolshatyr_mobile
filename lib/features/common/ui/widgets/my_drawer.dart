@@ -41,15 +41,15 @@ class MyDrawer extends ConsumerWidget {
                     Text(authService.currentUser!.displayName ?? 'User'),
                 accountEmail: Text(authService.currentUser!.email ?? ''),
               ),
+              // ListTile(
+              //   title: Text(localization.userTrips),
+              //   leading: const Icon(Icons.local_taxi_rounded),
+              //   onTap: () {
+              //     Navigator.of(context).pushNamed(TripsHistoryScreen.routeName);
+              //   },
+              // ),
               ListTile(
-                title: Text(localization.userTrips),
-                leading: const Icon(Icons.local_taxi_rounded),
-                onTap: () {
-                  Navigator.of(context).pushNamed(TripsHistoryScreen.routeName);
-                },
-              ),
-              ListTile(
-                title: const Text('Local History Screen'),
+                title: const Text('Trips History'),
                 leading: const Icon(Icons.local_taxi_rounded),
                 onTap: () {
                   Navigator.of(context)
@@ -106,6 +106,13 @@ class MyDrawer extends ConsumerWidget {
                           builder: (context) => const AuthChecker()),
                     );
                   }
+                },
+              ),
+              ListTile(
+                title: const Text('DEVS ONLY'),
+                leading: const Icon(Icons.bug_report),
+                onTap: () {
+                  Navigator.of(context).pushNamed('/check-in');
                 },
               ),
             ],
