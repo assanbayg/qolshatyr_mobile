@@ -2,51 +2,141 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:qolshatyr_mobile/features/common/ui/widgets/daily_guide.dart';
-import 'package:qolshatyr_mobile/features/common/ui/widgets/emergency_guide.dart';
 import 'package:qolshatyr_mobile/features/common/ui/widgets/privacy_policy_modal_window.dart';
 
-class OnboardingScreen extends StatelessWidget {
+class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
+
+  @override
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  final PageController _pageController = PageController();
+  int _currentIndex = 0;
+
+  final List<Map<String, String>> _features = [
+    {
+      'description': 'Specify your route and check in on time',
+      'image': 'assets/feature1.png', // Add your image paths
+    },
+    {
+      'description': 'Personally select and set your emergency contacts',
+      'image': 'assets/feature2.png',
+    },
+    // {
+    //   'description': 'Get real-time notifications and support',
+    //   'image': 'assets/feature3.png',
+    // },
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color.fromRGBO(141, 210, 143, 1),
+              Color.fromRGBO(83, 137, 129, 1),
+            ],
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+          ),
+        ),
+        child: Stack(
           children: [
-            Text(
-              'How to use our app?',
-              style: Theme.of(context).textTheme.headlineLarge,
+            PageView.builder(
+              controller: _pageController,
+              itemCount: _features.length,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+                // Check if the last page is reached
+                if (index == _features.length - 1) {
+                  Future.delayed(const Duration(seconds: 10), () {
+                    showPrivacyPolicyDialog(context);
+                    if (mounted) {
+                      Future.delayed(const Duration(seconds: 40), () {});
+                    }
+                  });
+                }
+              },
+              itemBuilder: (context, index) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      _features[index]['image']!,
+                      height: 300,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 70,
+                      ),
+                      child: Text(
+                        _features[index]['description']!,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(fontSize: 18),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
-            const SizedBox(height: 20),
-            Text(
-              'Daily usage',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
+            Positioned(
+              bottom: 60,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  _features.length,
+                  (index) => AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    width: _currentIndex == index ? 12 : 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: _currentIndex == index
+                          ? Colors.white
+                          : const Color.fromARGB(255, 60, 79, 77),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                ),
+              ),
             ),
-            const DailyGuide(),
-            const SizedBox(height: 20),
-            Text(
-              'Emergency usage',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const EmergencyGuide(),
-            const SizedBox(height: 20),
-            ElevatedButton(
-                onPressed: () {
-                  showPrivacyPolicyDialog(context);
+            Positioned(
+              bottom: 50,
+              right: 30,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/base');
                 },
-                child: const Text('Got it!'))
+                child: Text(
+                  'SKIP',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: const Color.fromARGB(255, 60, 79, 77),
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 }

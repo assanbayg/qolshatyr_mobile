@@ -1,10 +1,10 @@
-
+// Dart imports:
+import 'dart:io';
 import 'dart:typed_data';
 
-
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
+// Package imports:
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ImageToFileService {
   static final ImageToFileService _instance = ImageToFileService._internal();

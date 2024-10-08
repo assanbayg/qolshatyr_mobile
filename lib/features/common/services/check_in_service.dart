@@ -9,12 +9,12 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 // Project imports:
+import 'package:qolshatyr_mobile/features/common/services/image_to_file_service.dart';
 import 'package:qolshatyr_mobile/features/common/services/notification_service.dart';
 import 'package:qolshatyr_mobile/features/common/services/twilio_service.dart';
 import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 import 'package:qolshatyr_mobile/features/contacts/contact_model.dart';
 import 'package:qolshatyr_mobile/features/trip/models/trip.dart';
-import 'package:qolshatyr_mobile/features/common/services/image_to_file_service.dart';
 
 class CheckInService {
   static final CheckInService _instance = CheckInService._internal();
