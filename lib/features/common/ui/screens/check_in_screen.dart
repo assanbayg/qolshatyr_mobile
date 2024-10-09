@@ -73,6 +73,18 @@ class _CheckInScreenState extends ConsumerState<CheckInScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     const ImagePickerWidget(),
+
+                    //Display checkin image if available
+                    if (imageBytes != null)
+                      Image.memory(
+                        imageBytes,
+                        height: 200,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      )
+                    else
+                      const SizedBox.shrink(),
+
                     Card(
                       elevation: 4,
                       shape: RoundedRectangleBorder(
