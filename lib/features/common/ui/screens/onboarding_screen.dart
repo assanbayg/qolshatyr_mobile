@@ -1,6 +1,9 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
+// Package imports:
+import 'package:shared_preferences/shared_preferences.dart';
+
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/ui/widgets/privacy_policy_modal_window.dart';
 
@@ -56,6 +59,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 // Check if the last page is reached
                 if (index == _features.length - 1) {
                   Future.delayed(const Duration(seconds: 10), () {
+                    if (!mounted) return;
                     showPrivacyPolicyDialog(context);
                     if (mounted) {
                       Future.delayed(const Duration(seconds: 40), () {});
@@ -116,7 +120,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               bottom: 50,
               right: 30,
               child: GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setBool('isFirstLaunch', false);
+
+                  if (!mounted) return;
+
                   Navigator.pushReplacementNamed(context, '/base');
                 },
                 child: Text(

@@ -11,7 +11,7 @@ class TripsLocalHistoryScreen extends StatefulWidget {
   const TripsLocalHistoryScreen({super.key});
 
   @override
-  _TripsLocalHistoryScreenState createState() =>
+  State<TripsLocalHistoryScreen> createState() =>
       _TripsLocalHistoryScreenState();
 }
 
@@ -74,6 +74,7 @@ class _TripsLocalHistoryScreenState extends State<TripsLocalHistoryScreen> {
             onPressed: () async {
               final confirm = await _confirmDelete(context);
               if (confirm == true) {
+                if (!mounted) return;
                 await _deleteAllTrips(context);
               }
             },

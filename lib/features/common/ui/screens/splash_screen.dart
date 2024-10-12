@@ -30,15 +30,19 @@ class _SplashScreenState extends State<SplashScreen> {
     bool isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
     log(isFirstLaunch.toString());
     if (isFirstLaunch) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => OnboardingScreen()),
-      );
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+        );
+      }
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const BaseScreen()),
-      );
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const BaseScreen()),
+        );
+      }
     }
   }
 
