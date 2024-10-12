@@ -62,7 +62,7 @@ class QolshatyrApp extends ConsumerWidget {
         '/auth': (context) => const LoginScreen(),
         '/settings': (context) => const SettingsScreen(),
         '/tech-support': (context) => const TechSupportScreen(),
-        '/trips-history': (context) => TripsHistoryScreen(),
+        // '/trips-history': (context) => TripsHistoryScreen(),
         '/trips-local-history': (context) => const TripsLocalHistoryScreen(),
         '/check-in': (context) => const CheckInScreen(),
         '/faq': (context) => const FAQScreen(),

@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 // Project imports:
-import 'package:qolshatyr_mobile/features/common/services/firestore_service.dart';
+// import 'package:qolshatyr_mobile/features/common/services/firestore_service.dart';
 import 'package:qolshatyr_mobile/features/common/services/geocoding_service.dart';
 import 'package:qolshatyr_mobile/features/trip/models/trip.dart';
 import 'package:qolshatyr_mobile/features/trip/models/trip_with_placemark.dart';
@@ -17,7 +17,7 @@ final currentPositionProvider =
 final tripProvider = StateNotifierProvider((ref) => TripNotifier());
 
 class TripNotifier extends StateNotifier<Trip> {
-  final FirestoreService _firestoreService = FirestoreService();
+  // final FirestoreService _firestoreService = FirestoreService();
 
   TripNotifier() : super(Trip.empty());
 
@@ -57,7 +57,7 @@ class TripNotifier extends StateNotifier<Trip> {
         isOngoing: true,
         startPlacemark: startPlacemark,
         endPlacemark: endPlacemark);
-    await _firestoreService.addTrip(newTripWithPlacemark.toJson());
+    // await _firestoreService.addTrip(newTripWithPlacemark.toJson());
     state = newTrip;
   }
 

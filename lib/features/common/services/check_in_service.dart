@@ -69,7 +69,6 @@ class CheckInService {
     );
   }
 
-
   // Сохранить текущую поездку с изображением
   Future<void> saveTrip(Trip trip, Uint8List? imageBytes) async {
     final db = await database;
@@ -122,9 +121,12 @@ class CheckInService {
           'latitude': lastTrip['end_location_lat'],
           'longitude': lastTrip['end_location_lon'],
         }),
-        estimateDuration: Duration(minutes: lastTrip['estimate_duration'] as int),
-        startTime: DateTime.fromMillisecondsSinceEpoch(lastTrip['start_time'] as int),
-        endTime: DateTime.fromMillisecondsSinceEpoch(lastTrip['end_time'] as int),
+        estimateDuration:
+            Duration(minutes: lastTrip['estimate_duration'] as int),
+        startTime:
+            DateTime.fromMillisecondsSinceEpoch(lastTrip['start_time'] as int),
+        endTime:
+            DateTime.fromMillisecondsSinceEpoch(lastTrip['end_time'] as int),
         isOngoing: false,
         image: imageBytes, // Load image bytes from the file
       );
@@ -157,9 +159,12 @@ class CheckInService {
           'latitude': tripData['end_location_lat'],
           'longitude': tripData['end_location_lon'],
         }),
-        estimateDuration: Duration(minutes: tripData['estimate_duration'] as int),
-        startTime: DateTime.fromMillisecondsSinceEpoch(tripData['start_time'] as int),
-        endTime: DateTime.fromMillisecondsSinceEpoch(tripData['end_time'] as int),
+        estimateDuration:
+            Duration(minutes: tripData['estimate_duration'] as int),
+        startTime:
+            DateTime.fromMillisecondsSinceEpoch(tripData['start_time'] as int),
+        endTime:
+            DateTime.fromMillisecondsSinceEpoch(tripData['end_time'] as int),
         isOngoing: false,
         image: imageBytes, // Return image bytes for each trip
       );
@@ -168,6 +173,7 @@ class CheckInService {
 
     return trips;
   }
+
   // Удалить все поездки
   Future<void> deleteAllTrips() async {
     final db = await database;
@@ -177,8 +183,10 @@ class CheckInService {
   // Удалить поездку по дате
   Future<void> deleteTripByDate(DateTime date) async {
     final db = await database;
-    final startOfDay = DateTime(date.year, date.month, date.day).millisecondsSinceEpoch;
-    final endOfDay = DateTime(date.year, date.month, date.day, 23, 59, 59).millisecondsSinceEpoch;
+    final startOfDay =
+        DateTime(date.year, date.month, date.day).millisecondsSinceEpoch;
+    final endOfDay = DateTime(date.year, date.month, date.day, 23, 59, 59)
+        .millisecondsSinceEpoch;
 
     await db.delete(
       'trips',
@@ -205,21 +213,23 @@ class CheckInService {
   Future<void> triggerSos() async {
     List<Contact> contacts = await SharedPreferencesManager.getContacts();
     if (contacts.isNotEmpty) {
-      LocationData location = await SharedPreferencesManager.getLastLocation() as LocationData;
+      LocationData location =
+          await SharedPreferencesManager.getLastLocation() as LocationData;
 
       for (int i = 0; i < contacts.length; i++) {
         TwilioService.sendMessage(
           contacts[i].phoneNumber.trim(),
-          'QOLSHATYR: Help me lat:${location.latitude} long:${location.longitude}!',
+          'QOLSHATYR: Help me lat:${location.latitude} long:${location.longitude}\n https://qolshatyr.netlify.app/!',
         );
-        await FlutterPhoneDirectCaller.callNumber(contacts[i].phoneNumber);
-        bool didAnswer = await NotificationService.showCallResultNotification();
-        log('TEST: $didAnswer');
-        if (didAnswer) {
-          break;
-        }
+
+        // TwilioService.sendWhatsApp(contacts[i].phoneNumber.trim(), 'Qolshatyr');
+        // await FlutterPhoneDirectCaller.callNumber(contacts[i].phoneNumber);
+        // bool didAnswer = await NotificationService.showCallResultNotification();
+        // log('TEST: $didAnswer');
+        // if (didAnswer) {
+        //   break;
+        // }
       }
     }
   }
 }
-
