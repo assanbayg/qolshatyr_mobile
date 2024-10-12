@@ -69,84 +69,90 @@ class _CheckInScreenState extends ConsumerState<CheckInScreen> {
             child: Scaffold(
               body: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const ImagePickerWidget(),
-
-                    //Display checkin image if available
-                    if (imageBytes != null)
-                      Image.memory(
-                        imageBytes,
-                        height: 200,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      )
-                    else
-                      const SizedBox.shrink(),
-
-                    Card(
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.access_time, size: 18),
-                                const SizedBox(width: 8),
-                                Text(
-                                  "Start time: ${trip.latestTrip.startTime.hour}:${trip.latestTrip.startTime.minute}",
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                                const SizedBox(width: 16),
-                                const Icon(Icons.arrow_forward, size: 18),
-                                const SizedBox(width: 8),
-                                Text(
-                                  "End time: ${DateTime.now().hour}:${DateTime.now().minute}",
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
-                              "Location A: ${streets['startStreet']}",
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              "Location B: ${streets['endStreet']}",
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                          ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      //Display checkin image if available
+                      if (imageBytes != null)
+                        Image.memory(
+                          imageBytes,
+                          height: 300,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        )
+                      else
+                        const Padding(
+                          padding: EdgeInsets.all(75),
+                          child: Icon(Icons.person_rounded, size: 100),
                         ),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        checkInService.saveTrip(trip.latestTrip, imageBytes);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Checked in!')),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 24),
+
+                      const ImagePickerWidget(),
+                      Card(
+                        elevation: 4,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.access_time, size: 18),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    "Start time: ${trip.latestTrip.startTime.hour}:${trip.latestTrip.startTime.minute}",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                  const SizedBox(width: 16),
+                                  const Icon(Icons.arrow_forward, size: 18),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    "End time: ${DateTime.now().hour}:${DateTime.now().minute}",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                "Location A: ${streets['startStreet']}",
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                "Location B: ${streets['endStreet']}",
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      child: Text(
-                        localization.checkIn,
-                        style: const TextStyle(fontSize: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          checkInService.saveTrip(trip.latestTrip, imageBytes);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Checked in!')),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 24),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: Text(
+                          localization.checkIn,
+                          style: const TextStyle(fontSize: 16),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
