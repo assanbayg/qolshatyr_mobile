@@ -43,15 +43,12 @@ class _ImagePickerWidgetState extends ConsumerState<ImagePickerWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _image == null
-            ? const Padding(
-                padding: EdgeInsets.all(75),
-                child: Icon(Icons.person_rounded, size: 100),
-              )
-            : Image.file(_image!, height: 250),
-        ElevatedButton(
-          onPressed: _pickImage,
-          child: const Text('Take Picture'),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: ElevatedButton(
+            onPressed: _pickImage,
+            child: const Text('Take Picture'),
+          ),
         ),
       ],
     );
