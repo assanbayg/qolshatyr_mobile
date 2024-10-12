@@ -1,3 +1,6 @@
+// Dart imports:
+import 'dart:developer';
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -11,7 +14,9 @@ import 'package:location/location.dart';
 import 'package:qolshatyr_mobile/features/common/providers/checkin_image_provider.dart';
 import 'package:qolshatyr_mobile/features/common/services/check_in_service.dart';
 import 'package:qolshatyr_mobile/features/common/services/geocoding_service.dart';
+import 'package:qolshatyr_mobile/features/common/services/storage_service.dart';
 import 'package:qolshatyr_mobile/features/common/ui/widgets/image_picker_widget.dart';
+import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
 
 class CheckInScreen extends ConsumerStatefulWidget {
@@ -116,8 +121,14 @@ class _CheckInScreenState extends ConsumerState<CheckInScreen> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         checkInService.saveTrip(trip.latestTrip, imageBytes);
+
+                        String? imageURL = await StorageService()
+                            .uploadUserImage(imageBytes, 'test.png');
+
+                        SharedPreferencesManager.setImageURL(imageURL);
+                        if (!mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Checked in!')),
                         );

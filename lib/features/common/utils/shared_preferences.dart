@@ -69,6 +69,13 @@ class SharedPreferencesManager {
 
   static String? get sosPhrase =>
       _sharedPreferences?.getString('sosPhrase') ?? 'help';
+
+  static Future<void> setImageURL(String? url) async {
+    await _sharedPreferences?.setString('imageURL', url!);
+  }
+
+  static String? get imageURL =>
+      _sharedPreferences?.getString('imageURL') ?? '';
 }
 
 bool isFirstLaunch = true;

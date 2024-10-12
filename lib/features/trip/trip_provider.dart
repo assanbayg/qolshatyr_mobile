@@ -5,10 +5,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 // Project imports:
-// import 'package:qolshatyr_mobile/features/common/services/firestore_service.dart';
 import 'package:qolshatyr_mobile/features/common/services/geocoding_service.dart';
 import 'package:qolshatyr_mobile/features/trip/models/trip.dart';
 import 'package:qolshatyr_mobile/features/trip/models/trip_with_placemark.dart';
+
+// Project imports:
+// import 'package:qolshatyr_mobile/features/common/services/firestore_service.dart';
 
 // Provides user's current position
 final currentPositionProvider =

@@ -215,11 +215,12 @@ class CheckInService {
     if (contacts.isNotEmpty) {
       LocationData location =
           await SharedPreferencesManager.getLastLocation() as LocationData;
+      String? imageURL = SharedPreferencesManager.imageURL;
 
       for (int i = 0; i < contacts.length; i++) {
         TwilioService.sendMessage(
           contacts[i].phoneNumber.trim(),
-          'QOLSHATYR: Help me lat:${location.latitude} long:${location.longitude}\n https://qolshatyr.netlify.app/!',
+          'QOLSHATYR: Help me lat:${location.latitude} long:${location.longitude}\n $imageURL!',
         );
 
         // TwilioService.sendWhatsApp(contacts[i].phoneNumber.trim(), 'Qolshatyr');
