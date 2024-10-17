@@ -12,6 +12,7 @@ class Trip {
   final DateTime endTime;
   bool isOngoing;
   final Uint8List? image;
+  final List<Uint8List?> checkInImages; // Изображения чек-инов
 
   Trip({
     required this.startLocation,
@@ -21,6 +22,7 @@ class Trip {
     required this.endTime,
     required this.isOngoing,
     this.image,
+    this.checkInImages, // добавляем параметр
   });
 
   factory Trip.empty() {

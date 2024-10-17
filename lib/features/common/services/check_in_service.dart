@@ -69,6 +69,10 @@ class CheckInService {
     );
   }
 
+  Future<void> startNewCheckIn() async {
+    // This will just log that a new check-in has started
+    log('Started a new check-in');
+  }
   // Сохранить текущую поездку с изображением
   Future<void> saveTrip(Trip trip, Uint8List? imageBytes) async {
     final db = await database;
@@ -111,6 +115,30 @@ class CheckInService {
         final imageFile = await ImageToFileService().getImageFile(imagePath);
         imageBytes = await imageFile.readAsBytes();
       }
+
+      // Получаем чек-ины для последней поездки
+      final checkIns = await db.query(
+        'check_ins',
+        where: 'check_in_time >= ? AND check_in_time <= ?',
+        whereArgs: [
+          lastTrip['start_time'],
+          lastTrip['end_time'],
+        ],
+      );
+
+      // Создаём список изображений чек-инов
+      List<Uint8List?> checkInImages = [];
+      for (var checkIn in checkIns) {
+        final checkInImagePath = checkIn['image_path'] as String?;
+        if (checkInImagePath != null) {
+          final imageFile = await ImageToFileService().getImageFile(checkInImagePath);
+          checkInImages.add(await imageFile.readAsBytes());
+        } else {
+          checkInImages.add(null); // если изображения нет
+        }
+      }
+
+
 
       return Trip(
         startLocation: LocationData.fromMap({
@@ -167,6 +195,7 @@ class CheckInService {
             DateTime.fromMillisecondsSinceEpoch(tripData['end_time'] as int),
         isOngoing: false,
         image: imageBytes, // Return image bytes for each trip
+        checkInImages: checkInImages,
       );
       trips.add(trip);
     }
