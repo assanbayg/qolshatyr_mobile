@@ -224,12 +224,12 @@ class CheckInService {
         );
 
         // TwilioService.sendWhatsApp(contacts[i].phoneNumber.trim(), 'Qolshatyr');
-        // await FlutterPhoneDirectCaller.callNumber(contacts[i].phoneNumber);
-        // bool didAnswer = await NotificationService.showCallResultNotification();
-        // log('TEST: $didAnswer');
-        // if (didAnswer) {
-        //   break;
-        // }
+        await FlutterPhoneDirectCaller.callNumber(contacts[i].phoneNumber);
+        bool didAnswer = await NotificationService.showCallResultNotification();
+        log('TEST: $didAnswer');
+        if (didAnswer) {
+          break;
+        }
       }
     }
   }

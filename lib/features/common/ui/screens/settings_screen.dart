@@ -22,89 +22,91 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      localization.updateCheckInDuration,
-                      // Update Check-In timer duration (show reminder notification N minutes before trip ends)
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    CupertinoTimerPicker(
-                      initialTimerDuration: Duration(
-                        seconds:
-                            SharedPreferencesManager.checkInReminderDuration!,
-                      ),
-                      mode: CupertinoTimerPickerMode.ms,
-                      onTimerDurationChanged: (Duration newDuration) {
-                        final int durationInSeconds =
-                            newDuration.inSeconds + newDuration.inMinutes * 60;
-                        SharedPreferencesManager.updateCheckInReminderDuration(
-                            durationInSeconds);
-                      },
-                    ),
-                  ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ),
-            ),
-            const SizedBox(height: 20), // Space between cards
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      localization.updateKeyPhrase,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: SharedPreferencesManager.sosPhrase,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(
-                            color: Colors.grey.withOpacity(0.5),
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            color: Colors.blue,
-                            width: 2.0,
-                          ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        localization.updateCheckInDuration,
+                        // Update Check-In timer duration (show reminder notification N minutes before trip ends)
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                      onChanged: (value) =>
-                          SharedPreferencesManager.updateSosPhrase(value),
-                    ),
-                  ],
+                      const SizedBox(height: 12),
+                      CupertinoTimerPicker(
+                        initialTimerDuration: Duration(
+                          seconds:
+                              SharedPreferencesManager.checkInReminderDuration!,
+                        ),
+                        mode: CupertinoTimerPickerMode.ms,
+                        onTimerDurationChanged: (Duration newDuration) {
+                          final int durationInSeconds = newDuration.inSeconds +
+                              newDuration.inMinutes * 60;
+                          SharedPreferencesManager
+                              .updateCheckInReminderDuration(durationInSeconds);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 20), // Space between cards
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        localization.updateKeyPhrase,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: SharedPreferencesManager.sosPhrase,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              color: Colors.grey.withOpacity(0.5),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: const BorderSide(
+                              color: Colors.blue,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                        onChanged: (value) =>
+                            SharedPreferencesManager.updateSosPhrase(value),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
