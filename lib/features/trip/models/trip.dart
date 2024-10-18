@@ -22,7 +22,7 @@ class Trip {
     required this.endTime,
     required this.isOngoing,
     this.image,
-    this.checkInImages, // добавляем параметр
+    this.checkInImages = const [], // добавляем параметр
   });
 
   factory Trip.empty() {
