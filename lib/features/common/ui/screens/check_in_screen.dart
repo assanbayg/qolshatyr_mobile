@@ -138,8 +138,12 @@ class _CheckInScreenState extends ConsumerState<CheckInScreen> {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           checkInService.saveTrip(trip.latestTrip, imageBytes);
+                          String? imageURL = await StorageService()
+                              .uploadUserImage(imageBytes, 'test.png');
+                          SharedPreferencesManager.setImageURL(imageURL);
+                          if (!mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Checked in!')),
                           );

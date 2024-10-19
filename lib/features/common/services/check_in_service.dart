@@ -1,5 +1,4 @@
 // Dart imports:
-import 'dart:developer';
 import 'dart:typed_data';
 
 // Package imports:
@@ -211,6 +210,7 @@ class CheckInService {
 
   // Активировать SOS
   Future<void> triggerSos() async {
+    final twilio = TwilioService();
     List<Contact> contacts = await SharedPreferencesManager.getContacts();
     if (contacts.isNotEmpty) {
       LocationData location =
@@ -218,15 +218,13 @@ class CheckInService {
       String? imageURL = SharedPreferencesManager.imageURL;
 
       for (int i = 0; i < contacts.length; i++) {
-        TwilioService.sendMessage(
+        twilio.sendMessage(
           contacts[i].phoneNumber.trim(),
           'QOLSHATYR: Help me lat:${location.latitude} long:${location.longitude}\n $imageURL!',
         );
 
-        // TwilioService.sendWhatsApp(contacts[i].phoneNumber.trim(), 'Qolshatyr');
         await FlutterPhoneDirectCaller.callNumber(contacts[i].phoneNumber);
         bool didAnswer = await NotificationService.showCallResultNotification();
-        log('TEST: $didAnswer');
         if (didAnswer) {
           break;
         }
