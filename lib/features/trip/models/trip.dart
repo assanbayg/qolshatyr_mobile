@@ -75,6 +75,26 @@ class Trip {
     );
   }
 
+  Trip copyWith({
+    LocationData? startLocation,
+    LocationData? endLocation,
+    Duration? estimateDuration,
+    DateTime? startTime,
+    DateTime? endTime,
+    bool? isOngoing,
+    Uint8List? image,
+  }) {
+    return Trip(
+      startLocation: startLocation ?? this.startLocation,
+      endLocation: endLocation ?? this.endLocation,
+      estimateDuration: estimateDuration ?? this.estimateDuration,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      isOngoing: isOngoing ?? this.isOngoing,
+      image: image ?? this.image,
+    );
+  }
+
   @override
   String toString() {
     return 'Trip(startLocation: $startLocation, endLocation: $endLocation, estimateDuration: $estimateDuration, startTime: $startTime, endTime: $endTime, isOngoing: $isOngoing)';
