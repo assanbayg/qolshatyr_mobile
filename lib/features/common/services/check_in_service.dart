@@ -116,6 +116,8 @@ class CheckInService {
         imageBytes = await imageFile.readAsBytes();
       }
 
+      List<Uint8List?> checkInImages = [];
+
       // Получаем чек-ины для последней поездки
       final checkIns = await db.query(
         'check_ins',
@@ -126,8 +128,6 @@ class CheckInService {
         ],
       );
 
-      // Создаём список изображений чек-инов
-      List<Uint8List?> checkInImages = [];
       for (var checkIn in checkIns) {
         final checkInImagePath = checkIn['image_path'] as String?;
         if (checkInImagePath != null) {
@@ -157,6 +157,7 @@ class CheckInService {
             DateTime.fromMillisecondsSinceEpoch(lastTrip['end_time'] as int),
         isOngoing: false,
         image: imageBytes, // Load image bytes from the file
+        checkInImages: checkInImages ?? [],
       );
     }
     return null;
@@ -178,6 +179,9 @@ class CheckInService {
         imageBytes = await imageFile.readAsBytes();
       }
 
+      List<Uint8List?> checkInImages = [];
+
+
       Trip trip = Trip(
         startLocation: LocationData.fromMap({
           'latitude': tripData['start_location_lat'],
@@ -195,7 +199,7 @@ class CheckInService {
             DateTime.fromMillisecondsSinceEpoch(tripData['end_time'] as int),
         isOngoing: false,
         image: imageBytes, // Return image bytes for each trip
-        checkInImages: checkInImages,
+        checkInImages: checkInImages ?? [],
       );
       trips.add(trip);
     }
