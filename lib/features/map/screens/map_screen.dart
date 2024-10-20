@@ -1,6 +1,5 @@
 // Dart imports:
 import 'dart:async';
-import 'dart:developer';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -15,11 +14,11 @@ import 'package:location/location.dart';
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/services/geocoding_service.dart';
 import 'package:qolshatyr_mobile/features/common/ui/widgets/loading_indicator.dart';
+import 'package:qolshatyr_mobile/features/map/services/polyline_service.dart';
 import 'package:qolshatyr_mobile/features/map/widgets/map_markers.dart';
 import 'package:qolshatyr_mobile/features/map/widgets/search_card.dart';
 import 'package:qolshatyr_mobile/features/trip/services/location_service.dart';
 import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
-import 'package:qolshatyr_mobile/features/map/services/polyline_service.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   static const routeName = '/base/map';
@@ -214,8 +213,6 @@ class _GoogleMapScreenState extends ConsumerState<MapScreen> {
       ),
     );
 
-    log('MATCH: $isLocationMatch');
-
     if (isLocationMatch) {
       _handleLocationMatchEvent();
     }
@@ -244,8 +241,6 @@ class _GoogleMapScreenState extends ConsumerState<MapScreen> {
   }
 
   void _handleLocationMatchEvent() {
-    log('MATCH');
-
     showDialog(
       context: context,
       builder: (BuildContext context) {

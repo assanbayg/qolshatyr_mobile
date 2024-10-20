@@ -14,20 +14,28 @@ class PolylineService {
   Set<Polyline> get polylines => _polylines;
 
   void addPolyline(LatLng currentLatLng) {
-    Polyline polyline = const Polyline(
-      polylineId: PolylineId('trip_route'),
-      color: Color.fromARGB(255, 78, 157, 147),
+    // create a new polyline with the currentLatLng as the init point
+    Polyline polyline = Polyline(
+      polylineId: const PolylineId('trip_route'),
+      color: const Color.fromARGB(255, 78, 157, 147),
       width: 5,
-      points: [],
+      points: [currentLatLng], // Start with the init point
     );
-    polyline.points.add(currentLatLng);
     _polylines.add(polyline);
   }
 
   void updatePolyline(LatLng currentLatLng) {
     if (_polylines.isNotEmpty) {
+      // get the first polyline
       final Polyline polyline = _polylines.first;
-      polyline.points.add(currentLatLng);
+
+      // create a new polyline with updated points
+      List<LatLng> updatedPoints = List.from(polyline.points)
+        ..add(currentLatLng);
+
+      // replace the old polyline with the new one containing the updated points
+      _polylines.remove(polyline);
+      _polylines.add(polyline.copyWith(pointsParam: updatedPoints));
     }
   }
 
