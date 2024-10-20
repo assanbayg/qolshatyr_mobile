@@ -36,6 +36,7 @@ class TripNotifier extends StateNotifier<Trip> {
       final endPlacemark =
           await GeocodingService.translateFromLatLng(endLocation);
 
+      // ignore: unused_local_variable
       final newTripWithPlacemark = TripWithPlacemark(
         startLocation: startLocation,
         endLocation: endLocation,

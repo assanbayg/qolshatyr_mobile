@@ -76,6 +76,7 @@ class _TripsLocalHistoryScreenState extends State<TripsLocalHistoryScreen> {
             onPressed: () async {
               final confirm = await _confirmDelete(context);
               if (confirm == true) {
+                if (!mounted) return;
                 await _deleteAllTrips(context);
               }
             },

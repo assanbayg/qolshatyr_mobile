@@ -1,6 +1,3 @@
-// Dart imports:
-import 'dart:developer';
-
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -34,6 +31,8 @@ class _CheckInScreenState extends ConsumerState<CheckInScreen> {
     final CheckInService checkInService = CheckInService();
     final trip = ref.read(tripProvider.notifier);
     final imageBytes = ref.watch(checkinImageProvider);
+    final checkinImageProviderNotifier =
+        ref.read(checkinImageProvider.notifier);
 
     Future<String> getPlacemarkStreet(LocationData location) async {
       try {
@@ -139,17 +138,34 @@ class _CheckInScreenState extends ConsumerState<CheckInScreen> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          checkInService.saveTrip(trip.latestTrip, imageBytes);
-                          String? imageURL = await StorageService()
-                              .uploadUserImage(imageBytes, 'test.png');
-                          SharedPreferencesManager.setImageURL(imageURL);
-                          if (!mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Checked in!')),
-                          );
+                          try {
+                            // save the trip with the image in it
+                            checkInService.saveTrip(
+                              trip.latestTrip,
+                              imageBytes,
+                            );
 
-                          ref.read(checkinImageProvider.notifier).state = null; // Reset image
-                          log('Started a new check-in'); // Log that a new check-in has started
+                            // upload the image in the firebase store + receive the download link for it
+                            String? imageURL = await StorageService()
+                                .uploadUserImage(imageBytes, 'test.png');
+                            SharedPreferencesManager.setImageURL(imageURL);
+
+                            // display success message
+                            if (!mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Checked in!')),
+                            );
+
+                            // clear the checkin image state for the next checkin
+                            checkinImageProviderNotifier.clearImage();
+                          } catch (e) {
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Check-in failed!')),
+                              );
+                            }
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(

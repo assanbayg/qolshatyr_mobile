@@ -20,7 +20,6 @@ import 'package:qolshatyr_mobile/features/common/ui/screens/tech_support_screen.
 import 'package:qolshatyr_mobile/features/contacts/ui/contacts_screen.dart';
 import 'package:qolshatyr_mobile/features/map/screens/map_screen.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/screens/trip_status_screen.dart';
-import 'package:qolshatyr_mobile/features/trip/ui/screens/trips_history_screen.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/screens/trips_local_history_screen.dart';
 import 'package:qolshatyr_mobile/themes.dart';
 
