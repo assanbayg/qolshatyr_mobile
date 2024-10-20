@@ -14,7 +14,7 @@ import 'package:location/location.dart';
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/services/geocoding_service.dart';
 import 'package:qolshatyr_mobile/features/common/ui/widgets/loading_indicator.dart';
-import 'package:qolshatyr_mobile/features/common/utils/geojson_utils.dart';
+import 'package:qolshatyr_mobile/features/map/services/polyline_service.dart';
 import 'package:qolshatyr_mobile/features/map/widgets/map_markers.dart';
 import 'package:qolshatyr_mobile/features/map/widgets/search_card.dart';
 import 'package:qolshatyr_mobile/features/trip/services/location_service.dart';
@@ -32,10 +32,9 @@ class _GoogleMapScreenState extends ConsumerState<MapScreen> {
   final LocationService _locationService = LocationService();
   final Completer<GoogleMapController> _mapController = Completer();
   final TextEditingController _addressController = TextEditingController();
+  final PolylineService _polylineService = PolylineService();
   LocationData? _currentLocation;
   StreamSubscription<LocationData>? _locationSubscription;
-
-  Set<Polyline> polylines = {};
 
   @override
   void initState() {
@@ -101,7 +100,7 @@ class _GoogleMapScreenState extends ConsumerState<MapScreen> {
                 myLocationButtonEnabled: true,
                 compassEnabled: true,
                 markers: MapMarkers.buildMarkers(startLocation, endLocation),
-                polylines: polylines,
+                polylines: _polylineService.polylines,
                 onTap: (location) => _handleMapTap(location),
                 onMapCreated: (GoogleMapController controller) {
                   _mapController.complete(controller);
@@ -192,32 +191,37 @@ class _GoogleMapScreenState extends ConsumerState<MapScreen> {
     }
   }
 
-  // -------- polylines related ---------------
-
   Future<void> _updateCurrentLocation(LocationData currentLocation) async {
     LatLng currentLatLng = LatLng(
       currentLocation.latitude!,
       currentLocation.longitude!,
     );
 
-    Polyline polyline = const Polyline(
-      polylineId: PolylineId('trip_route'),
-      color: Color.fromARGB(255, 78, 157, 147),
-      width: 5,
-      points: [],
-    );
-    polyline.points.add(currentLatLng);
-    polylines.add(polyline);
+    _polylineService.addPolyline(currentLatLng);
+    _polylineService.updatePolyline(currentLatLng);
 
     setState(() {
       _currentLocation = currentLocation;
-      polyline.points.add(currentLatLng);
     });
+
+    final tripNotifier = ref.read(tripProvider.notifier);
+    bool isLocationMatch = _isLocationMatch(
+      currentLatLng,
+      LatLng(
+        tripNotifier.latestTrip.endLocation.latitude!,
+        tripNotifier.latestTrip.endLocation.longitude!,
+      ),
+    );
+
+    if (isLocationMatch) {
+      _handleLocationMatchEvent();
+    }
+
     _locationService.saveLastLocation(currentLocation);
   }
 
   void _exportRouteToGeoJSON() async {
-    await saveGeoJsonToFile(convertPolylinesToGeoJson(polylines));
+    await _polylineService.exportToGeoJson();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Successfully stored route!')));
@@ -225,10 +229,34 @@ class _GoogleMapScreenState extends ConsumerState<MapScreen> {
   }
 
   void _importRouteFromGeoJSON() async {
-    Set<Polyline> importPolylines = await createPolylinesFromGeoJson();
+    await _polylineService.importFromGeoJson();
+    setState(() {});
+  }
 
-    setState(() {
-      polylines = importPolylines;
-    });
+  bool _isLocationMatch(LatLng currentLocation, LatLng endLocation,
+      {double tolerance = 0.0001}) {
+    return (currentLocation.latitude - endLocation.latitude).abs() <
+            tolerance &&
+        (currentLocation.longitude - endLocation.longitude).abs() < tolerance;
+  }
+
+  void _handleLocationMatchEvent() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Location Match!'),
+          content: const Text('You have reached your destination.'),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
