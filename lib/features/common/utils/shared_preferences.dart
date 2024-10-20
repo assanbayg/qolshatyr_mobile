@@ -15,6 +15,21 @@ class SharedPreferencesManager {
     _sharedPreferences = await SharedPreferences.getInstance();
   }
 
+  static Future<void> updateLanguage(String languageCode) async {
+    await _sharedPreferences?.setString('selectedLanguage', languageCode);
+  }
+
+  // New method to save the language
+  static Future<void> saveLanguage(String language) async {
+    await updateLanguage(language); // Reuse the existing method
+  }
+
+  static String? getSavedLanguage() {
+    return _sharedPreferences?.getString('selectedLanguage'); //
+  }
+
+
+
   static Future<void> saveLastLocation(LocationData location) async {
     await _sharedPreferences!.setDouble('latitude', location.latitude ?? 0);
     await _sharedPreferences!.setDouble('longitude', location.longitude ?? 0);

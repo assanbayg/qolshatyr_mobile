@@ -105,61 +105,6 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
-
-              const SizedBox(height: 20), // Space between cards
-
-              // Language Selector Card
-              Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        localization.languageSetting,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      DropdownButton<String>(
-                        value: currentLanguage,
-                        items: [
-                          DropdownMenuItem(
-                            value: 'en',
-                            child: Text(localization.english),
-                          ),
-                          DropdownMenuItem(
-                            value: 'ru',
-                            child: Text(localization.russian),
-                          ),
-                          DropdownMenuItem(
-                            value: 'kk',
-                            child: Text(localization.kazakh),
-                          ),
-                        ],
-                        onChanged: (String? newLanguage) async {
-                          if (newLanguage != null) {
-                            // Update language in SharedPreferences
-                            SharedPreferencesManager.updateLanguage(newLanguage);
-
-                            // Update app locale using Provider
-                            Provider.of<LocaleProvider>(context, listen: false).setLocale(Locale(newLanguage));
-
-                            // Optionally restart listening if using voice recognition
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
             ],
           ),
         ),
