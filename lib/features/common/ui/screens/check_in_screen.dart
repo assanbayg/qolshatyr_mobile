@@ -147,6 +147,9 @@ class _CheckInScreenState extends ConsumerState<CheckInScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Checked in!')),
                           );
+
+                          ref.read(checkinImageProvider.notifier).state = null; // Reset image
+                          log('Started a new check-in'); // Log that a new check-in has started
                         },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
