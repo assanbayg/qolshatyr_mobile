@@ -1,3 +1,5 @@
+// TODO: localize this thing later
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -17,7 +19,6 @@ class TripsLocalHistoryScreen extends StatefulWidget {
 
 class _TripsLocalHistoryScreenState extends State<TripsLocalHistoryScreen> {
   final CheckInService _tripCheckInService = CheckInService();
-
   late Future<TripsData> _tripsData;
 
   @override
@@ -34,12 +35,13 @@ class _TripsLocalHistoryScreenState extends State<TripsLocalHistoryScreen> {
 
   Future<void> _deleteAllTrips(BuildContext context) async {
     await _tripCheckInService.deleteAllTrips();
-    if (mounted) {}
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('All trips deleted successfully')),
     );
     setState(() {
-      _tripsData = _fetchTripsData(); // Refresh data
+      // refresh data
+      _tripsData = _fetchTripsData();
     });
   }
 
@@ -74,7 +76,6 @@ class _TripsLocalHistoryScreenState extends State<TripsLocalHistoryScreen> {
             onPressed: () async {
               final confirm = await _confirmDelete(context);
               if (confirm == true) {
-                if (!mounted) return;
                 await _deleteAllTrips(context);
               }
             },
@@ -102,38 +103,95 @@ class _TripsLocalHistoryScreenState extends State<TripsLocalHistoryScreen> {
   }
 
   Widget _buildTripsContent(BuildContext context, TripsData tripsData) {
-    return Column(
-      children: [
-        if (tripsData.lastTrip != null) ...[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Last Trip:',
-              style: Theme.of(context).textTheme.titleLarge,
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (tripsData.lastTrip != null) ...[
+            Text(
+              'Last Trip',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            _buildTripCard(tripsData.lastTrip!),
+            const Divider(),
+          ],
+          Text(
+            'All Trips',
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: ListView.builder(
+              reverse: true,
+              itemCount: tripsData.allTrips.length,
+              itemBuilder: (context, index) {
+                final trip = tripsData.allTrips[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: _buildTripCard(trip),
+                );
+              },
             ),
           ),
-          ListTile(
-            title: Text(tripsData.lastTrip!.startLocation.toString()),
-            subtitle: Text(tripsData.lastTrip!.endLocation.toString()),
-            trailing:
-                Text('${tripsData.lastTrip!.estimateDuration.inMinutes} mins'),
-          ),
-          const Divider(),
         ],
-        Expanded(
-          child: ListView.builder(
-            itemCount: tripsData.allTrips.length,
-            itemBuilder: (context, index) {
-              final trip = tripsData.allTrips[index];
-              return ListTile(
-                title: Text(trip.startLocation.toString()),
-                subtitle: Text(trip.endLocation.toString()),
-                trailing: Text('${trip.estimateDuration.inMinutes} mins'),
-              );
-            },
-          ),
+      ),
+    );
+  }
+
+  Widget _buildTripCard(Trip trip) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            if (trip.image != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.memory(
+                  trip.image!,
+                  height: 100,
+                  width: 100,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Start: ${trip.startLocation}',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'End: ${trip.endLocation}',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '${trip.estimateDuration.inMinutes} mins',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
