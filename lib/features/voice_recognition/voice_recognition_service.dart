@@ -18,6 +18,9 @@ class VoiceRecognitionService {
   bool _isListening = false;
   String _recognizedText = '';
 
+  final List<String> supportedLanguages = ['en_US', 'ru_RU', 'kk_KZ']; //multiple languages
+
+
   bool get isListening => _isListening;
   String get recognizedText => _recognizedText;
 
@@ -32,7 +35,7 @@ class VoiceRecognitionService {
           onError: (val) async {
             if (val.errorMsg == 'error_no_match' ||
                 val.errorMsg == 'error_time_out') {
-              _startListening();
+              _startListening(languageCode: languageCode ?? supportedLanguages.first); //use provided languages
             } else {
               _speech.stop();
               await Future.delayed(const Duration(seconds: 2));
@@ -40,7 +43,7 @@ class VoiceRecognitionService {
           },
         );
       }
-      _startListening();
+      _startListening(languageCode: languageCode ?? supportedLanguages.first); //Default to first language if none provided
       _isListening = true;
     } else {
       _speech.stop();
@@ -48,7 +51,7 @@ class VoiceRecognitionService {
     }
   }
 
-  void _startListening() {
+  void _startListening({required String languageCode}) {
     _speech.listen(
       onResult: (result) async {
         log(result.recognizedWords);
@@ -57,9 +60,11 @@ class VoiceRecognitionService {
           checkInService.triggerSos();
         }
         if (result.finalResult) {
-          _startListening();
+          _startListening(languageCode: languageCode);
         }
       },
+      localeId: languageCode, //Listen with the specified language
+      listenMode: stt.ListenMode.dictation, //Use dictation mode for continuous listening
     );
   }
 }
