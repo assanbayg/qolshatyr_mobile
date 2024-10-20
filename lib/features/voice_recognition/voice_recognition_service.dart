@@ -24,7 +24,7 @@ class VoiceRecognitionService {
   bool get isListening => _isListening;
   String get recognizedText => _recognizedText;
 
-  Future<void> toggleListening({triggerStop = false}) async {
+  Future<void> toggleListening({String? languageCode, triggerStop = false}) async {
     if (triggerStop) {
       _speech.stop();
     }
