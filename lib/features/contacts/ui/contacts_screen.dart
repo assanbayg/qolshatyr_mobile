@@ -19,11 +19,13 @@ class ContactsScreen extends ConsumerWidget {
     final localization = AppLocalizations.of(context)!;
     final contactsList = ref.watch(contactListProvider);
 
-    return Column(
-      children: [
-        EmergencyContactsHeader(localization: localization),
-        ContactsList(contacts: contactsList, localization: localization),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          EmergencyContactsHeader(localization: localization),
+          ContactsList(contacts: contactsList, localization: localization),
+        ],
+      ),
     );
   }
 }

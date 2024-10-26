@@ -46,19 +46,50 @@ class SharedPreferencesManager {
 
     final contacts = serializedContacts.map((contactJson) {
       final contactMap = jsonDecode(contactJson);
-      contactMap['number'] = contactMap['phoneNumber'];
       return Contact.fromJson(contactMap);
     }).toList();
 
     return contacts;
   }
 
-  // in seconds
+  // update telegram username of one user
+  static Future<void> updateContactTelegramUsername(
+    String phoneNumber,
+    String tgUsername,
+  ) async {
+    final contacts = await getContacts();
+    final updatedContacts = contacts.map((contact) {
+      if (contact.phoneNumber == phoneNumber) {
+        return contact.copyWith(tgUsername: tgUsername);
+      }
+      return contact;
+    }).toList();
+
+    await saveContacts(updatedContacts);
+  }
+
+  // updating the chat id of one user
+  static Future<void> updateContactChatId(
+    String phoneNumber,
+    String chatId,
+  ) async {
+    final contacts = await getContacts();
+    final updatedContacts = contacts.map((contact) {
+      if (contact.phoneNumber == phoneNumber) {
+        return contact.copyWith(chatId: chatId);
+      }
+      return contact;
+    }).toList();
+
+    await saveContacts(updatedContacts);
+  }
+
+  // time: in seconds
   static Future<void> updateCheckInReminderDuration(int seconds) async {
     await _sharedPreferences?.setInt('checkinDuration', seconds);
   }
 
-  // in seconds - 6000s = 10min
+  // time: in seconds - 6000s = 10min
   static int? get checkInReminderDuration =>
       _sharedPreferences?.getInt('checkinDuration') ?? 6000;
 

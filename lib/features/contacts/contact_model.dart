@@ -1,25 +1,48 @@
 class Contact {
   final String name;
   final String phoneNumber;
+  final String tgUsername;
+  String? chatId;
 
-  Contact(this.name, this.phoneNumber);
+  Contact({
+    required this.name,
+    required this.phoneNumber,
+    this.tgUsername = '',
+    this.chatId,
+  });
 
   @override
   String toString() {
-    return 'Contact(name: $name, phoneNumber: $phoneNumber)';
+    return 'Contact(name: $name, phoneNumber: $phoneNumber, tgUsername: $tgUsername, chatId: $chatId)';
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'phoneNumber': phoneNumber,
-    };
-  }
+  // convert a Contact to JSON
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'phoneNumber': phoneNumber,
+        'tgUsername': tgUsername,
+        'chatId': chatId,
+      };
 
-  factory Contact.fromJson(Map<String, dynamic> json) {
+  // create a Contact from JSON
+  factory Contact.fromJson(Map<String, dynamic> json) => Contact(
+        name: json['name'],
+        phoneNumber: json['phoneNumber'],
+        tgUsername: json['tgUsername'] ?? '',
+        chatId: json['chatId'],
+      );
+
+  Contact copyWith({
+    String? name,
+    String? phoneNumber,
+    String? tgUsername,
+    String? chatId,
+  }) {
     return Contact(
-      json['name'],
-      json['number'],
+      name: name ?? this.name,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      tgUsername: tgUsername ?? this.tgUsername,
+      chatId: chatId ?? this.chatId,
     );
   }
 }

@@ -23,16 +23,20 @@ class TelegramService {
         // loop through each update to find the message from the username
         for (var update in updates['result']) {
           final message = update['message'];
-          if (message != null && message['from']['username'] == tgUsername) {
+
+          if (message != null &&
+              message['from']['username'].toLowerCase() ==
+                  tgUsername.trim().toLowerCase()) {
             return message['chat']['id'].toString();
           }
         }
       }
     }
+
     return null;
   }
 
-Future<void> sendMessage(String chatId, String message) async {
+  Future<void> sendMessage(String chatId, String message) async {
     final url = Uri.parse('https://api.telegram.org/bot$botToken/sendMessage');
     final response = await http.post(
       url,

@@ -21,6 +21,7 @@ class ContactFloatingActionButton extends ConsumerWidget {
         ref.read(contactListProvider.notifier).addContact(
               contact.fullName!,
               contact.phoneNumbers![0],
+              '',
             );
       }
     }

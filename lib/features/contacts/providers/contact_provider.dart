@@ -15,12 +15,28 @@ class ContactNotifier extends StateNotifier<List<Contact>> {
     _loadContactsFromSharedPreferences();
   }
 
-  Future<void> addContact(String name, String phoneNumber) async {
+  Future<void> _loadContactsFromSharedPreferences() async {
+    List<Contact> contacts = await SharedPreferencesManager.getContacts();
+    state = contacts;
+  }
+
+  Future<void> addContact(
+    String name,
+    String phoneNumber,
+    String tgUsername,
+  ) async {
     if (state.any((contact) => contact.phoneNumber == phoneNumber)) {
       return;
     }
 
-    state = [...state, Contact(name, phoneNumber)];
+    state = [
+      ...state,
+      Contact(
+        name: name,
+        phoneNumber: phoneNumber,
+        tgUsername: tgUsername,
+      )
+    ];
     SharedPreferencesManager.saveContacts(state);
   }
 
@@ -29,16 +45,21 @@ class ContactNotifier extends StateNotifier<List<Contact>> {
     SharedPreferencesManager.saveContacts(contacts);
   }
 
+  void updateContact(Contact updatedContact) {
+    state = [
+      for (var contact in state)
+        if (contact.phoneNumber == updatedContact.phoneNumber)
+          updatedContact
+        else
+          contact,
+    ];
+  }
+
   void removeContact(String number) async {
     List<Contact> updatedContacts =
         state.where((contact) => contact.phoneNumber != number).toList();
 
     state = updatedContacts;
     SharedPreferencesManager.saveContacts(updatedContacts);
-  }
-
-  Future<void> _loadContactsFromSharedPreferences() async {
-    List<Contact> contacts = await SharedPreferencesManager.getContacts();
-    state = contacts;
   }
 }
