@@ -148,5 +148,4 @@ local.properties
 GoogleService-Info.plist
 google-services.json
 firebase.json
-/lib/features/common/services/twilio_options.dart
-/lib/features/common/services/email_options.dart
+/lib/features/common/services/env.dart

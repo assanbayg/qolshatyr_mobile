@@ -6,7 +6,7 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 
 // Project imports:
-import 'package:qolshatyr_mobile/features/common/services/email_options.dart';
+import 'package:qolshatyr_mobile/features/common/services/env.dart';
 
 Future<void> sendEmail({
   required String senderEmail,
