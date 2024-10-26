@@ -49,4 +49,24 @@ class TelegramService {
       log('Failed to send message: ${response.statusCode}');
     }
   }
+
+  Future<void> sendLocation(
+      String chatId, double latitude, double longitude) async {
+    final url = Uri.parse('https://api.telegram.org/bot$botToken/sendLocation');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'chat_id': chatId,
+        'latitude': latitude,
+        'longitude': longitude,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      log('Location sent successfully');
+    } else {
+      log('Failed to send location: ${response.statusCode}');
+    }
+  }
 }

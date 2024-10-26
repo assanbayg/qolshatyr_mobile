@@ -249,6 +249,8 @@ class CheckInService {
           contacts[i].chatId!,
           'QOLSHATYR: Help me lat:${location.latitude} long:${location.longitude}\n $imageURL!',
         );
+        telegramService.sendLocation(
+            contacts[i].chatId!, location.latitude!, location.longitude!);
 
         await FlutterPhoneDirectCaller.callNumber(contacts[i].phoneNumber);
         bool didAnswer = await NotificationService.showCallResultNotification();
