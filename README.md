@@ -38,8 +38,9 @@ flutter pub get
 - firebase.json: ./
 - google-services.json: ./android/app/
 - firebase_options.dart: ./lib/
-- twilio_service.dart: ./lib/features/common/services/
-- local.properties: ./android/local.properties
+- twlio_options.dart: ./lib/features/common/services/
+- local.properties: ./android/local.properties (put Google Maps API in it)
+- telegram_options.dart: ./lib/features/common/services/
 ```
 
 4. Run the app:

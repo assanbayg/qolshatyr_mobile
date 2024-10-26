@@ -110,7 +110,7 @@ class MyDrawer extends ConsumerWidget {
                 title: const Text('DEVS ONLY'),
                 leading: const Icon(Icons.bug_report),
                 onTap: () {
-                  Navigator.of(context).pushNamed('/check-in');
+                  Navigator.of(context).pushNamed('/dev');
                 },
               ),
             ],
