@@ -1,3 +1,11 @@
+/* ARCHIVED
+initially i used twilio api for alerting emergency contacts
+but it had 2 huge disadvantages: 1. it's hella expensive 2. it doesn't really support media files
+therefore 8 months later i decided to migrate to telegram api. hope i won't regret it later
+
+cheers, gauhar. 26/10/2024
+*/
+/*
 // Dart imports:
 import 'dart:convert';
 import 'dart:developer';
@@ -53,3 +61,4 @@ class TwilioService {
     twilio.sendWhatsApp(toNumber: phoneNumber, messageBody: messageBody);
   }
 }
+*/

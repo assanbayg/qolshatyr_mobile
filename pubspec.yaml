@@ -52,7 +52,7 @@ dependencies:
   location: ^7.0.0
   speech_to_text: ^6.6.2
   flutter_local_notifications: ^17.1.2
-  twilio_flutter: ^0.9.0
+  # twilio_flutter: ^0.9.0
   intl: any
   flutter_localizations:
     sdk: flutter

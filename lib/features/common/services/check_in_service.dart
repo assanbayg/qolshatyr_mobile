@@ -10,7 +10,7 @@ import 'package:sqflite/sqflite.dart';
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/services/image_to_file_service.dart';
 import 'package:qolshatyr_mobile/features/common/services/notification_service.dart';
-import 'package:qolshatyr_mobile/features/common/services/twilio_service.dart';
+import 'package:qolshatyr_mobile/features/common/services/telegram_service.dart';
 import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 import 'package:qolshatyr_mobile/features/contacts/contact_model.dart';
 import 'package:qolshatyr_mobile/features/trip/models/trip.dart';
@@ -237,7 +237,7 @@ class CheckInService {
 
   // Активировать SOS
   Future<void> triggerSos() async {
-    final twilio = TwilioService();
+    final telegramService = TelegramService();
     List<Contact> contacts = await SharedPreferencesManager.getContacts();
     if (contacts.isNotEmpty) {
       LocationData location =
@@ -245,8 +245,8 @@ class CheckInService {
       String? imageURL = SharedPreferencesManager.imageURL;
 
       for (int i = 0; i < contacts.length; i++) {
-        twilio.sendMessage(
-          contacts[i].phoneNumber.trim(),
+        telegramService.sendMessage(
+          contacts[i].chatId!,
           'QOLSHATYR: Help me lat:${location.latitude} long:${location.longitude}\n $imageURL!',
         );
 
