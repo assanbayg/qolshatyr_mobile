@@ -1,10 +1,18 @@
+// Dart imports:
+import 'dart:developer';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_background_video_recorder/flutter_bvr.dart';
+
+// Package imports:
 import 'package:flutter_background_video_recorder/flutter_bvr_platform_interface.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+// Project imports:
 import 'package:qolshatyr_mobile/features/video_recording/video_recording_service.dart';
 
 class VideoRecordingScreen extends StatefulWidget {
-  const VideoRecordingScreen({Key? key}) : super(key: key);
+  const VideoRecordingScreen({super.key});
 
   @override
   State<VideoRecordingScreen> createState() => _VideoRecordingScreenState();
@@ -20,24 +28,39 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen> {
     super.dispose();
   }
 
+  void _test() {
+    _recordingService.test();
+  }
+
   void _toggleCamera() {
     if (!_recordingService.isRecording && !_recordingService.recorderBusy) {
-      cameraFacing = cameraFacing == "Rear camera" ? "Front camera" : "Rear camera";
+      cameraFacing =
+          cameraFacing == "Rear camera" ? "Front camera" : "Rear camera";
       setState(() {});
     }
   }
 
   Future<void> _toggleRecording() async {
-    if (!_recordingService.isRecording && !_recordingService.recorderBusy) {
-      await _recordingService.startRecording(
-        "Example Recorder",
-        cameraFacing == "Rear camera" ? CameraFacing.rearCamera : CameraFacing.frontCamera,
-      );
-      setState(() {});
-    } else if (_recordingService.isRecording) {
-      String filePath = await _recordingService.stopRecording() ?? "None";
-      print("Recording saved to $filePath");
-      setState(() {});
+    // Check and request permissions if needed
+    final cameraPermission = await Permission.camera.request();
+    final microphonePermission = await Permission.microphone.request();
+
+    if (cameraPermission.isGranted && microphonePermission.isGranted) {
+      if (!_recordingService.isRecording && !_recordingService.recorderBusy) {
+        await _recordingService.startRecording(
+          "Example Recorder",
+          cameraFacing == "Rear camera"
+              ? CameraFacing.rearCamera
+              : CameraFacing.frontCamera,
+        );
+        setState(() {});
+      } else if (_recordingService.isRecording) {
+        String filePath = await _recordingService.stopRecording() ?? "None";
+        log("Recording saved to $filePath");
+        setState(() {});
+      }
+    } else {
+      log("Не удалось получить необходимые разрешения.");
     }
   }
 
@@ -50,7 +73,7 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: Text(
@@ -64,14 +87,14 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen> {
             ),
             ElevatedButton(
               onPressed: _toggleRecording,
-              child: Text(_recordingService.isRecording ? "Stop Recording" : "Start Recording"),
+              child: Text(_recordingService.isRecording
+                  ? "Stop Recording"
+                  : "Start Recording"),
             ),
+            ElevatedButton(onPressed: _test, child: const Text('TEST')),
           ],
         ),
       ),
     );
   }
 }
-
-
-

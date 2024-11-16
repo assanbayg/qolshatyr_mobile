@@ -70,6 +70,7 @@ dependencies:
   path_provider: ^2.1.4
   firebase_storage: ^12.2.0
   flutter_background_video_recorder: ^1.0.0+2
+  device_info_plus: ^11.1.1
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

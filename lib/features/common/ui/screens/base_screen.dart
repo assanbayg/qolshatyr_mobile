@@ -1,6 +1,5 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:qolshatyr_mobile/features/common/ui/screens/video_recording_screen.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/ui/widgets/my_drawer.dart';
@@ -10,7 +9,6 @@ import 'package:qolshatyr_mobile/features/contacts/ui/widgets/contact_floating_a
 import 'package:qolshatyr_mobile/features/map/screens/map_screen.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/screens/trip_status_screen.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/widgets/create_trip_floating_action_button.dart';
-import 'package:qolshatyr_mobile/features/common/ui/screens/video_recording_screen.dart'; // Импорт экрана записи видео
 import 'package:qolshatyr_mobile/themes.dart';
 
 class BaseScreen extends StatefulWidget {
@@ -49,22 +47,6 @@ class _BaseScreenState extends State<BaseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Base Screen'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.videocam_rounded),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const VideoRecordingScreen(),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
       body: Stack(
         children: [
           SafeArea(child: _screens[_selectedIndex]),
@@ -100,9 +82,8 @@ class _BaseScreenState extends State<BaseScreen> {
       floatingActionButton: _selectedIndex == 0
           ? const CreateTripFloatingActionButton()
           : _selectedIndex == 2
-          ? const ContactFloatingActionButton()
-          : null,
+              ? const ContactFloatingActionButton()
+              : null,
     );
   }
 }
-
