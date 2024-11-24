@@ -1,12 +1,14 @@
 // Dart imports:
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 // Package imports:
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_background_video_recorder/flutter_bvr.dart';
 import 'package:flutter_background_video_recorder/flutter_bvr_platform_interface.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart'; // Для работы с директорией
 
 class VideoRecordingService {
   final FlutterBackgroundVideoRecorder _videoRecorder =
@@ -63,14 +65,41 @@ class VideoRecordingService {
     return allGranted;
   }
 
-  Future<void> startRecording(
-      String folderName, CameraFacing cameraFacing) async {
+  Future<String> _getStorageDirectory(String userDirectory) async {
+    // Получаем базовую директорию
+    Directory baseDir;
+    if (Platform.isAndroid) {
+      baseDir = (await getExternalStorageDirectory())!;
+    } else if (Platform.isIOS) {
+      baseDir = await getApplicationDocumentsDirectory();
+    } else {
+      throw UnsupportedError("Unsupported platform");
+    }
+
+    // Создаем пользовательскую директорию
+    final Directory userDir = Directory('${baseDir.path}/$userDirectory');
+
+    if (!await userDir.exists()) {
+      await userDir.create(recursive: true);
+      log("Папка ${userDir.path} создана.");
+    } else {
+      log("Папка ${userDir.path} уже существует.");
+    }
+
+    return userDir.path; // Возвращаем полный путь
+  }
+
+  Future<void> startRecording(String userDirectory, CameraFacing cameraFacing) async {
     if (!_isRecording && !_recorderBusy) {
       if (await _requestPermissions()) {
         try {
+          // Получаем директорию, указанную пользователем
+          final String folderPath = await _getStorageDirectory(userDirectory);
+
+          // Начинаем запись видео
           final res = await _videoRecorder.startVideoRecording(
-            folderName: 'main',
-            cameraFacing: CameraFacing.frontCamera,
+            folderName: folderPath, // Передаем полный путь
+            cameraFacing: cameraFacing,
             notificationTitle: "Recording in progress",
             notificationText: "Tap to return to app",
             showToast: true,
@@ -90,10 +119,10 @@ class VideoRecordingService {
     if (_isRecording) {
       try {
         String? filePath = await _videoRecorder.stopVideoRecording();
-        print("Видео сохранено в: $filePath");
+        log("Видео сохранено в: $filePath");
         return filePath;
       } catch (e) {
-        print("Ошибка при остановке записи: $e");
+        log("Ошибка при остановке записи: $e");
         return null;
       }
     }
@@ -127,6 +156,7 @@ class VideoRecordingService {
     }
   }
 }
+
 
 // import 'dart:async';
 
