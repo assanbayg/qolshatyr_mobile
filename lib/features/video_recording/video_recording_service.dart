@@ -4,11 +4,10 @@ import 'dart:developer';
 import 'dart:io';
 
 // Package imports:
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:path_provider/path_provider.dart'; // Новый импорт
 import 'package:flutter_background_video_recorder/flutter_bvr.dart';
 import 'package:flutter_background_video_recorder/flutter_bvr_platform_interface.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:path_provider/path_provider.dart'; // Для работы с директорией
 
 class VideoRecordingService {
   final FlutterBackgroundVideoRecorder _videoRecorder =
@@ -50,7 +49,6 @@ class VideoRecordingService {
   bool get isRecording => _isRecording;
   bool get recorderBusy => _recorderBusy;
 
-  // Запрашиваем необходимые разрешения
   Future<bool> _requestPermissions() async {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.camera,
@@ -65,40 +63,32 @@ class VideoRecordingService {
     return allGranted;
   }
 
-  Future<String> _getStorageDirectory(String userDirectory) async {
+  Future<String> _getStorageDirectory(String folderName) async {
     // Получаем базовую директорию
-    Directory baseDir;
-    if (Platform.isAndroid) {
-      baseDir = (await getExternalStorageDirectory())!;
-    } else if (Platform.isIOS) {
-      baseDir = await getApplicationDocumentsDirectory();
+    final Directory baseDir = await getApplicationDocumentsDirectory();
+    final Directory targetDir = Directory('${baseDir.path}/$folderName');
+
+    // Проверяем, существует ли директория, если нет — создаем её
+    if (!await targetDir.exists()) {
+      await targetDir.create(recursive: true);
+      log("Папка ${targetDir.path} создана.");
     } else {
-      throw UnsupportedError("Unsupported platform");
+      log("Папка ${targetDir.path} уже существует.");
     }
 
-    // Создаем пользовательскую директорию
-    final Directory userDir = Directory('${baseDir.path}/$userDirectory');
-
-    if (!await userDir.exists()) {
-      await userDir.create(recursive: true);
-      log("Папка ${userDir.path} создана.");
-    } else {
-      log("Папка ${userDir.path} уже существует.");
-    }
-
-    return userDir.path; // Возвращаем полный путь
+    return targetDir.path; // Возвращаем полный путь
   }
 
-  Future<void> startRecording(String userDirectory, CameraFacing cameraFacing) async {
+  Future<void> startRecording(String folderName, CameraFacing cameraFacing) async {
     if (!_isRecording && !_recorderBusy) {
       if (await _requestPermissions()) {
         try {
-          // Получаем директорию, указанную пользователем
-          final String folderPath = await _getStorageDirectory(userDirectory);
+          // Получаем директорию для хранения файлов
+          final String directoryPath = await _getStorageDirectory(folderName);
 
-          // Начинаем запись видео
+          // Начинаем запись
           final res = await _videoRecorder.startVideoRecording(
-            folderName: folderPath, // Передаем полный путь
+            folderName: directoryPath, // Полный путь
             cameraFacing: cameraFacing,
             notificationTitle: "Recording in progress",
             notificationText: "Tap to return to app",
@@ -138,24 +128,17 @@ class VideoRecordingService {
   }
 
   void test() async {
-    final plugin = DeviceInfoPlugin();
-    final android = await plugin.androidInfo;
-
-    final storageStatus = android.version.sdkInt < 33
-        ? await Permission.storage.request()
-        : PermissionStatus.granted;
-
-    if (storageStatus == PermissionStatus.granted) {
-      print("granted");
-    }
-    if (storageStatus == PermissionStatus.denied) {
-      print("denied");
-    }
-    if (storageStatus == PermissionStatus.permanentlyDenied) {
+    final storagePermission = await Permission.storage.request();
+    if (storagePermission.isGranted) {
+      log("Доступ к хранилищу предоставлен.");
+    } else if (storagePermission.isDenied) {
+      log("Доступ к хранилищу отклонен.");
+    } else if (storagePermission.isPermanentlyDenied) {
       openAppSettings();
     }
   }
 }
+
 
 
 // import 'dart:async';
