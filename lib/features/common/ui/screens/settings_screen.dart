@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,11 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+
+    Future<String?> pickDirectory() async {
+      String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+      return selectedDirectory;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -62,7 +68,6 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20), // Space between cards
               Card(
                 elevation: 4,
                 shape: RoundedRectangleBorder(
@@ -100,6 +105,40 @@ class SettingsScreen extends StatelessWidget {
                         ),
                         onChanged: (value) =>
                             SharedPreferencesManager.updateSosPhrase(value),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Update files location',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      ElevatedButton(
+                        onPressed: () async {
+                          String? newDirectory = await pickDirectory();
+                          SharedPreferencesManager.setDirectory(newDirectory);
+                          // TODO: check if set directory with no problems
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Updated directory!')));
+                        },
+                        child: const Text('Pick a directory'),
                       ),
                     ],
                   ),

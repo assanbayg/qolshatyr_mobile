@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:file_picker/file_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 
 String convertPolylinesToGeoJson(Set<Polyline> polylines) {
   final features = polylines.map((polyline) {
@@ -36,28 +37,17 @@ String convertPolylinesToGeoJson(Set<Polyline> polylines) {
 }
 
 Future<void> saveGeoJsonToFile(String geoJson) async {
-  String? directoryPath = await pickDirectory();
+  String? directoryPath = SharedPreferencesManager.directory;
 
   if (directoryPath != null) {
     String timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
-    String fileDirectory = '/storage/emulated/0/Download/qolshatyrproject';
-    String filePath = '$fileDirectory/route_$timestamp.geojson';
+    String filePath = '$directoryPath/route_$timestamp.geojson';
     final file = File(filePath);
 
     // ensure directory exists
     await file.create(recursive: true);
     await file.writeAsString(geoJson);
-  } else {
-  }
-}
-
-Future<String?> pickDirectory() async {
-  String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
-  if (selectedDirectory != null) {
-    return selectedDirectory;
-  } else {
-    return null;
-  }
+  } else {}
 }
 
 Future<Set<Polyline>> createPolylinesFromGeoJson() async {

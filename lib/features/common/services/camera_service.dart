@@ -5,7 +5,7 @@ import 'dart:io';
 
 // Package imports:
 import 'package:camera/camera.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 
 // this file consists methods for handling background video recording
 // TODO: - store the state of recording in riverpod
@@ -32,17 +32,6 @@ class CameraService {
     _isInitialized = true;
   }
 
-// remove this and store one directory path in shared preferences
-// adjust it in settings
-  Future<String?> getTemporaryDirectory() async {
-    String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
-    if (selectedDirectory != null) {
-      return selectedDirectory;
-    } else {
-      return null;
-    }
-  }
-
   // Start video recording with auto-stop after 10 seconds (for development purposes)
   // TODO: stop video recording on the command instead of automatically
   Future<void> startVideoRecording() async {
@@ -51,7 +40,7 @@ class CameraService {
       if (!_isInitialized) await initializeCamera();
 
       // use temporary storage
-      final directory = await getTemporaryDirectory();
+      final directory = SharedPreferencesManager.directory;
       final filePath =
           '$directory/trip_recording_${DateTime.now().millisecondsSinceEpoch}.mp4';
 
@@ -72,35 +61,29 @@ class CameraService {
   }
 
   Future<void> stopVideoRecording() async {
-    String? directoryPath = await getTemporaryDirectory();
+    String? directory = SharedPreferencesManager.directory;
 
     if (_cameraController.value.isRecordingVideo) {
       try {
         // get the recorded video file
         final XFile file = await _cameraController.stopVideoRecording();
 
-        if (directoryPath != null) {
-          // format the timestamp to avoid invalid characters in the filename
-          String timestamp =
-              DateTime.now().toIso8601String().replaceAll(':', '-');
-          String fileDirectory =
-              '/storage/emulated/0/Download/qolshatyrproject';
-          String filePath = '$fileDirectory/trip_recording_$timestamp.mp4';
+        // format the timestamp to avoid invalid characters in the filename
+        String timestamp =
+            DateTime.now().toIso8601String().replaceAll(':', '-');
+        String filePath = '$directory/trip_recording_$timestamp.mp4';
 
-          // Ensure the directory exists
-          final dir = Directory(fileDirectory);
-          if (!dir.existsSync()) {
-            dir.createSync(recursive: true);
-          }
-
-          // copy the recorded video to the specified path
-          final savedFile = File(filePath);
-          await savedFile.writeAsBytes(await file.readAsBytes());
-
-          log('VIDEO: Stopped and saved at $filePath');
-        } else {
-          log('Error: Directory path is null.');
+        // Ensure the directory exists
+        final dir = Directory(directory!);
+        if (!dir.existsSync()) {
+          dir.createSync(recursive: true);
         }
+
+        // copy the recorded video to the specified path
+        final savedFile = File(filePath);
+        await savedFile.writeAsBytes(await file.readAsBytes());
+
+        log('VIDEO: Stopped and saved at $filePath');
       } catch (e) {
         log('Error stopping video recording: $e');
       }
