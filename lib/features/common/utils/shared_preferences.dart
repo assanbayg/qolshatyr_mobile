@@ -105,6 +105,13 @@ class SharedPreferencesManager {
     await _sharedPreferences?.setString('imageURL', url!);
   }
 
+  static String? get directory =>
+      _sharedPreferences?.getString('directory') ?? 'no';
+
+  static Future<void> setDirectory(String? newDirectory) async {
+    await _sharedPreferences?.setString('directory', newDirectory!);
+  }
+
   static String? get imageURL =>
       _sharedPreferences?.getString('imageURL') ?? '';
 }

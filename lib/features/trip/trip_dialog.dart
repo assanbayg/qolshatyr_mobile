@@ -11,6 +11,7 @@ import 'package:location/location.dart';
 import 'package:qolshatyr_mobile/features/common/providers/timer_provider.dart';
 import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
+import 'package:qolshatyr_mobile/features/video_recording/video_recording_provider.dart';
 import 'package:qolshatyr_mobile/features/voice_recognition/voice_recognition_provider.dart';
 
 class TripDialog {
@@ -31,6 +32,7 @@ class TripDialog {
             final timerNotifier = ref.read(currentTripTimerProvider.notifier);
             final checkinNotifier = ref.read(checkInProvider.notifier);
             final voiceService = ref.watch(voiceServiceProvider);
+            final videoRecordingService = ref.watch(videoRecordingProvider);
 
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
@@ -89,6 +91,8 @@ class TripDialog {
                                 seconds: SharedPreferencesManager
                                     .checkInReminderDuration!));
                             voiceService.toggleListening();
+                            videoRecordingService.startVideoRecording();
+
                             if (context.mounted) {
                               Navigator.pop(context);
                             }

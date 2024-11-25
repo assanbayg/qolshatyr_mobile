@@ -41,14 +41,18 @@ class DeveloperScreen extends StatelessWidget {
     }
 
     return SafeArea(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: getChatId,
-            child: const Text('Telegram TEST'),
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: getChatId,
+                child: const Text('Telegram TEST'),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

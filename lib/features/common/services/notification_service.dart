@@ -10,8 +10,32 @@ class NotificationService {
   // Initialize the local notifications with permission check
   static Future<void> init() async {
     final PermissionStatus status = await Permission.notification.status;
+    final PermissionStatus cameraStatus = await Permission.camera.status;
+    final PermissionStatus microphoneStatus =
+        await Permission.microphone.status;
+    final PermissionStatus storageStatus = await Permission.storage.status;
+
     if (status.isDenied) {
       final result = await Permission.notification.request();
+      if (!result.isGranted) {
+        return;
+      }
+    }
+
+    if (cameraStatus.isDenied) {
+      final result = await Permission.camera.request();
+      if (!result.isGranted) {
+        return;
+      }
+    }
+    if (microphoneStatus.isDenied) {
+      final result = await Permission.microphone.request();
+      if (!result.isGranted) {
+        return;
+      }
+    }
+    if (storageStatus.isDenied) {
+      final result = await Permission.storage.request();
       if (!result.isGranted) {
         return;
       }
