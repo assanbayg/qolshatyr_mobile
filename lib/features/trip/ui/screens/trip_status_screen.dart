@@ -12,6 +12,7 @@ import 'package:qolshatyr_mobile/features/common/services/notification_service.d
 import 'package:qolshatyr_mobile/features/common/ui/screens/check_in_screen.dart';
 import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
 import 'package:qolshatyr_mobile/features/trip/ui/widgets/current_trip_widget.dart';
+import 'package:qolshatyr_mobile/features/video_recording/video_recording_provider.dart';
 import 'package:qolshatyr_mobile/features/voice_recognition/voice_recognition_provider.dart';
 
 class TripStatusScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
 
     return Consumer(builder: (context, ref, child) {
       final voiceService = ref.watch(voiceServiceProvider);
+      final videoRecordingService = ref.watch(videoRecordingProvider);
       final checkInService = CheckInService();
       final trip = ref.watch(tripProvider.notifier);
       final tripNotifier = ref.watch(tripProvider.notifier);
@@ -44,6 +46,7 @@ class _TripStatusScreenState extends State<TripStatusScreen> {
             payload: 'endTrip');
         timerNotifier.stopTimer();
         voiceService.toggleListening(triggerStop: true);
+        videoRecordingService.stopVideoRecording();
         checkinNotifier.stopTimer();
         Navigator.of(context).pushNamed(CheckInScreen.routeName);
       }

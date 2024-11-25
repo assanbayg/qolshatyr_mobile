@@ -8,7 +8,6 @@ import 'package:camera/camera.dart';
 import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 
 // this file consists methods for handling background video recording
-// TODO: - store the state of recording in riverpod
 
 class CameraService {
   late CameraController _cameraController;
@@ -33,7 +32,6 @@ class CameraService {
   }
 
   // Start video recording with auto-stop after 10 seconds (for development purposes)
-  // TODO: stop video recording on the command instead of automatically
   Future<void> startVideoRecording() async {
     log('VIDEO: Started');
     try {
@@ -49,14 +47,9 @@ class CameraService {
       if (_cameraController.value.isInitialized) {
         await _cameraController.startVideoRecording();
         log('Recording started: $filePath');
-
-        // Stop recording automatically after 10 seconds
-        Timer(const Duration(seconds: 10), () async {
-          await stopVideoRecording();
-        });
       }
     } catch (e) {
-      print('Error starting video recording: $e');
+      log('Error starting video recording: $e');
     }
   }
 

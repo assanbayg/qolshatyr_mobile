@@ -1,4 +1,6 @@
 // Flutter imports:
+import 'dart:developer';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -130,13 +132,31 @@ class SettingsScreen extends StatelessWidget {
                       const SizedBox(height: 12),
                       ElevatedButton(
                         onPressed: () async {
-                          String? newDirectory = await pickDirectory();
-                          SharedPreferencesManager.setDirectory(newDirectory);
-                          // TODO: check if set directory with no problems
+                          try {
+                            String? newDirectory = await pickDirectory();
 
-                          ScaffoldMessenger.of(context).showSnackBar(
+                            if (newDirectory != null &&
+                                newDirectory.isNotEmpty) {
+                              SharedPreferencesManager.setDirectory(
+                                  newDirectory);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          'Updated directory: $newDirectory')));
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('No directory was selected.')),
+                              );
+                            }
+                          } catch (e) {
+                            log('Error picking directory: $e');
+                            ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                  content: Text('Updated directory!')));
+                                  content: Text('Failed to pick a directory.')),
+                            );
+                          }
                         },
                         child: const Text('Pick a directory'),
                       ),
