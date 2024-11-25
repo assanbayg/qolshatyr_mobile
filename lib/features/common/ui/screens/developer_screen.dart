@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/services/telegram_service.dart';
-import 'package:qolshatyr_mobile/features/common/ui/screens/video_recording_screen.dart';
 
 class DeveloperScreen extends StatelessWidget {
   static const routeName = '/dev';
@@ -41,12 +40,6 @@ class DeveloperScreen extends StatelessWidget {
       telegramService.sendMessage(res, 'Hi');
     }
 
-    void backgroundVideo() {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        return const VideoRecordingScreen();
-      }));
-    }
-
     return SafeArea(
       child: Scaffold(
         body: Center(
@@ -57,9 +50,6 @@ class DeveloperScreen extends StatelessWidget {
                 onPressed: getChatId,
                 child: const Text('Telegram TEST'),
               ),
-              ElevatedButton(
-                  onPressed: backgroundVideo,
-                  child: const Text('Videorecording TEST'))
             ],
           ),
         ),
