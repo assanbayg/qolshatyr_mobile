@@ -4,10 +4,12 @@ import 'dart:developer';
 import 'dart:io';
 
 // Package imports:
-import 'package:path_provider/path_provider.dart'; // Новый импорт
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_background_video_recorder/flutter_bvr.dart';
 import 'package:flutter_background_video_recorder/flutter_bvr_platform_interface.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import 'package:path_provider/path_provider.dart'; // Новый импорт
 
 class VideoRecordingService {
   final FlutterBackgroundVideoRecorder _videoRecorder =
@@ -79,12 +81,24 @@ class VideoRecordingService {
     return targetDir.path; // Возвращаем полный путь
   }
 
-  Future<void> startRecording(String folderName, CameraFacing cameraFacing) async {
+  Future<String?> pickDirectory() async {
+    String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+    if (selectedDirectory != null) {
+      return selectedDirectory;
+    } else {
+      return null;
+    }
+  }
+
+  Future<void> startRecording(
+      String folderName, CameraFacing cameraFacing) async {
     if (!_isRecording && !_recorderBusy) {
       if (await _requestPermissions()) {
         try {
           // Получаем директорию для хранения файлов
-          final String directoryPath = await _getStorageDirectory(folderName);
+          // final String directoryPath = await _getStorageDirectory(folderName);
+
+          String directoryPath = await pickDirectory() as String;
 
           // Начинаем запись
           final res = await _videoRecorder.startVideoRecording(

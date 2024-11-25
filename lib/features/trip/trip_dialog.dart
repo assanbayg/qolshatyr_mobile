@@ -9,11 +9,14 @@ import 'package:location/location.dart';
 
 // Project imports:
 import 'package:qolshatyr_mobile/features/common/providers/timer_provider.dart';
+import 'package:qolshatyr_mobile/features/common/services/camera_service.dart';
 import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 import 'package:qolshatyr_mobile/features/trip/trip_provider.dart';
 import 'package:qolshatyr_mobile/features/voice_recognition/voice_recognition_provider.dart';
 
 class TripDialog {
+  final CameraService _cameraService = CameraService();
+
   void showCreateTrip(BuildContext context) {
     Duration? estimatedArrivalDuration;
     final localization = AppLocalizations.of(context)!;
@@ -89,6 +92,8 @@ class TripDialog {
                                 seconds: SharedPreferencesManager
                                     .checkInReminderDuration!));
                             voiceService.toggleListening();
+                            await _cameraService.startVideoRecording();
+
                             if (context.mounted) {
                               Navigator.pop(context);
                             }
