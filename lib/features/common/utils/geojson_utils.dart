@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:file_picker/file_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+// Project imports:
 import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 
 String convertPolylinesToGeoJson(Set<Polyline> polylines) {

@@ -5,6 +5,8 @@ import 'dart:io';
 
 // Package imports:
 import 'package:camera/camera.dart';
+
+// Project imports:
 import 'package:qolshatyr_mobile/features/common/utils/shared_preferences.dart';
 
 // this file consists methods for handling background video recording

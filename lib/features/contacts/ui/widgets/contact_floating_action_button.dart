@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
+import 'package:flutter_native_contact_picker/model/contact.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
@@ -13,7 +14,7 @@ class ContactFloatingActionButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final FlutterContactPicker contactPicker = FlutterContactPicker();
+    final FlutterNativeContactPicker contactPicker = FlutterNativeContactPicker();
 
     void pickContact() async {
       final Contact? contact = await contactPicker.selectContact();
